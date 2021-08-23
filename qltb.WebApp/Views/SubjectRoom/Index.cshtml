@@ -1,0 +1,296 @@
+﻿@using qltb.Data
+@using qltb.Data.ViewModels
+@model IEnumerable<qltb.Data.ResVMs.ToBoMonResVM>
+@{
+    ViewBag.Title = "SubjectRoom";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto">Tổ bộ môn</h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="#" type="button" data-toggle="modal" data-target="#subjectroom_insert_modal" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới</span></a>
+    </div>
+</div>
+<div class="page-section">
+    <!-- .card -->
+    <div class="card card-fluid">
+        <!-- .card-header -->
+        @*<div class="card-header d-flex">
+            <button type="button" class="btn btn-primary ml-auto" data-toggle="modal" data-target="#subjectroom_insert_modal">Thêm mới</button>
+        </div>*@<!-- /.card-header -->
+        <!-- .card-body -->
+        <div class="card-body subjectroom-table table-responsive">
+            <table id="subjectroom-table" class="table table-bordered table-hover">
+                <!-- thead -->
+                <thead class="bg-light">
+                    <tr>
+                        <th style="width:5%" class=""> # </th>
+                        <th style="width:25%" class=""> Mã bộ môn </th>
+                        <th style="width:25%" class=""> Tên bộ môn </th>
+                        <th style="width:25%" class=""> Thuộc phòng ban </th>
+                        <th style="width:10%" class="text-center"> &nbsp; </th>
+                    </tr>
+                </thead><!-- /thead -->
+                <!-- tbody -->
+                <tbody>
+                    <!-- create empty row to passing html validator -->
+                    @foreach (var equip in Model)
+                    {
+                        <tr>
+                            <td class="">@equip.STT</td>
+                            <td class=""><code>@equip.MaBoMon</code></td>
+                            <td class="">@equip.TenToBoMon</td>
+                            <td class="">@equip.TenPhongBan</td>
+                            <td class="align-middle text-center">
+                                <a href="#" class="btn btn-sm btn-icon btn-subtle-primary subjectroom_update" data-id="@equip.ToBoMonId" data-toggle="modal" data-target="#subjectroom_update_modal"><i class="fa fa-pencil-alt"></i> <span class="sr-only">Edit</span></a>
+                                <a href="#" class="btn btn-sm btn-icon btn-subtle-danger subjectroom_delete" data-id="@equip.ToBoMonId" data-name="@equip.TenToBoMon" data-toggle="modal" data-target="#subjectroom_delete_modal"><i class="far fa-trash-alt"></i> <span class="sr-only">Remove</span></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody><!-- /tbody -->
+            </table><!-- /.table -->
+        </div><!-- /.card-body -->
+    </div><!-- /.card -->
+</div><!-- /.page-section -->
+
+<form id="subjectroom_insert_form" action="/SubjectRoom/Insert" method="post">
+    <div id="subjectroom_insert_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title"> Thêm mới tổ bộ môn  </h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label> Mã tổ bộ môn <span class="text-danger">*</span></label>
+                                <input class="form-control" type="text" name="MaBoMon" value="" required />
+                            </div>
+                            <div class="form-group">
+                                <label>Thuộc phòng ban <span class="text-danger">*</span></label>
+                                <select id="used_type_select" name="PhongBanId" class="used_type_select form-control selectize-select selectize-growth" required>
+                                    <option value="-1" disabled selected>-- Chọn phòng ban --</option>
+                                    @foreach (var type in ViewBag.PhongBan as List<PhongBanViewModel>)
+                                    {
+                                        <option value="@type.PhongBanId"> @type.TenPhongBan </option>
+                                    }
+                                </select>
+                                <div class="invalid-feedback">
+                                    <i class="fa fa-exclamation-circle fa-fw"></i> Vui lòng không để trống
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label> Tên tổ bộ môn <span class="text-danger">*</span></label>
+                                <input class="form-control" type="text" name="TenToBoMon" value="" required />
+                            </div>
+                            <div class="form-group">
+                                <label> Ghi chú <span class="text-danger"></span></label>
+                                <textarea class="form-control" name="GhiChu" value=""></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                    <button type="submit" class="btn btn-subtle-success" id="subjectroom_insert_btn"><i class="fal fa-check mr-2"></i>Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<form id="subjectroom_update_form" action="/SubjectRoom/Update" method="post">
+    <div id="subjectroom_update_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header border-bottom mb-3">
+                    <h5 class="modal-title"> Cập nhật tổ bộ môn</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label>Mã bộ môn <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="subjectroom_id_update" name="ToBoMonId" aria-describedby="" placeholder="" hidden required>
+                                    <input type="text" class="form-control" id="subjectroom_code_update" name="MaBoMon" aria-describedby="" placeholder="Mã tổ bộ môn.." required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tên tổ bộ môn <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="subjectroom_name_update" name="TenToBoMon" aria-describedby="" placeholder="Tên tổ bộ môn..." required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Thuộc phòng ban <span class="text-danger">*</span></label>
+                                    <select id="phongban_select_update" name="PhongBanId" class="subjectroom_type_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn phòng ban --</option>
+                                        @foreach (var x in ViewBag.PhongBan as List<PhongBanViewModel>)
+                                        {
+                                            <option value="@x.PhongBanId"> @x.TenPhongBan </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label> Ghi chú <span class="text-danger"></span></label>
+                                    <textarea class="form-control" id="subjectroom_des_update" name="GhiChu" value=""></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                    <button type="submit" class="btn btn-subtle-success" id="subjectroom_update_btn"><i class="fal fa-check mr-2"></i>Cập nhật</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="subjectroom_delete_form" action="/SubjectRoom/Delete" method="post">
+    <div id="subjectroom_delete_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"> Hủy bỏ tổ bộ môn</h5>
+                </div>
+
+                <div class="modal-body">
+                    <input id="subjectroom_id_delete" hidden />
+                    <p>Xóa bỏ tổ bộ môn <b id="subjectroom_to_delete"></b> khỏi hệ thống</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                    <button type="submit" class="btn btn-subtle-success" id="subjectroom_delete_btn"><i class="fal fa-check mr-2"></i>Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<script>
+    $(function () {
+        $("#subjectroom-table").DataTable({
+            autoWidth: false
+        });
+        $(".dataTables_length select").css("width", "55");
+
+    })
+
+    $("#subjectroom_insert_form").submit(function () {
+        var form = $(this);
+        var tpb = $("#used_type_select option:selected").val();
+        if (tpb == -1) {
+            $("#used_type_select").addClass("is-invalid");
+            return false;
+        }
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: form.serialize(),
+            dataType: 'html',
+            beforeSend: function () {
+                $("#subjectroom_insert_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công!');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công.');
+                }
+            },
+            complete: function () {
+                $("#subjectroom_insert_btn").removeAttr("disabled");
+                $("#subjectroom_insert_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+    $(".subjectroom_update").click(function () {
+        var subjectroom_id = $(this).data('id');
+        console.log(subjectroom_id);
+        $.post("/SubjectRoom/GetToBoMon", { id: subjectroom_id }, function (data) {
+            console.log(data);
+            $("#subjectroom_id_update").val(data.ToBoMonId);
+            $("#subjectroom_name_update").val(data.TenToBoMon);
+            $("#subjectroom_code_update").val(data.MaBoMon);
+            $("#subjectroom_des_update").val(data.GhiChu);
+            $("#phongban_select_update").selectize()[0].selectize.setValue(data.PhongBanId);
+            console.log("1");
+        });
+    })
+    $("#subjectroom_update_form").submit(function (event) {
+        var form = $(this);
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: form.serialize(),
+            dataType: 'html',
+            beforeSend: function () {
+                $("#subjectroom_update_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công!');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công.');
+                }
+            },
+            complete: function () {
+                $("#subjectroom_update_btn").removeAttr("disabled");
+                $("#subjectroom_update_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+
+    $(".subjectroom_delete").click(function () {
+        var subjectroom_id = $(this).data('id');
+        var subjectroom_name = $(this).data('name');
+        $("#subjectroom_id_delete").val(subjectroom_id);
+        $("#subjectroom_to_delete").text(subjectroom_name);
+    })
+    $("#subjectroom_delete_form").submit(function (event) {
+        var form = $(this);
+        var subjectroom_id = $("#subjectroom_id_delete").val();
+        if (subjectroom_id == null) {
+            return false;
+        }
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: { id: subjectroom_id },
+            dataType: 'html',
+            beforeSend: function () {
+                $("#subjectroom_update_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công! ');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công. ');
+                }
+            },
+            complete: function () {
+                $("#subjectroom_delete_btn").removeAttr("disabled");
+                $("#subjectroom_delete_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+
+</script>
+

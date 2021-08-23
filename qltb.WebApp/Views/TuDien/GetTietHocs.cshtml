@@ -1,0 +1,301 @@
+﻿@using qltb.Data.ResVMs
+@model ListWithPaginationResVM
+@{
+    ViewBag.Title = "Tiết học";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var SuccessNotification = TempData["SUCCESS"];
+    var WarningNotification = TempData["WARNING"];
+
+    // get ten tinh param
+    string BuoiTrongNgayQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("BuoiTrongNgay", out BuoiTrongNgayQueryParam);
+}
+<div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm mới tiết học</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-tiet-hoc-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Tiết học</label>
+                                <input type="number" min="1" class="form-control" name="TenTietHoc" />
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label class="control-label">Buổi trong ngày</label>
+                                    <select class="form-control" name="BuoiTrongNgay" data-toggle="select2" data-placeholder="Buổi trong ngày">
+                                        <option value="1" selected>Buổi sáng</option>
+                                        <option value="2">Buổi chiều</option>
+                                        <option value="3">Buổi tối</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="add-tiet-hoc-btn">Thêm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-tiet-hoc-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Tiết học</label>
+                                <input type="text" class="form-control" name="TenTietHoc" />
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label class="control-label">Buổi trong ngày</label>
+                                    <select class="form-control" name="BuoiTrongNgay" data-toggle="select2" data-placeholder="Buổi trong ngày">
+                                        <option value="1">Buổi sáng</option>
+                                        <option value="2">Buổi chiều</option>
+                                        <option value="3">Buổi tối</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="update-tiet-hoc-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bạn có chắc chắn muốn xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="delete-tiet-hoc-btn">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto">Danh sách tiết học</h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="#" type="button" onclick="Add()" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới</span></a>
+    </div><!-- /.btn-toolbar -->
+</div>
+<div class="page-section">
+    
+    <div class="row">
+        @*<div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <div class="float-right">
+                        <button class="btn btn-sm btn-primary" onclick="Add()">Thêm mới</button>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+        <div class="col-12">
+            <div class="card card-fluid">
+                @*<div class="card-header">
+                </div>*@
+                <div class="card-body" style="overflow-x: auto">
+                    <div class="table-responsive" style="min-width: 1000px">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tiết học</th>
+                                    <th>Buổi trong ngày</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var tietHocResVM in (List<TietHocResVM>)Model.Objects)
+                                    {
+                                        <tr>
+                                            <td>@tietHocResVM.STT</td>
+                                            <td>@tietHocResVM.TenTietHoc</td>
+                                            <td>@tietHocResVM.BuoiTrongNgay</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-info" onclick="Edit('@(tietHocResVM.TietHocId)')"><i class="fas fa-pencil"></i></button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="Delete('@(tietHocResVM.TietHocId)')"><i class="fas fa-trash-alt"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <ul class="pagination justify-content-center mt-4">
+                            @{
+                                foreach (var paginationResVM in (List<PaginationResVM>)Model.Paginations)
+                                {
+                                    <li class="page-item @(paginationResVM.IsActived.Value ? "active":  "") @(paginationResVM.IsDisabled.Value ? "disabled":  "")">
+                                        <a class="page-link" href="/tu-dien/tiet-hoc@(paginationResVM.Url)" tabindex="-1">@Html.Raw(paginationResVM.Text)</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/assets/javascript/hanhnd_1.js"></script>
+    <script>
+        function Add() {
+            $('#add-modal').modal('show');
+            $('#add-tiet-hoc-form input[name=TenTietHoc]').val('');
+            $('#add-tiet-hoc-form input[name=BuoiTrongNgay]').val('');
+            $("#add-tiet-hoc-btn").unbind();
+            $("#add-tiet-hoc-btn").click(function () {
+                AddMonHoc();
+            });
+        }
+
+        function Edit(TietHocId) {
+            $.ajax({
+                url: "/tu-dien/thong-tin-tiet-hoc",
+                data: {
+                    TietHocId: TietHocId
+                },
+                type: "get",
+                success: function (response) {
+                    if (response) {
+                        setTimeout(function () {
+                            $('#edit-modal').modal('show');
+                            $('#editModalLabel').html('Tiết ' + response.TenTietHoc)
+                            $('#edit-tiet-hoc-form input[name=TenTietHoc]').val(response.TenTietHoc);
+                            $('#edit-tiet-hoc-form input[name=BuoiTrongNgay]').val(response.BuoiTrongNgay);
+                            $('#edit-tiet-hoc-form select[name=BuoiTrongNgay]').val(response.BuoiTrongNgay).trigger('change');
+                            $("#update-tiet-hoc-btn").unbind();
+                            $("#update-tiet-hoc-btn").click(function () {
+                                UpdateMonHoc(response.TietHocId);
+                            });
+                        }, 500);
+                    }
+                    else {
+                        setTimeout(function () { toastr["warning"]('Không tìm thấy dữ liệu') }, 500)
+                    }
+
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Delete(TietHocId) {
+            $('#delete-modal').modal('show');
+            $("#delete-tiet-hoc-btn").unbind();
+            $("#delete-tiet-hoc-btn").click(function () {
+                DeleteMonHoc(TietHocId);
+            });
+        }
+
+        function DeleteMonHoc(TietHocId) {
+            console.log(TietHocId)
+            $.ajax({
+                url: "/tu-dien/xoa-thong-tin-tiet-hoc",
+                data: {
+                    TietHocId: TietHocId
+                },
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function UpdateMonHoc(TietHocId) {
+            let data = {
+                TietHocId: TietHocId
+            }
+            $('#edit-tiet-hoc-form').serializeArray().forEach(ele => {
+                data[ele.name] = ele.value
+            })
+
+            $.ajax({
+                url: "/tu-dien/cap-nhat-thong-tin-tiet-hoc",
+                data: data,
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function AddMonHoc() {
+            let data = {}
+            $('#add-tiet-hoc-form').serializeArray().forEach(ele => {
+                data[ele.name] = ele.value
+            })
+
+            $.ajax({
+                url: "/tu-dien/them-thong-tin-tiet-hoc",
+                data: data,
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Search() {
+            let queryParams = $('#search-tiet-hoc-form').serialize();
+            console.log(queryParams);
+            location.replace("/tu-dien/tiet-hoc?" + queryParams);
+        }
+
+        $(document).ready(function () {
+            if ('@(SuccessNotification)') {
+                toastr["success"]('@(SuccessNotification)')
+            }
+            else if ('@(WarningNotification)') {
+                toastr["warning"]('@(WarningNotification)')
+            }
+
+            $("#search-tiet-hoc-form").submit(function (e) {
+                e.preventDefault();
+            })
+        })
+    </script>
+}

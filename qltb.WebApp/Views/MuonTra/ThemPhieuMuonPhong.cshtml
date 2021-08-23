@@ -1,0 +1,420 @@
+﻿@model qltb.Data.ViewModels.PhieuMuonViewModel
+@{
+    ViewBag.Title = "ThemPhieuMuonPhong";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<header class="page-title-bar">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/muon-tra/phong"><i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Danh sách phiếu mượn</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <a href="#">Thêm phiếu mượn</a>
+            </li>
+        </ol>
+    </nav>
+    <h1 class="page-title"> Tạo phiếu mượn phòng </h1>
+</header>
+<div class="modal fade" id="modalChonPhong" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Chọn phòng mượn</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-5 col-12">
+                        <input class="form-control" placeholder="Nhập tên phòng" id="searchString" />
+                    </div>
+                    <div class="col-md-5 col-12">
+                        <select class="form-control" data-toggle="select2" id="LoaiKhoPhongId">
+                            <option>Tất cả loại phòng</option>
+                            @foreach (var item in Model.LoaiPhongs)
+                            {
+                                <option value="@item.LoaiKhoPhongId">@item.TenLoaiKhoPhong</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2 col-12">
+                        <button class="btn btn-block btn-primary" onclick="renderListPhong()"><i class="fal fa-search mr-1"></i> Tìm kiếm</button>
+                    </div>
+                </div>
+                <hr />
+                <div class="list-group list-group-flush list-group-divider" id="phong-selected">
+                    @*<div class="list-group-item">
+                            <div class="list-group-item-figure">
+                                <a href="#" class="tile bg-primary"><i class="fad fa-window-frame"></i></a>
+                            </div>
+                            <div class="list-group-item-body">
+                                <h4 class="list-group-item-title">
+                                    <b>Phòng học 101</b> <span class="badge badge-subtle badge-success">Có thể sử dụng</span>
+                                </h4>
+                                <p class="list-group-item-text">Mã: <code>HSFG9845</code> | Diện tích <b>200m2</b> </p>
+                            </div>
+                            <div class="list-group-item-figure">
+                                <button class="btn btn-sm btn-subtle-success">Chọn</button>
+                            </div>
+                        </div>*@
+                </div>
+            </div>
+            <hr />
+            <div class="modal-footer">
+                <button type="button" class="btn btn-subtle-dark" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-section">
+    <div class="row">
+        <div class="col-md-4 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <fieldset>
+                        <legend class="text-uppercase">Ngày mượn / trả</legend>
+                    </fieldset>
+                    <i class="text-info">*Gợi ý: Nhập vào ngày mượn trả trước khi chọn phòng để xem được danh sách phòng có thể mượn</i>
+                    <div class="row mt-3">
+                        <div class="form-group col-md-6 col-12">
+                            <label>Ngày mượn</label>
+                            <input type="text" readonly onchange="onChangeDate()" placeholder="Ngày mượn" class="form-control flatpicker" id="NgayMuon">
+                        </div>
+                        <div class="form-group col-md-6 col-12">
+                            <label>Ngày trả</label>
+                            <input type="text" readonly onchange="onChangeDate()" placeholder="Ngày trả" class="form-control flatpicker" id="NgayTra">
+                        </div>
+                    </div>
+
+                    <hr />
+                    <fieldset>
+                        <legend class="text-uppercase">Thông tin chương trình học</legend>
+                    </fieldset>
+                    <div class="row">
+                        <div class="form-group col-md-6 col-12">
+                            <label>Chương trình học</label>
+                            <select class="form-control" data-toggle="select2" data-placeholder="Chọn chương trình học" id="ChuongTrinhHocId">
+                                @foreach (var item in Model.ChuongTrinhHocs)
+                                {
+                                    <option value="@item.ChuongTrinhHocId">@item.TenChuongTrinhHoc</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6 col-12">
+                            <label>Môn học</label>
+                            <select class="form-control" data-toggle="select2" data-placeholder="Chọn môn học" id="MonHocId">
+                                @foreach (var item in Model.MonHocs)
+                                {
+                                    <option value="@item.MonHocId">@item.TenMonHoc</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Bài học</label>
+                        <select class="form-control" id="BaiHocId" data-toggle="select2" data-placeholder="Chọn bài học">
+                            @foreach (var item in Model.BaiHocCoSuDungThietBis)
+                            {
+                                <option value="@item.BaiHocSuDungThietBiId">@item.TenBaiHoc</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 col-12">
+                            <label>Khối lơp</label>
+                            <select class="form-control" data-toggle="select2" data-placeholder="Chọn khối lớp" id="KhoiLopId">
+                                @foreach (var item in Model.KhoiLops)
+                                {
+                                    <option value="@item.KhoiLopId">@item.TenKhoiLop</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6 col-12">
+                            <label>Lớp học</label>
+                            <select class="form-control" data-toggle="select2" data-placeholder="Chọn lớp" id="LopHocId">
+                                @foreach (var item in Model.Lops)
+                                {
+                                    <option value="@item.LopId">@item.TenLop</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 col-12">
+                            <label>Giáo viên</label>
+                            <select class="form-control" data-toggle="select2" data-placeholder="Chọn giáo viên" id="GiaoVienId">
+                                @foreach (var item in Model.GiaoViens)
+                                {
+                                    <option value="@item.GiaoVienId">@item.TenGiaoVien</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6 col-12">
+                            <label>Mục đích sử dụng</label>
+                            <select class="form-control" data-toggle="select2" data-placeholder="Chọn mục đích sử dụng" id="MucDichSuDungId">
+                                @foreach (var item in Model.MucDichSuDungs)
+                                {
+                                    <option value="@item.MucDichSuDungId">@item.TenMucDichSuDung</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <hr />
+                    <fieldset>
+                        <legend class="text-uppercase">Thông tin tiết học</legend>
+                    </fieldset>
+                    <div>
+                        <p class="text-primary">Sáng</p>
+                        @foreach (var item in Model.TietHocs)
+                        {
+                            if (item.BuoiTrongNgay == 1)
+                            {
+
+                                <div class="custom-control custom-control-inline custom-checkbox">
+                                    <input type="checkbox" data-id="@item.TietHocId" data-ten="@item.TenTietHoc" data-buoi-hoc="@item.BuoiTrongNgay" class="custom-control-input" name="TietHoc" id="tiet-@item.TietHocId"> <label class="custom-control-label" for="tiet-@item.TietHocId">Tiết @item.TenTietHoc</label>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <div class="mt-2">
+                        <p class="text-primary">Chiều</p>
+                        @foreach (var item in Model.TietHocs)
+                        {
+                            if (item.BuoiTrongNgay == 2)
+                            {
+
+                                <div class="custom-control custom-control-inline custom-checkbox">
+                                    <input type="checkbox" data-id="@item.TietHocId" data-ten="@item.TenTietHoc" data-buoi-hoc="@item.BuoiTrongNgay" class="custom-control-input" name="TietHoc" id="tiet-@item.TietHocId"> <label class="custom-control-label" for="tiet-@item.TietHocId">Tiết @item.TenTietHoc</label>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <div class="form-group mt-3">
+                        <label>Ghi chú</label>
+                        <textarea rows="3" class="form-control" placeholder="Ghi chú" id="GhiChu"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <fieldset>
+                        <legend class="text-uppercase">Phòng mượn</legend>
+                    </fieldset>
+                    <div class="list-group list-group-flush list-group-divider" id="phong-da-chon">
+                        
+                    </div>
+                    <input type="hidden" id="KhoPhongId" />
+                    <div class="text-right">
+                        <a href="#" onclick="openModalChonPhong()"><i class="fal fa-plus mr-2"></i>Chọn phòng</a>
+                    </div>
+                    <hr />
+                    <fieldset>
+                        <legend class="text-uppercase">Thiết bị trong phòng</legend>
+                    </fieldset>
+
+                    <div class="list-group list-group-bordered mb-3 shadow-none" id="list-selected">
+                        <div class="text-center">
+                            <img src="~/assets/images/empty_xct9.svg" width="150" style="opacity:.5" />
+                            <p class="text-center text-muted mt-2">Chưa có thiết bị nào</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center">
+        <a href="#" class="btn btn-subtle-dark mr-2"><i class="fal fa-arrow-left mr-2"></i>Quay lại</a>
+        <button type="button" class="btn btn-subtle-success" onclick="AddPhieu()"><i class="fal fa-check mr-2"></i>Tạo phiếu</button>
+    </div>
+</div>
+<script>
+    $(function () {
+        $(".flatpicker").flatpickr({
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+        });
+    })
+    function openModalChonPhong() {
+        var NgayMuon = $("#NgayMuon").val();
+        var NgayTra = $("#NgayTra").val();
+        if (!NgayMuon || !NgayTra) {
+            toastr["error"]("Chưa nhập đủ ngày mượn và ngày trả")
+        } else {
+            $("#modalChonPhong").modal('show');
+            $('#modalChonPhong').on('shown.bs.modal', function () {
+                renderListPhong();
+            })
+        }
+    }
+    function renderListPhong() {
+        var html = '';
+        var NgayMuon = $("#NgayMuon").val();
+        var NgayTra = $("#NgayTra").val();
+        var searchString = $("#searchString").val();
+        var LoaiKhoPhongId = $("#LoaiKhoPhongId").val();
+        var dataReq = {
+            LoaiKhoPhongId: LoaiKhoPhongId,
+            ngayMuon: NgayMuon,
+            ngayTra: NgayTra,
+            searchString: searchString
+        }
+        if (!NgayMuon || !NgayTra) {
+            toastr["error"]("Chưa nhập đủ ngày mượn và ngày trả")
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: '/MuonTra/GetPhongMuon',
+                data: dataReq,
+                dataType: 'html',
+                beforeSend: function () {
+                    $("#phong-selected").LoadingOverlay("show", {
+                        image: "/assets/images/load.png",
+                        progress: true
+                    });
+                },
+                success: function (response) {
+                    var data = JSON.parse(response);
+                    $.each(data, function (key, value) {
+                        if (value.TrangThaiPhongId == 1) {
+                            html += '<div class="list-group-item"><div class="list-group-item-figure"><a href="#" class="tile bg-primary"><i class="fad fa-window-frame"></i></a></div><div class="list-group-item-body"><h4 class="list-group-item-title"><b>' + value.TenKhoPhong + '</b> <span data-toggle="tooltip" data-placement="top" title="" data-original-title=" a' + value.TenNguoiDangKy + '" class="badge badge-subtle badge-' + value.MaMau + '">' + value.TenTrangThai + '</span></h4><p class="list-group-item-text">Mã: <code>' + value.MaKhoPhong + '</code> | Diện tích <b>' + value.DienTich + '</b> </p></div><div class="list-group-item-figure"><button class="btn btn-sm btn-subtle-success" data-name="' + value.TenKhoPhong + '" data-trangthai = "' + value.TenTrangThai + '" data-mau="' + value.MaMau + '" data-maphong = "' + value.MaKhoPhong + '" data-dientich = "' + value.DienTich + '" id="select_' + value.KhoPhongId + '" onclick="SelectPhong(' + value.KhoPhongId + ')">Chọn</button></div></div >';
+                        }
+                        else {
+                            html += '<div class="list-group-item"><div class="list-group-item-figure"><a href="#" class="tile bg-primary"><i class="fad fa-window-frame"></i></a></div><div class="list-group-item-body"><h4 class="list-group-item-title"><b>' + value.TenKhoPhong + '</b> <span data-toggle="tooltip" data-placement="top" title="" data-original-title=" a' + value.TenNguoiDangKy + '" class="badge badge-subtle badge-' + value.MaMau + '">' + value.TenTrangThai + '</span></h4><p class="list-group-item-text">Mã: <code>' + value.MaKhoPhong + '</code> | Diện tích <b>' + value.DienTich + '</b> </p></div><div class="list-group-item-figure"></div></div >';
+                        }
+                    });
+                },
+                complete: function () {
+                    $("#phong-selected").LoadingOverlay("hide", true);
+                    $("#phong-selected").html(html);
+                }
+            });
+        }
+    }
+    function onChangeDate() {
+        $("#phong-selected").html('<div class="text-center"><img src="/assets/images/empty_xct9.svg" width="150" style="opacity:.5" /><p class="text-center text-muted mt-2">Chưa có thiết bị nào được chọn</p></div>');
+    }
+    function SelectPhong(id) {
+        var TenKhoPhong = $("#select_" + id).attr('data-name');
+        var MaKhoPhong = $("#select_" + id).attr('data-maphong');
+        var TenTrangThai = $("#select_" + id).attr('data-trangthai');
+        var MaMau = $("#select_" + id).attr('data-mau');
+        var DienTich = $("#select_" + id).attr('data-dientich');
+        var html = '<div class="list-group-item"><div class="list-group-item-figure"><a href="#" class="tile bg-primary"><i class="fad fa-window-frame"></i></a></div><div class="list-group-item-body"><h4 class="list-group-item-title"><b>' + TenKhoPhong + '</b></h4><p class="list-group-item-text">Mã: <code>' + MaKhoPhong + '</code> Diện tích <b>' + DienTich + 'm2</b> </p></div><div class="list-group-item-figure"><span class="badge badge-subtle badge-' + MaMau + '">' + TenTrangThai + '</span></div></div>';
+        $("#phong-da-chon").html(html);
+        $("#KhoPhongId").val(id);
+        var html2 = '';
+        $.ajax({
+            type: "POST",
+            url: '/MuonTra/GetThietBiByKhoPhong',
+            data: {
+                KhoPhongId: id
+            },
+            dataType: 'html',
+            beforeSend: function () {
+                $("#list-selected").LoadingOverlay("show", {
+                    image: "/assets/images/load.png",
+                    progress: true
+                });
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                console.log(data)
+                $.each(data, function (key, value) {
+                    html2 += '<div class="list-group-item"><div class="list-group-item-body"><span><b>' + value.TenThietBi + '</b></span><span class="badge badge-subtle badge-info ml-2">' + value.TenLoaiThietBi + '</span></div><div class="list-group-item-figure"><span class="mr-4">Số lượng: <span class="badge badge-primary ml-1">' + value.SoLuong + '</span></span><span>Còn dùng được: <span class="badge badge-success ml-1">' + value.SoLuongConLai + '</span></span></div></div>';
+                });
+            },
+            complete: function () {
+                $("#list-selected").LoadingOverlay("hide", true);
+                $("#list-selected").html(html2);
+            }
+        });
+        $("#modalChonPhong").modal('hide');
+    }
+    function AddPhieu() {
+        var ChuongTrinhHocId = $("#ChuongTrinhHocId").val();
+        var MonHocId = $("#MonHocId").val();
+        var BaiHocId = $("#BaiHocId").val();
+        var KhoiLopId = $("#KhoiLopId").val();
+        var LopHocId = $("#LopHocId").val();
+        var GiaoVienId = $("#GiaoVienId").val();
+        var MucDichSuDungId = $("#MucDichSuDungId").val();
+        var NgayMuon = $("#NgayMuon").val();
+        var NgayTra = $("#NgayTra").val();
+        var GhiChu = $("#GhiChu").val();
+        var KhoPhongId = $("#KhoPhongId").val();
+        var TietHocs = []
+        var d1 = Date.parse(NgayMuon);
+        var d2 = Date.parse(NgayTra);
+        $('input[name="TietHoc"]:checked').each(function () {
+            if ($(this).is(":checked")) {
+                var TietHocId = $(this).attr('data-id');
+                var TenTietHoc = $(this).attr('data-ten');
+                var BuoiTrongNgay = $(this).attr('data-buoi-hoc');
+                var obj = { TietHocId: TietHocId, TenTietHoc: TenTietHoc, BuoiTrongNgay: BuoiTrongNgay }
+                TietHocs.push(obj);
+            }
+        });
+        var reqData = {
+            ChuongTrinhHocId: ChuongTrinhHocId,
+            MonHocId: MonHocId,
+            BaiHocId: BaiHocId,
+            KhoiLopId: KhoiLopId,
+            LopHocId: LopHocId,
+            GiaoVienId: GiaoVienId,
+            MucDichSuDungId: MucDichSuDungId,
+            LoaiPhieuMuonId: 2,
+            NgayMuon: NgayMuon,
+            NgayTra: NgayTra,
+            GhiChu: GhiChu,
+            KhoPhongId: KhoPhongId,
+            TietHocs: TietHocs
+        }
+
+        if (!NgayMuon) {
+            toastr["error"]("Bạn chưa nhập ngày mượn thiết bị")
+        }
+        else if (!NgayTra) {
+            toastr["error"]("Bạn chưa nhập ngày trả thiết bị")
+        }
+        else if (d1 > d2) {
+            toastr["error"]("Ngày trả không thể sớm hơn ngày mượn")
+        }
+        else if (TietHocs.length <= 0) {
+            toastr["error"]("Bạn chưa chọn tiết học")
+        }
+        else if (!KhoPhongId) {
+            toastr["error"]("Bạn chưa chọn phòng")
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: '/MuonTra/AddNewPhieuMuon',
+                data: reqData,
+                dataType: 'html',
+                beforeSend: function () {
+                    $(".page-inner").LoadingOverlay("show", {
+                        image: "/assets/images/load.png",
+                        progress: true
+                    });
+                },
+                success: function (response) {
+                    var data = JSON.parse(response);
+                    toastr[data.Style](data.Message)
+                },
+                complete: function () {
+                    $(".page-inner").LoadingOverlay("hide", true);
+                    setTimeout(function () {
+                        window.location.href = "/muon-tra/phong";
+                    }, 1500);
+                }
+            });
+        }
+    }
+</script>
+

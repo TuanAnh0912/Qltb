@@ -1,0 +1,17 @@
+﻿@model List<qltb.Data.TieuChuanCoSoVatChat>
+<option value="0">Chọn cơ sở vật chất</option>
+@foreach (var item in Model)
+{
+    if (item.TieuChuanCoSoVatChatId == ((int)ViewBag.selected))
+    {
+        <option value="@item.TieuChuanCoSoVatChatId" selected>@item.TenTieuChuan </option>
+
+    }
+    else
+    {
+        <option value="@item.TieuChuanCoSoVatChatId">@item.TenTieuChuan </option>
+    }
+
+}
+
+

@@ -1,0 +1,252 @@
+﻿
+@{
+    ViewBag.Title = "ReportDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<header class="page-title-bar">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/bao-cao/danh-muc-bao-cao"><i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Thống kê / báo cáo</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <a href="#">Báo cáo mượn trả theo giáo viên</a>
+            </li>
+        </ol>
+    </nav>
+    <h1 class="page-title"> Báo cáo mượn trả theo giáo viên</h1>
+</header>
+<div class="page-section">
+    <div class="row">
+        <div class="col-md-6 col-12">
+            <select class="form-control" data-toggle="select2">
+                <option>Giáo viên 1</option>
+                <option>Giáo viên 2</option>
+            </select>
+        </div>
+        <div class="col-md-3 col-12">
+            <select class="form-control" data-toggle="select2">
+                <option>Năm học 2018-2019</option>
+                <option>Năm học 2019-2020</option>
+                <option selected>Năm học 2020-2021</option>
+            </select>
+        </div>
+        <div class="col-md-3 col-12">
+            <button class="btn btn-block btn-primary">Xem báo cáo</button>
+        </div>
+    </div>
+    <div class="metric-row mt-4">
+        <!-- metric column -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <!-- .metric -->
+            <div class="card-metric">
+                <div class="metric">
+                    <p class="metric-value h3">
+                        <sub><i class="oi oi-people"></i></sub> <span class="value">12</span>
+                    </p>
+                    <h2 class="metric-label"> Tổng số thiết bị đã mượn</h2>
+                </div>
+            </div><!-- /.metric -->
+        </div><!-- /metric column -->
+        <!-- metric column -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <!-- .metric -->
+            <div class="card-metric">
+                <div class="metric">
+                    <p class="metric-value h3">
+                        <sub><i class="oi oi-fork"></i></sub> <span class="value">47</span>
+                    </p>
+                    <h2 class="metric-label"> Thiết bị đang mượn </h2>
+                </div>
+            </div><!-- /.metric -->
+        </div><!-- /metric column -->
+        <!-- metric column -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <!-- .metric -->
+            <div class="card-metric">
+                <div class="metric">
+                    <p class="metric-value h3">
+                        <sub><i class="fa fa-tasks"></i></sub> <span class="value">64</span>
+                    </p>
+                    <h2 class="metric-label"> Thiết bị đã trả </h2>
+                </div>
+            </div><!-- /.metric -->
+        </div><!-- /metric column -->
+        <!-- metric column -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <!-- .metric -->
+            <div class="card-metric">
+                <div class="metric">
+                    <p class="metric-value h3">
+                        <sub><i class="oi oi-timer"></i></sub> <span class="value">8</span>
+                    </p>
+                    <h2 class="metric-label"> Thiết bị làm hỏng, mất</h2>
+                </div>
+            </div><!-- /.metric -->
+        </div><!-- /metric column -->
+    </div>
+    <div class="nav-scroller border-bottom">
+        <!-- .nav-tabs -->
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#tb">Mượn thiết bị</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#kp">Mượn phòng</a>
+            </li>
+        </ul><!-- /.nav-tabs -->
+    </div>
+    <div class="tab-content pt-4" id="clientDetailsTabs">
+        <div class="tab-pane  active show  fade" id="tb" role="tabpanel" aria-labelledby="client-invoices-tab">
+            <!-- .card -->
+            <div class="card">
+                <!-- .card-header -->
+                <div class="card-header d-flex">
+                    <!-- .dropdown -->
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-filter mr-1"></i> Tất cả (5) <i class="fa fa-caret-down"></i></button> <!-- .dropdown-menu -->
+                        <div class="dropdown-menu stop-propagation">
+                            <div class="dropdown-arrow"></div>
+                            <h6 id="client-invoices-tab" class="dropdown-header"> Trạng thái </h6>
+                            <label class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="clientInvoiceFilter" value="0" checked="">
+                                <span class="custom-control-label">Tất cả (3)</span>
+                            </label> <label class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="clientInvoiceFilter" value="1">
+                                <span class="custom-control-label">Đã trả (2)</span>
+                            </label> <label class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="clientInvoiceFilter" value="2">
+                                <span class="custom-control-label">Đang mượn (1)</span>
+                            </label>
+                        </div><!-- /.dropdown-menu -->
+                    </div><!-- /.dropdown -->
+                </div><!-- /.card-header -->
+                <!-- .table-responsive -->
+                <div class="table-responsive">
+                    <!-- .table -->
+                    <table class="table">
+                        <!-- thead -->
+                        <thead>
+                            <tr>
+                                <th style="min-width:256px"> Tên thiết bị </th>
+                                <th> Ngày mượn </th>
+                                <th> Ngày trả </th>
+                                <th> Mã phiếu mượn </th>
+                                <th> Trạng thái </th>
+                            </tr>
+                        </thead><!-- /thead -->
+                        <!-- tbody -->
+                        <tbody>
+                            <!-- tr -->
+                            <tr>
+                                <td class="align-middle text-truncate">
+                                    <div class="media align-items-center">
+                                        <a href="#" class="tile bg-pink text-white mr-2">SP</a>
+                                        <div class="media-body">
+                                            <a href="#">Xe ngồi đẩy</a> <small class="d-block text-muted">THIẾT BỊ DẠY HỌC, ĐỒ CHƠI VÀ HỌC LIỆU</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="align-middle"> 20/06/2021 </td>
+                                <td class="align-middle">- </td>
+                                <td class="align-middle">
+                                    <code>GHDGF85476</code>
+                                </td>
+                                <td class="align-middle">
+                                    <span class="badge badge-warning">Đang mượn</span>
+                                </td>
+                            </tr><!-- /tr -->
+                            <tr>
+                                <td class="align-middle text-truncate">
+                                    <div class="media align-items-center">
+                                        <a href="#" class="tile bg-pink text-white mr-2">SP</a>
+                                        <div class="media-body">
+                                            <a href="#">Bộ khối hình</a> <small class="d-block text-muted">THIẾT BỊ DẠY HỌC, ĐỒ CHƠI VÀ HỌC LIỆU</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="align-middle"> 20/06/2021 </td>
+                                <td class="align-middle">21/06/2021 </td>
+                                <td class="align-middle">
+                                    <code>GHDGF85476</code>
+                                </td>
+                                <td class="align-middle">
+                                    <span class="badge badge-success">Đã trả</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="align-middle text-truncate">
+                                    <div class="media align-items-center">
+                                        <a href="#" class="tile bg-pink text-white mr-2">SP</a>
+                                        <div class="media-body">
+                                            <a href="#">Gà mổ thóc</a> <small class="d-block text-muted">THIẾT BỊ DẠY HỌC, ĐỒ CHƠI VÀ HỌC LIỆU</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="align-middle"> 20/06/2021 </td>
+                                <td class="align-middle">21/06/2021 </td>
+                                <td class="align-middle">
+                                    <code>GHDGF85476</code>
+                                </td>
+                                <td class="align-middle">
+                                    <span class="badge badge-success">Đã trả</span>
+                                </td>
+                            </tr>
+                        </tbody><!-- /tbody -->
+                    </table><!-- /.table -->
+                </div><!-- /.table-responsive -->
+            </div><!-- /.card -->
+        </div>
+        <div class="tab-pane fade" id="kp" role="tabpanel" aria-labelledby="client-projects-tab">
+            <!-- .card -->
+            <div class="card">
+                <!-- .card-header -->
+                <div class="card-header d-flex">
+                    <!-- .dropdown -->
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-filter mr-1"></i> All (3) <i class="fa fa-caret-down"></i></button> <!-- .dropdown-menu -->
+                        <div class="dropdown-menu stop-propagation">
+                            <h6 id="client-projects-tab" class="dropdown-header"> Projects </h6><label class="custom-control custom-radio"><input type="radio" class="custom-control-input" name="clientProjectFilter" value="0" checked=""> <span class="custom-control-label">All (3)</span></label> <label class="custom-control custom-radio"><input type="radio" class="custom-control-input" name="clientProjectFilter" value="1"> <span class="custom-control-label">On Going (1)</span></label> <label class="custom-control custom-radio"><input type="radio" class="custom-control-input" name="clientProjectFilter" value="2"> <span class="custom-control-label">Completed (2)</span></label> <label class="custom-control custom-radio"><input type="radio" class="custom-control-input" name="clientProjectFilter" value="3"> <span class="custom-control-label">Archived (0)</span></label>
+                        </div><!-- /.dropdown-menu -->
+                    </div><!-- /.dropdown -->
+                    <button type="button" class="btn btn-primary ml-auto">Add project</button>
+                </div><!-- /.card-header -->
+                <!-- .table-responsive -->
+                <div class="table-responsive">
+                    <!-- .table -->
+                    <table class="table">
+                        <!-- thead -->
+                        <thead>
+                            <tr>
+                                <th style="min-width:260px"> Tên phòng </th>
+                                <th> Ngày mượn </th>
+                                <th> Ngày trả </th>
+                                <th> Trạng thái </th>
+                                <th></th>
+                            </tr>
+                        </thead><!-- /thead -->
+                        <!-- tbody -->
+                        <tbody>
+                            <!-- tr -->
+                            <tr>
+                                <td class="align-middle text-truncate">
+                                    <a href="#" class="tile bg-blue text-white mr-2">SP</a> <a href="#">Phòng dạy học 1</a>
+                                </td>
+                                <td class="align-middle"> 15/06/2021 lúc 13:30 </td>
+                                <td class="align-middle"> 15/06/2021 lúc 17:30</td>
+                                <td class="align-middle">
+                                    <span class="badge badge-success">Đã trả</span>
+                                </td>
+                            </tr><!-- /tr -->
+                        </tbody><!-- /tbody -->
+                    </table><!-- /.table -->
+                </div><!-- /.table-responsive -->
+            </div><!-- /.card -->
+        </div><!-- /.tab-pane -->
+        <!-- .tab-pane -->
+        <!-- /.tab-pane -->
+        <!-- .tab-pane -->
+    </div>
+</div>
+

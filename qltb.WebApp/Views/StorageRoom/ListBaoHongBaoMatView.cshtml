@@ -1,0 +1,35 @@
+﻿@model IEnumerable<qltb.WebApp.Models.StorageRoomViewModel.BaoHongBaoMatItemModel>
+@{
+    Layout = null;
+}
+@foreach (var item in Model)
+{
+
+
+<div class="list-group-item">
+        <div class="list-group-item-figure">
+            <a href="#" class="tile bg-blue"><i class="fad fa-file-alt"></i></a>
+        </div>
+        <div class="list-group-item-body">
+            <h4 class="list-group-item-title">
+                @if (item.Type.Equals("HONG"))
+                {
+                    <a href="#" onclick="LoadDetailBaoHongThietBi('@item.Id')">
+                        <i class="fas fa-circle text-warning mr-1"></i> <code><b>@item.SoHieu</b></code> - @item.NguoiTao
+                    </a>
+                }
+                else
+                {
+                    <a href="#" onclick="LoadDetailBaoMatThietBi('@item.Id')">
+                        <i class="fas fa-circle text-danger mr-1"></i> <code><b>@item.SoHieu</b></code> - @item.NguoiTao
+                    </a>
+                }
+            </h4>
+            <p class="list-group-item-text"> @item.NgayBao.ToString("dd-MM-yyyy") </p>
+        </div>
+        <div class="list-group-item-figure">
+            <span class="badge badge-subtle badge-@item.TrangThaiColor">@item.TrangThai</span>
+        </div>
+    </div><!-- /.list-group-item -->
+}
+

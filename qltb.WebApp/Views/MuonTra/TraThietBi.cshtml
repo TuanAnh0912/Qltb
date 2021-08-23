@@ -1,0 +1,299 @@
+﻿@using qltb.Data
+@model qltb.Data.ViewModels.PhieuMuonViewModel
+@{
+    ViewBag.Title = "Trả thiết bị";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = Session["User"] as NguoiDung;
+}
+<div class="modal modal-alert fade has-shown" id="confirmNhanBanGiaoTB" data-backdrop="static" role="dialog">
+    <!-- .modal-dialog -->
+    <div class="modal-dialog" role="document">
+        <!-- .modal-content -->
+        <div class="modal-content">
+            <!-- .modal-header -->
+            <div class="modal-header">
+                <h5 id="exampleModalAlertWarningLabel" class="modal-title">
+                    <i class="fa fa-bullhorn text-warning mr-1"></i> Xác nhận bàn giao thiết bị
+                </h5>
+            </div><!-- /.modal-header -->
+            <!-- .modal-body -->
+            <div class="modal-body">
+                <p class="text-primary"> Bạn chắc chắn xác nhận đã nhận người mượn đã trả thiết bị? </p>
+                <i>Hãy kiểm tra lại thông tin phiếu. Nếu sai sót hãy yêu cầu người mượn cập nhật thông tin chính xác!</i>
+            </div><!-- /.modal-body -->
+            <!-- .modal-footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Tôi muốn kiểm tra lại</button>
+                <button type="button" class="btn btn-subtle-dark" onclick="TraThietBi()"><i class="fal fa-check mr-1"></i>Xác nhận đã nhận bàn giao</button>
+            </div><!-- /.modal-footer -->
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<header class="page-title-bar">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/muon-tra/thiet-bi"><i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Danh sách phiếu mượn</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <a href="#">Trả thiết bị</a>
+            </li>
+        </ol>
+    </nav>
+    <div class="d-md-flex align-items-md-start">
+        <h1 class="page-title mr-sm-auto"> Trả thiết bị phiếu <code>@Model.MaPhieuMuon</code> </h1><!-- .btn-toolbar -->
+    </div>
+</header>
+<div class="page-section">
+    <div class="row">
+        <div class="col-md-4 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <fieldset>
+                        <legend class="text-muted text-uppercase">Ngày mượn / trả</legend>
+                    </fieldset>
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <label>Ngày mượn: <b>@String.Format("{0:dd/MM/yyyy - HH:mm}", Model.NgayMuon)</b></label>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <label>Ngày trả: <b>@String.Format("{0:dd/MM/yyyy - HH:mm}", Model.NgayTra)</b></label>
+                        </div>
+                    </div>
+                    <div>
+                        <label>Ghi chú: </label>
+                        <i>@Model.GhiChu</i>
+                    </div>
+                    <hr />
+                    <fieldset>
+                        <legend class="text-muted text-uppercase">Thông tin chương trình học</legend>
+                    </fieldset>
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <label>Chương trình học: </label>
+                            @foreach (var item in Model.ChuongTrinhHocs)
+                            {
+                                if (item.ChuongTrinhHocId == Model.ChuongTrinhHocId)
+                                {
+                                    <b>@item.TenChuongTrinhHoc</b>
+                                }
+                            }
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <label>Môn học: </label>
+                            @foreach (var item in Model.MonHocs)
+                            {
+                                if (item.MonHocId == Model.MonHocId)
+                                {
+                                    <b>@item.TenMonHoc</b>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        <label>Bài học: </label>
+                        @foreach (var item in Model.BaiHocCoSuDungThietBis)
+                        {
+                            if (item.BaiHocSuDungThietBiId == Model.BaiHocId)
+                            {
+                                <b>@item.TenBaiHoc</b>
+                            }
+                        }
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <label>Khối lớp: </label>
+                            @foreach (var item in Model.KhoiLops)
+                            {
+                                if (Model.KhoiLopId == item.KhoiLopId)
+                                {
+                                    <b>@item.TenKhoiLop</b>
+                                }
+                            }
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <label>Lớp học:</label>
+                            @foreach (var item in Model.Lops)
+                            {
+                                if (item.LopId == Model.LopHocId)
+                                {
+                                    <b>@item.TenLop</b>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        <label>Giáo viên: </label>
+                        @foreach (var item in Model.GiaoViens)
+                        {
+                            if (item.GiaoVienId == Model.GiaoVienId)
+                            {
+                                <b>
+                                    <a href="#">@@@item.TenGiaoVien</a>
+                                </b>
+                            }
+                        }
+                    </div>
+                    <div>
+                        <label>Mục đích sử dụng: </label>
+                        @foreach (var item in Model.MucDichSuDungs)
+                        {
+                            if (item.MucDichSuDungId == Model.MucDichSuDungId)
+                            {
+                                <b>@item.TenMucDichSuDung</b>
+                            }
+                        }
+                    </div>
+                    <hr />
+                    <fieldset>
+                        <legend class="text-muted text-uppercase">Thông tin tiết học</legend>
+                    </fieldset>
+                    <div>
+                        @foreach (var item in Model.BuoiTrongNgay)
+                        {
+                            if (item == 1)
+                            {
+                                <div class="mb-2">
+                                    <span>Sáng: </span>
+                                    @foreach (var t in Model.TietHocDaChon)
+                                    {
+                                        if (t.BuoiTrongNgay == item)
+                                        {
+                                            <span class="badge badge-dark">Tiết @t.TenTietHoc</span>
+                                        }
+                                    }
+                                </div>
+                            }
+                            else if (item == 2)
+                            {
+                                <div class="mb-2">
+                                    <span>Chiều:</span>
+                                    @foreach (var t in Model.TietHocDaChon)
+                                    {
+                                        if (t.BuoiTrongNgay == item)
+                                        {
+                                            <span class="badge badge-dark">Tiết @t.TenTietHoc</span>
+                                        }
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="mb-2">
+                                    <span>Tối: </span>
+                                    @foreach (var t in Model.TietHocDaChon)
+                                    {
+                                        if (t.BuoiTrongNgay == item)
+                                        {
+                                            <span class="badge badge-dark">Tiết @t.TenTietHoc</span>
+                                        }
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <fieldset>
+                        <legend class="text-muted text-uppercase">Thiết bị đã mượn</legend>
+                    </fieldset>
+                    <div class="list-group list-group-bordered mb-3 shadow-none" id="list-selected">
+                        @if (Model.ThietBis.Count > 0)
+                        {
+                            foreach (var item in Model.ThietBis)
+                            {
+                                <div class="list-group-item thietbi-muon" data-kho-phong-id="@item.KhoPhongId" data-id="@item.ThietBiId" data-sl="@item.SoLuong" id="tb_@item.ThietBiId@item.KhoPhongId">
+                                    <div class="list-group-item-body">
+                                        <span><b id="ttb_1">@item.TenThietBi</b> (@item.TenMonHoc) </span>
+                                        <span class="badge badge-subtle badge-info ml-2">@item.TenLoaiThietBi</span><span class="badge badge-subtle badge-danger ml-2">@item.TenKhoPhong</span>
+                                    </div>
+                                    <div class="list-group-item-figure">
+                                        <span class="text-danger">
+                                            Hỏng: <input type="number" id="tbh_@item.KhoPhongId@item.ThietBiId" class="input-number" value="0" min="0" />
+                                        </span>
+                                        <span class="text-warning ml-2">
+                                            Mất: <input type="number" id="tbm_@item.KhoPhongId@item.ThietBiId" class="input-number" value="0" min="0" />
+                                        </span>
+                                        <span class="ml-2">
+                                            Mượn: <b class="text-primary" id="sl_@item.ThietBiId@item.KhoPhongId">@item.SoLuong</b>
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-center">
+                                <img src="~/assets/images/empty_xct9.svg" width="150" style="opacity:.5" />
+                                <p class="text-center text-muted mt-2">Chưa có thiết bị nào được chọn</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center">
+        <a href="/muon-tra/thiet-bi" class="btn btn-subtle-dark mr-2"><i class="fal fa-arrow-left mr-2"></i>Quay lại</a>
+        <button type="button" class="btn btn-subtle-success" data-toggle="modal" data-target="#confirmNhanBanGiaoTB"><i class="fal fa-check-double mr-2"></i>Hoàn thành trả thiết bị</button>
+    </div>
+</div>
+<script>
+    function TraThietBi() {
+        var MaPhieu = '@Model.MaPhieuMuon';
+        var ThietBis = [];
+        var check = 0;
+        var mess = '';
+        $(".thietbi-muon").each(function () {
+            var ThietBiId = $(this).attr("data-id");
+            var KhoPhongId = $(this).attr("data-kho-phong-id");
+            var SoLuong = $(this).attr("data-sl");
+            var SoLuongMat = $("#tbm_" + KhoPhongId + ThietBiId).val();
+            var SoLuongHong = $("#tbh_" + KhoPhongId + ThietBiId).val();
+            if (parseInt(SoLuongMat) < 0 || parseInt(SoLuongHong) <0) {
+                check = 1;
+            }
+            mess += "Số lượng hỏng hoặc mất không được âm";
+            var obj = { MaPhieuMuon: MaPhieu, ThietBiId: ThietBiId, KhoPhongId: KhoPhongId, SoLuong: SoLuong, SoLuongHong: SoLuongHong, SoLuongMat: SoLuongMat }
+            ThietBis.push(obj);
+        });
+        if (check == 1) {
+            toastr["error"](mess)
+        }
+        else {
+            var reqData = { ThietBis: ThietBis}
+            console.log(ThietBis);
+            $.ajax({
+                type: "POST",
+                url: '/MuonTra/TraThietBi',
+                data: reqData,
+                dataType: 'html',
+                beforeSend: function () {
+                    $("body").LoadingOverlay("show", {
+                        image: "/assets/images/load.png",
+                        progress: true
+                    });
+                },
+                success: function (response) {
+                    var data = JSON.parse(response);
+                    toastr[data.Style](data.Message);
+                    if (data.Status == true) {
+                        setTimeout(function () {
+                            window.location.href = "/muon-tra/chi-tiet-phieu-muon?maPhieu=" + MaPhieu;
+                        }, 1500);
+                    }
+                    
+                },
+                complete: function () {
+                    $("#confirmNhanBanGiaoTB").modal('hide');
+                    $("body").LoadingOverlay("hide", true);
+                }
+            });
+        }
+    }
+</script>
+

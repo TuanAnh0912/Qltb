@@ -1,0 +1,459 @@
+﻿@using qltb.Data
+@model qltb.Data.ViewModels.PhieuMuonViewModel
+@{
+    ViewBag.Title = "Chi tiết phiếu mượn thiết bị";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = Session["User"] as NguoiDung;
+}
+<header class="page-title-bar">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/muon-tra/thiet-bi"><i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Danh sách phiếu mượn</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <a href="#">Chi tiết phiếu</a>
+            </li>
+        </ol>
+    </nav>
+    <div class="d-md-flex align-items-md-start">
+        <h1 class="page-title mr-sm-auto"> Chi tiết phiếu <code>@Model.MaPhieuMuon</code> </h1><!-- .btn-toolbar -->
+        <div class="btn-toolbar">
+            @if (Model.TrangThaiPhieuMuonId == 1)
+            {
+                if (Model.GiaoVienId == user.GiaoVienId)
+                {
+                    <a href="#" class="btn btn-sm btn-subtle-success ml-1" data-toggle="modal" data-target="#confirmTraPhong"><i class="fal fa-sign-out-alt mr-1"></i> Trả thiết bị</a>
+                }
+                else
+                {
+                    <a href="/muon-tra/tra-thiet-bi?maPhieu=@Model.MaPhieuMuon" class="btn btn-sm btn-subtle-success ml-1"><i class="fal fa-sign-out-alt mr-1"></i> Nhận thiết bị</a>
+                }
+            }
+            @if (Model.TrangThaiPhieuMuonId != 2)
+            {
+                <a href="/muon-tra/cap-nhat-phieu-muon?maPhieu=@Model.MaPhieuMuon" class="btn btn-sm btn-subtle-dark ml-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Cập nhật phiếu"><i class="fal fa-edit mr-1"></i> Cập nhật</a>
+            }
+            @if (Model.TrangThaiPhieuMuonId == 3)
+            {
+                if (Model.GiaoVienId == user.GiaoVienId)
+                {
+                    <a href="#" class="btn btn-sm btn-subtle-primary ml-1" data-toggle="modal" data-target="#confirmNhanPhong"><i class="fal fa-share mr-1"></i> Nhận thiết bị</a>
+                }
+                else
+                {
+                    <a href="#" class="btn btn-sm btn-subtle-primary ml-1" data-toggle="modal" data-target="#confirmGiaoPhong"><i class="fal fa-share-all mr-1"></i> Giao thiết bị</a>
+                }
+
+                <a href="#" class="btn btn-sm btn-subtle-danger ml-1"><i class="fal fa-trash-alt mr-1"></i> Xóa phiếu</a>
+            }
+        </div>
+    </div>
+</header>
+<div class="page-section">
+    <div class="row">
+        <div class="col-md-4 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <fieldset>
+                        <legend class="text-muted text-uppercase">Ngày mượn / trả</legend>
+                    </fieldset>
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <label>Ngày mượn: <b>@String.Format("{0:dd/MM/yyyy - HH:mm}", Model.NgayMuon)</b></label>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <label>Ngày trả: <b>@String.Format("{0:dd/MM/yyyy - HH:mm}", Model.NgayTra)</b></label>
+                        </div>
+                    </div>
+                    <div>
+                        <label>Ghi chú: </label>
+                        <i>@Model.GhiChu</i>
+                    </div>
+                    <hr />
+                    <fieldset>
+                        <legend class="text-muted text-uppercase">Thông tin chương trình học</legend>
+                    </fieldset>
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <label>Chương trình học: </label>
+                            @foreach (var item in Model.ChuongTrinhHocs)
+                            {
+                                if (item.ChuongTrinhHocId == Model.ChuongTrinhHocId)
+                                {
+                                    <b>@item.TenChuongTrinhHoc</b>
+                                }
+                            }
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <label>Môn học: </label>
+                            @foreach (var item in Model.MonHocs)
+                            {
+                                if (item.MonHocId == Model.MonHocId)
+                                {
+                                    <b>@item.TenMonHoc</b>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        <label>Bài học: </label>
+                        @foreach (var item in Model.BaiHocCoSuDungThietBis)
+                        {
+                            if (item.BaiHocSuDungThietBiId == Model.BaiHocId)
+                            {
+                                <b>@item.TenBaiHoc</b>
+                            }
+                        }
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <label>Khối lớp: </label>
+                            @foreach (var item in Model.KhoiLops)
+                            {
+                                if (Model.KhoiLopId == item.KhoiLopId)
+                                {
+                                    <b>@item.TenKhoiLop</b>
+                                }
+                            }
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <label>Lớp học:</label>
+                            @foreach (var item in Model.Lops)
+                            {
+                                if (item.LopId == Model.LopHocId)
+                                {
+                                    <b>@item.TenLop</b>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        <label>Giáo viên: </label>
+                        @foreach (var item in Model.GiaoViens)
+                        {
+                            if (item.GiaoVienId == Model.GiaoVienId)
+                            {
+                                <b>
+                                    <a href="#">@@@item.TenGiaoVien</a>
+                                </b>
+                            }
+                        }
+                    </div>
+                    <div>
+                        <label>Mục đích sử dụng: </label>
+                        @foreach (var item in Model.MucDichSuDungs)
+                        {
+                            if (item.MucDichSuDungId == Model.MucDichSuDungId)
+                            {
+                                <b>@item.TenMucDichSuDung</b>
+                            }
+                        }
+                    </div>
+                    <hr />
+                    <fieldset>
+                        <legend class="text-muted text-uppercase">Thông tin tiết học</legend>
+                    </fieldset>
+                    <div>
+                        @foreach (var item in Model.BuoiTrongNgay)
+                        {
+                            if (item == 1)
+                            {
+                                <div class="mb-2">
+                                    <span>Sáng: </span>
+                                    @foreach (var t in Model.TietHocDaChon)
+                                    {
+                                        if (t.BuoiTrongNgay == item)
+                                        {
+                                            <span class="badge badge-dark">Tiết @t.TenTietHoc</span>
+                                        }
+                                    }
+                                </div>
+                            }
+                            else if (item == 2)
+                            {
+                                <div class="mb-2">
+                                    <span>Chiều:</span>
+                                    @foreach (var t in Model.TietHocDaChon)
+                                    {
+                                        if (t.BuoiTrongNgay == item)
+                                        {
+                                            <span class="badge badge-dark">Tiết @t.TenTietHoc</span>
+                                        }
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="mb-2">
+                                    <span>Tối: </span>
+                                    @foreach (var t in Model.TietHocDaChon)
+                                    {
+                                        if (t.BuoiTrongNgay == item)
+                                        {
+                                            <span class="badge badge-dark">Tiết @t.TenTietHoc</span>
+                                        }
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <fieldset>
+                        <legend class="text-muted text-uppercase">Thiết bị đăng ký mượn</legend>
+                    </fieldset>
+                    <div class="list-group list-group-bordered mb-3 shadow-none" id="list-selected">
+                        @if (Model.ThietBis.Count > 0)
+                        {
+                            foreach (var item in Model.ThietBis)
+                            {
+                                <div class="list-group-item thietbi-selected" data-kho-phong-id="@item.KhoPhongId" data-id="@item.ThietBiId" data-slc="13" id="tb_@item.ThietBiId@item.KhoPhongId">
+                                    <div class="list-group-item-body">
+                                        <span><b id="ttb_1">@item.TenThietBi</b> (@item.TenMonHoc) </span>
+                                        <span class="badge badge-subtle badge-info ml-2">@item.TenLoaiThietBi</span><span class="badge badge-subtle badge-danger ml-2">@item.TenKhoPhong</span>
+                                    </div>
+                                    <div class="list-group-item-figure">
+                                        @if (Model.TrangThaiPhieuMuonId == 2)
+                                        {
+                                            <span class="text-danger">
+                                                Hỏng: <input type="number" class="input-number" value="@item.SoLuongHong" readonly />
+                                            </span>
+                                            <span class="text-warning ml-2">
+                                                Mất: <input type="number" class="input-number" value="@item.SoLuongMat" readonly />
+                                            </span>
+                                        }
+                                        <span class="ml-2">
+                                            Mượn: <b class="text-primary" id="sl_@item.ThietBiId@item.KhoPhongId">@item.SoLuong</b>
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-center">
+                                <img src="~/assets/images/empty_xct9.svg" width="150" style="opacity:.5" />
+                                <p class="text-center text-muted mt-2">Chưa có thiết bị nào được chọn</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <fieldset>
+                        <legend class="text-muted text-uppercase">Lịch sử thay đổi</legend>
+                    </fieldset>
+                    <div class="section-block">
+                        <ul class="timeline">
+                            <!-- .timeline-item -->
+                            @foreach (var item in Model.Logs)
+                            {
+                                <li class="timeline-item">
+                                    <!-- .timeline-figure -->
+                                    <div class="timeline-figure">
+                                        <span class="tile tile-circle tile-sm"><i class="far fa-history"></i></span>
+                                    </div><!-- /.timeline-figure -->
+                                    <!-- .timeline-body -->
+                                    <div class="timeline-body">
+                                        <!-- .media -->
+                                        <div class="media">
+                                            <!-- .media-body -->
+                                            <div class="media-body">
+                                                <h6 class="timeline-heading">
+                                                    <a href="#" class="text-link">@item.TieuDe</a>
+                                                </h6>
+                                                <p class="mb-0">
+                                                    <a href="#">@@@item.TenNguoiThucHien</a> @item.HanhDong
+                                                </p>
+                                                <p class="timeline-date d-sm-none"> Ngày @String.Format("{0:dd/MM/yyyy}", item.ThoiGian) lúc @String.Format("{0:HH:mm tt}", item.ThoiGian)</p>
+                                            </div><!-- /.media-body -->
+                                            <!-- .media-right -->
+                                            <div class="d-none d-sm-block">
+                                                <span class="timeline-date">Ngày @String.Format("{0:dd/MM/yyyy}", item.ThoiGian) lúc @String.Format("{0:HH:mm tt}", item.ThoiGian)</span>
+                                            </div><!-- /.media-right -->
+                                        </div><!-- /.media -->
+                                    </div><!-- /.timeline-body -->
+                                </li><!-- /.timeline-item -->
+                            }
+                        </ul><!-- /.timeline -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal modal-alert fade has-shown" id="confirmGiaoPhong" data-backdrop="static" role="dialog">
+    <!-- .modal-dialog -->
+    <div class="modal-dialog" role="document">
+        <!-- .modal-content -->
+        <div class="modal-content">
+            <!-- .modal-header -->
+            <div class="modal-header">
+                <h5 id="exampleModalAlertWarningLabel" class="modal-title">
+                    <i class="fa fa-bullhorn text-warning mr-1"></i> Xác nhận bàn giao thiết bị
+                </h5>
+            </div><!-- /.modal-header -->
+            <!-- .modal-body -->
+            <div class="modal-body">
+                <p class="text-primary"> Bạn chắc chắn xác nhận đã bàn giao thiết bị? </p>
+                <i>Hãy kiểm tra lại thông tin phiếu. Nếu sai sót hãy yêu càu người mượn cập nhật thông tin chính xác!</i>
+            </div><!-- /.modal-body -->
+            <!-- .modal-footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Tôi muốn kiểm tra lại</button>
+                <button type="button" class="btn btn-subtle-dark" onclick="XacNhanGiaoPhong()"><i class="fal fa-check mr-1"></i>Xác nhận bàn giao</button>
+            </div><!-- /.modal-footer -->
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<div class="modal modal-alert fade has-shown" id="confirmNhanPhong" data-backdrop="static" role="dialog">
+    <!-- .modal-dialog -->
+    <div class="modal-dialog" role="document">
+        <!-- .modal-content -->
+        <div class="modal-content">
+            <!-- .modal-header -->
+            <div class="modal-header">
+                <h5 id="exampleModalAlertWarningLabel" class="modal-title">
+                    <i class="fa fa-bullhorn text-warning mr-1"></i> Xác nhận bàn giao thiết bị
+                </h5>
+            </div><!-- /.modal-header -->
+            <!-- .modal-body -->
+            <div class="modal-body">
+                <p class="text-primary"> Bạn chắc chắn xác nhận đã nhận thiết bị đăng ký mượn? </p>
+                <i>Hãy kiểm tra lại thông tin phiếu. Nếu sai sót hãy cập nhật thông tin chính xác!</i>
+            </div><!-- /.modal-body -->
+            <!-- .modal-footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Tôi muốn kiểm tra lại</button>
+                <button type="button" class="btn btn-subtle-dark" onclick="XacNhanNhanPhong()"><i class="fal fa-check mr-1"></i>Xác nhận đã nhận thiết bị</button>
+            </div><!-- /.modal-footer -->
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div class="modal modal-alert fade has-shown" id="confirmTraPhong" data-backdrop="static" role="dialog">
+    <!-- .modal-dialog -->
+    <div class="modal-dialog" role="document">
+        <!-- .modal-content -->
+        <div class="modal-content">
+            <!-- .modal-header -->
+            <div class="modal-header">
+                <h5 id="exampleModalAlertWarningLabel" class="modal-title">
+                    <i class="fa fa-bullhorn text-warning mr-1"></i> Xác nhận bàn giao thiết bị
+                </h5>
+            </div><!-- /.modal-header -->
+            <!-- .modal-body -->
+            <div class="modal-body">
+                <p class="text-primary"> Bạn chắc chắn xác nhận đã trả thiết bị? </p>
+                <i>Hãy kiểm tra lại thông tin phiếu. Nếu sai sót hãy cập nhật thông tin chính xác!</i>
+            </div><!-- /.modal-body -->
+            <!-- .modal-footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Tôi muốn kiểm tra lại</button>
+                <button type="button" class="btn btn-subtle-dark" onclick="XacNhanTraPhong()"><i class="fal fa-check mr-1"></i>Xác nhận đã trả thiết bị mượn</button>
+            </div><!-- /.modal-footer -->
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<script>
+    var MaPhieu = '@Model.MaPhieuMuon';
+    function XacNhanGiaoPhong() {
+        $.ajax({
+            type: "POST",
+            url: '/MuonTra/GiaoNhanThietBi',
+            data: {
+                NguoiChoMuonGiao: true,
+                MaPhieu: MaPhieu
+            },
+            dataType: 'html',
+            beforeSend: function () {
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                toastr[data.Style](data.Message);
+                setTimeout(function () {
+                    location.reload();
+                }, 1500);
+            },
+            complete: function () {
+                $("#confirmGiaoPhong").modal('hide');
+            }
+        });
+    }
+    function XacNhanNhanPhong() {
+        $.ajax({
+            type: "POST",
+            url: '/MuonTra/GiaoNhanThietBi',
+            data: {
+                NguoiMuonNhan: true,
+                MaPhieu: MaPhieu
+            },
+            dataType: 'html',
+            beforeSend: function () {
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                toastr[data.Style](data.Message);
+                setTimeout(function () {
+                    location.reload();
+                }, 1500);
+            },
+            complete: function () {
+                $("#confirmNhanPhong").modal('hide');
+            }
+        });
+    }
+    function XacNhanTraPhong() {
+        $.ajax({
+            type: "POST",
+            url: '/MuonTra/GiaoNhanThietBi',
+            data: {
+                NguoiMuonTra: true,
+                MaPhieu: MaPhieu
+            },
+            dataType: 'html',
+            beforeSend: function () {
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                toastr[data.Style](data.Message);
+                setTimeout(function () {
+                    location.reload();
+                }, 1500);
+            },
+            complete: function () {
+                $("#confirmNhanPhong").modal('hide');
+            }
+        });
+    }
+    function XacNhanNhanBanGiaoPhong() {
+        $.ajax({
+            type: "POST",
+            url: '/MuonTra/GiaoNhanThietBi',
+            data: {
+                NguoiChoMuonNhan: true,
+                MaPhieu: MaPhieu
+            },
+            dataType: 'html',
+            beforeSend: function () {
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                toastr[data.Style](data.Message);
+                setTimeout(function () {
+                    location.reload();
+                }, 1500);
+            },
+            complete: function () {
+                $("#confirmNhanPhong").modal('hide');
+            }
+        });
+    }
+</script>
+

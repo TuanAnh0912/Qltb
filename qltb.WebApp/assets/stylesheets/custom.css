@@ -1,0 +1,73 @@
+/* put your own styles to customize and override the theme */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 30px;
+    background: -webkit-gradient(linear, left top, left bottom, from(#789ac4), to(#4875ad));
+    box-shadow: inset 2px 2px 2px rgba(255,255,255,0.25), inset -2px -2px -2px rgba(0,0,0,0.25);
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 2px;
+    background: linear-gradient(to right, #F5F7FA, #B8C6DB);
+}
+.text-sugress{
+    color:#e0e0e0;
+}
+.selectize-growth {
+    z-index: 1050!important;
+}
+.fz-20{
+    font-size:20px
+}
+.modal-70{
+    max-width:70%!important;
+}
+.mh-40{
+    min-height:40rem;
+}
+.input-number{
+    width:60px;
+}
+.page-item.active a {
+    z-index: 3;
+    color: #2e609c;
+    background-color: #346cb014;
+    border-color: #0000;
+}
+.page-item a {
+    position: relative;
+    display: block;
+    padding: .5rem .75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #222230;
+    background-color: #0000;
+    border: 1px solid #0000;
+    font-weight: 600;
+    border-radius: 3rem;
+}
+.fz-15{
+    font-size:15px;
+}
+.fwb{
+    font-weight:bold;
+}
+.input-number {
+    width: 40px;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    padding-left: 8px;
+}
+@media only screen and (max-width: 600px) {
+    .page-inner{
+        padding-left:20px;
+        padding-right:20px;
+    }
+    .modal-70 {
+        max-width: 100% !important;
+    }
+}

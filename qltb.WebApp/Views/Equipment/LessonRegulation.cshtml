@@ -1,0 +1,495 @@
+﻿
+@using qltb.Data
+@using qltb.Data.ResVMs
+@model IEnumerable<qltb.Data.ResVMs.QuyDinhSoTietSuDungThietBiViewResVM>
+@{
+    ViewBag.Title = "Quy định số tiết sử dụng thiết bị";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto">Quy định số tiết sử dụng thiết bị</h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="#" type="button" data-toggle="modal" data-target="#regulation_insert_modal" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới</span></a>
+    </div>
+</div><!-- /.page-title-bar -->
+<!-- .page-section -->
+<div class="page-section">
+    <!-- .card -->
+    <div class="card card-fluid">
+        <!-- .card-header -->
+        <div class="card-header d-flex">
+            <div class="form-group">
+                <!-- .input-group -->
+                <div class="input-group input-group-alt">
+                    <!-- .input-group-prepend -->
+                    <div class="input-group-prepend" hidden>
+                        <select id="filterBy" class="custom-select">
+                            <option value='' selected=""> Chọn đơn vị</option>
+                            @foreach (var unit in ViewBag.DonVi as List<DonVi>)
+                            {
+                                <option value="@unit.DonViId"> @unit.TenDonVi </option>
+                            }
+                        </select>
+                    </div><!-- /.input-group-prepend -->
+                    <div class="input-group-prepend">
+                        <select id="grade_filter" class="custom-select">
+                            <option value='' selected=""> Chọn khối lớp </option>
+                            @foreach (var unit in ViewBag.KhoiLop as List<KhoiLop>)
+                            {
+                                if (unit.KhoiLopId == ViewBag.Khoi)
+                                {
+                                    <option value="@unit.KhoiLopId" selected> @unit.TenKhoiLop </option>
+                                }
+                                else
+                                {
+                                    <option value="@unit.KhoiLopId"> @unit.TenKhoiLop </option>
+                                }
+                            }
+                        </select>
+                    </div><!-- /.input-group-prepend -->
+                    <div class="input-group-prepend">
+                        <select id="subject_filter" class="custom-select">
+                            <option value='' selected=""> Chọn môn học </option>
+                            @foreach (var unit in ViewBag.MonHoc as List<MonHoc>)
+                            {
+                                if (unit.MonHocId == ViewBag.Mon)
+                                {
+                                    <option value="@unit.MonHocId" selected> @unit.TenMonHoc </option>
+                                }
+                                else
+                                {
+                                    <option value="@unit.MonHocId"> @unit.TenMonHoc </option>
+                                }
+                            }
+                        </select>
+                    </div><!-- /.input-group-prepend -->
+                    <!-- .input-group -->
+                    <div class="input-group has-clearable" hidden>
+                        <button id="clear-search" type="button" class="close" aria-label="Close"><span aria-hidden="true"><i class="fa fa-times-circle"></i></span></button>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><span class="oi oi-magnifying-glass"></span></span>
+                        </div><input id="table-search" type="text" class="form-control" placeholder="Tìm kiếm">
+                    </div><!-- /.input-group -->
+                </div><!-- /.input-group -->
+            </div><!-- /.form-group -->
+            <div class="btn-group ml-auto">
+                @*<button type="button" class="btn btn-success">Xuất excel</button>*@
+                @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#regulation_insert_modal">Thêm mới</button>*@
+            </div>
+        </div><!-- /.card-header -->
+        <!-- .card-body -->
+        <div class="card-body incharger-table table-responsive">
+            <table id="incharger-table" class="table table-bordered table-hover">
+                <thead class="bg-light">
+                    <tr>
+                        <th style="Width:1%" class=""> # </th>
+                        <th style="Width:10%" class=""> Tên lớp </th>
+                        <th style="Width:12%" class=""> Chương trình học </th>
+                        <th style="Width:13%" class=""> Môn học </th>
+                        <th style="Width:12%" class="text-center"> Số tiết TH HK1 </th>
+                        <th style="Width:12%" class="text-center"> Số tiết TH HK2 </th>
+                        <th style="Width:12%" class="text-center"> Số tiết TN HK1 </th>
+                        <th style="Width:12%" class="text-center"> Số tiết TN HK2 </th>
+                        <th style="Width:8%" class="text-center"> Năm học </th>
+                        <th style="Width:8%" class="text-center"> &nbsp; </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- create empty row to passing html validator -->
+                    @foreach (var clsr in Model)
+                    {
+                        <tr>
+                            <td class="">@clsr.STT</td>
+                            <td class="">@clsr.Lops</td>
+                            <td class=""><b>@clsr.ThongTin.TenChuongTrinhHoc</b></td>
+                            <td class="">@clsr.ThongTin.TenMonHoc</td>
+                            <td class="text-center">@clsr.ThongTin.TietTHHKI</td>
+                            <td class="text-center">@clsr.ThongTin.TietTHHKII</td>
+                            <td class="text-center">@clsr.ThongTin.TietTNHKI</td>
+                            <td class="text-center">@clsr.ThongTin.TietTNHKII</td>
+                            <td class="text-center">@clsr.ThongTin.NamHocBatDau-@clsr.ThongTin.NamHocKetThuc </td>
+                            <td class="align-middle text-center">
+                                <a href="#" class="btn btn-sm btn-icon btn-subtle-primary regulation_update" data-id="@clsr.QuyDinhId" data-toggle="modal" data-target="#regulation_update_modal"><i class="fa fa-pencil-alt"></i> <span class="sr-only">Edit</span></a>
+                                <a href="#" class="btn btn-sm btn-icon btn-subtle-danger regulation_delete" data-id="@clsr.QuyDinhId" data-name="@clsr.Lops" data-toggle="modal" data-target="#regulation_delete_modal"><i class="far fa-trash-alt"></i> <span class="sr-only">Remove</span></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody><!-- /tbody -->
+            </table><!-- /.table -->
+        </div><!-- /.card-body -->
+    </div><!-- /.card -->
+</div><!-- /.page-section -->
+
+<form id="regulation_insert_form" action="/Equipment/InsertQuyDinh" method="post">
+    <div id="regulation_insert_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <!-- .modal-dialog -->
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <!-- .modal-content -->
+            <div class="modal-content">
+                <!-- .modal-header -->
+                <div class="modal-header">
+                    <h5 class="modal-title"> Thêm mới số tiết sử dụng thiết bị</h5>
+                </div><!-- /.modal-header -->
+                <!-- .modal-body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label>Chương trình học <span class="text-danger">*</span></label>
+                                    <select id="curriculum_select" name="ChuongTrinhHocId" class="curriculum_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn chương trình học --</option>
+                                        @foreach (var item in ViewBag.ChuongTrinh as List<ChuongTrinhHoc>)
+                                        {
+                                            <option value="@item.ChuongTrinhHocId"> @item.TenChuongTrinhHoc </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Lớp học <span class="text-danger">*</span></label>
+                                    <select id="class_select" name="LopHocId" class="class_select form-control selectize-select selectize-growth" multiple="multiple" required>
+                                        <option value="0" disabled>-- Chọn lớp học --</option>
+                                        @foreach (var clsr in ViewBag.LopHoc as List<Lop>)
+                                        {
+                                            <option value="@clsr.LopId"> @clsr.TenLop </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tf1">Số tiết thí nghiệm HK1 <span class="text-danger">*</span></label>
+                                    <div class="custom-number">
+                                        <input type="number" class="form-control" name="TietTNHKI" min="0" step="1" value="0" placeholder="Số tiết thí nghiệm HK1.." required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tf2">Số tiết thí nghiệm HK2 <span class="text-danger">*</span></label>
+                                    <div class="custom-number">
+                                        <input type="number" class="form-control" name="TietTNHKII" min="0" step="1" value="0" placeholder="Số tiết thí nghiệm HK2.." required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="tf5">Năm học <span class="text-danger">*</span></label>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="custom-number">
+                                                <input type="number" class="form-control" id="year_start_select" name="NamHocBatDau" min="0" step="1"  placeholder="Năm bắt đầu.." required>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="custom-number">
+                                                <input type="number" class="form-control" id="year_end_select" name="NamHocKetThuc" min="0" step="1"  placeholder="Năm kết thúc.." required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Môn học <span class="text-danger">*</span></label>
+                                    <select id="subject_select" name="MonHocId" class="subject_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn môn học --</option>
+                                        @foreach (var subject in ViewBag.MonHoc as List<MonHoc>)
+                                        {
+                                            <option value="@subject.MonHocId"> @subject.TenMonHoc </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tf3">Số tiết thực hành HK1 <span class="text-danger">*</span></label>
+                                    <div class="custom-number">
+                                        <input type="number" class="form-control" name="TietTHHKI" min="0" step="1" value="0" placeholder="Số tiết thực hành HK1.." required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tf4">Số tiết thực hành HK2 <span class="text-danger">*</span></label>
+                                    <div class="custom-number">
+                                        <input type="number" class="form-control" name="TietTHHKII" min="0" step="1" value="0" placeholder="Số tiết thực hành HK2.." required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.modal-body -->
+                <!-- .modal-footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="regulation_insert_btn">Thêm mới</button>
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+                </div><!-- /.modal-footer -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>
+<form id="regulation_update_form" action="/Equipment/UpdateQuyDinh" method="post">
+    <div id="regulation_update_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <!-- .modal-dialog -->
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <!-- .modal-content -->
+            <div class="modal-content">
+                <!-- .modal-header -->
+                <div class="modal-header">
+                    <h5 class="modal-title"> Cập nhật thông tin nhân viên phụ trách</h5>
+                    <input type="text" name="QuyDinhSuDungSoTietId" hidden id="regulation_id_update" />
+                </div><!-- /.modal-header -->
+                <!-- .modal-body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label>Chương trình học <span class="text-danger">*</span></label>
+                                    <select id="curriculum_select_update" name="ChuongTrinhHocId" class="curriculum_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn chương trình học --</option>
+                                        @foreach (var item in ViewBag.ChuongTrinh as List<ChuongTrinhHoc>)
+                                        {
+                                            <option value="@item.ChuongTrinhHocId"> @item.TenChuongTrinhHoc </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Lớp học <span class="text-danger">*</span></label>
+                                    <select id="class_select_update" name="LstLopId" class="class_select form-control selectize-select selectize-growth" multiple="multiple" required>
+                                        <option value="0" disabled>-- Chọn lớp học --</option>
+                                        @foreach (var clsr in ViewBag.LopHoc as List<Lop>)
+                                        {
+                                            <option value="@clsr.LopId"> @clsr.TenLop </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tf1">Số tiết thí nghiệm HK1 <span class="text-danger">*</span></label>
+                                    <div class="custom-number">
+                                        <input type="number" id="tnhk1_update" class="form-control" name="TietTNHKI" min="0" step="1" value="0" placeholder="Số tiết thí nghiệm HK1.." required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tf2">Số tiết thí nghiệm HK2 <span class="text-danger">*</span></label>
+                                    <div class="custom-number">
+                                        <input type="number" id="tnhk2_update" class="form-control" name="TietTNHKII" min="0" step="1" value="0" placeholder="Số tiết thí nghiệm HK2.." required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="tf5">Năm học <span class="text-danger">*</span></label>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="custom-number">
+                                                <input type="number" class="form-control" id="year_start_select_update" name="NamHocBatDau" min="0" step="1" placeholder="Năm bắt đầu.." required>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="custom-number">
+                                                <input type="number" class="form-control" id="year_end_select_update" name="NamHocKetThuc" min="0" step="1" placeholder="Năm kết thúc.." required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Môn học <span class="text-danger">*</span></label>
+                                    <select id="subject_select_update" name="MonHocId" class="subject_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn môn học --</option>
+                                        @foreach (var subject in ViewBag.MonHoc as List<MonHoc>)
+                                        {
+                                            <option value="@subject.MonHocId"> @subject.TenMonHoc </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tf3">Số tiết thực hành HK1 <span class="text-danger">*</span></label>
+                                    <div class="custom-number">
+                                        <input type="number" id="thhk1_update" class="form-control" name="TietTHHKI" min="0" step="1" value="0" placeholder="Số tiết thực hành HK1.." required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tf4">Số tiết thực hành HK2 <span class="text-danger">*</span></label>
+                                    <div class="custom-number">
+                                        <input type="number" id="thhk2_update" class="form-control" name="TietTHHKII" min="0" step="1" value="0" placeholder="Số tiết thực hành HK2.." required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.modal-body -->
+                <!-- .modal-footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="regulation_update_btn">Cập nhật</button>
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+                </div><!-- /.modal-footer -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>
+<form id="regulation_delete_form" action="/Equipment/DeleteQuyDinh" method="post">
+    <div id="regulation_delete_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <!-- .modal-dialog -->
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <!-- .modal-content -->
+            <div class="modal-content">
+                <!-- .modal-header -->
+                <div class="modal-header">
+                    <h5 class="modal-title"> Hủy bỏ quy định</h5>
+                </div><!-- /.modal-header -->
+                <!-- .modal-body -->
+                <div class="modal-body">
+                    <input id="regulation_id_delete" hidden />
+                    <p>Xóa thông tin quy định số tiết của <b id="regulation_to_delete"></b> khỏi hệ thống</p>
+                </div><!-- /.modal-body -->
+                <!-- .modal-footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="regulation_delete_btn">Xác nhận</button>
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+                </div><!-- /.modal-footer -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>
+<script>
+    $(function () {
+        $("#incharger-table").DataTable({
+            autoWidth: false
+        });
+        
+        $(".dataTables_length select").css("width", "55");
+        $(".class_select").selectize({
+            create: 0,
+            placeholder: "Chọn lớp học",
+            dropdownParent: "body"
+        })
+        $(".curriculum_select").selectize({
+            create: 0,
+            placeholder: "Chọn chương trình học",
+            dropdownParent: "body"
+        })
+        $(".subject_select").selectize({
+            create: 0,
+            placeholder: "Chọn môn học",
+            dropdownParent: "body"
+        })
+    })
+    $("#grade_filter").change(function () {
+        var grade_id = $("#grade_filter option:selected").val();
+        var subject_id = $("#subject_filter option:selected").val();
+        Filter(grade_id, subject_id);
+    })
+    $("#subject_filter").change(function () {
+        var subject_id = $("#subject_filter option:selected").val();
+        var grade_id = $("#grade_filter  option:selected").val();
+        Filter(grade_id, subject_id);
+    })
+    function Filter(grade_id, subject_id) {
+        window.location.href = "/Equipment/LessonRegulation?grade_id=" + grade_id + "&subject_id=" + subject_id;
+    }
+    $("#regulation_insert_form").submit(function (event) {
+        var form = $(this);
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: form.serialize(),
+            dataType: 'html',
+            beforeSend: function () {
+                $("#regulation_insert_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công!');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công.');
+                }
+            },
+            complete: function () {
+                $("#regulation_insert_btn").removeAttr("disabled");
+                $("#regulation_insert_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+    $(".regulation_update").click(function () {
+        var quydinh_id = $(this).data('id');
+        $.get("/Equipment/GetQuyDinh", { quydinh_id: quydinh_id }, function (data) {
+            $("#regulation_id_update").val(quydinh_id);
+            $("#thhk1_update").val(data.ThongTin.TietTHHKI);
+            $("#thhk2_update").val(data.ThongTin.TietTHHKII);
+            $("#tnhk1_update").val(data.ThongTin.TietTNHKI);
+            $("#tnhk2_update").val(data.ThongTin.TietTNHKII);
+            $("#year_start_select_update").val(data.ThongTin.NamHocBatDau);
+            $("#year_end_select_update").val(data.ThongTin.NamHocKetThuc);
+            $("#subject_select_update").selectize()[0].selectize.setValue(data.ThongTin.MonHocId);
+            $("#curriculum_select_update").selectize()[0].selectize.setValue(data.ThongTin.ChuongTrinhHocId);
+            $("#class_select_update").selectize()[0].selectize.setValue(data.LstLopIds);
+        });
+    })
+    $("#regulation_update_form").submit(function (event) {
+        var form = $(this);
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: form.serialize(),
+            dataType: 'html',
+            beforeSend: function () {
+                $("#regulation_update_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công!');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công.');
+                }
+            },
+            complete: function () {
+                $("#regulation_update_btn").removeAttr("disabled");
+                $("#regulation_update_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+
+    $(".regulation_delete").click(function () {
+        var regulation_id = $(this).data('id');
+        var regulation_name = $(this).data('name');
+        $("#regulation_id_delete").val(regulation_id);
+        $("#regulation_to_delete").text(regulation_name);
+    })
+    $("#regulation_delete_form").submit(function (event) {
+        var form = $(this);
+        var regulation_id = $("#regulation_id_delete").val();
+        if (regulation_id == null) {
+            return false;
+        }
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: { regulation_id: regulation_id },
+            dataType: 'html',
+            beforeSend: function () {
+                $("#regulation_delete_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công! ');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công. ');
+                }
+            },
+            complete: function () {
+                $("#regulation_delete_btn").removeAttr("disabled");
+                $("#regulation_delete_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+
+</script>

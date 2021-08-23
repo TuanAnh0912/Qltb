@@ -1,0 +1,35 @@
+﻿@model List<qltb.Data.TieuChuanCoSoVatChat>
+@{
+    Layout = null;
+}
+<div class="card-body">
+    <div class="accordion scrollspy-detail">
+        @foreach (var item in Model)
+        {
+            <h5>@item.TenTieuChuan</h5>
+            <p>@item.MoTa</p>
+            if (item.LoaiThietBiTieuChuans.Count() > 0)
+            {
+                <ul>
+                    @foreach (var item2 in item.LoaiThietBiTieuChuans)
+                    {
+                        <li>
+                            @item2.TenLoaiThietBi
+                            <p></p>
+                            @if (item2.ThietBiTieuChuans.Count() > 0)
+                            {
+                                <ul>
+                                    @foreach (var item3 in item2.ThietBiTieuChuans)
+                                    {
+                                        <li>@item3.TenThietBi</li>
+                                    }
+                                </ul>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+        }
+    </div>
+</div>
+

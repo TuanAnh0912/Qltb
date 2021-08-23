@@ -1,0 +1,32 @@
+﻿@model List<qltb.Data.KhoThietBi>
+@{
+    Layout = null;
+    List<int> thietBiIdSelected = ViewData["ThietBiIdSelected"] as List<int>;
+}
+@foreach (var item in Model)
+{
+    if (thietBiIdSelected.Count(m => m == item.ThietBiId) > 0)
+    {
+        <label class="list-group-item d-flex justify-content-between align-items-center">
+            <span>
+                <b>@item.ThietBi.TenThietBi</b> (@item.ThietBi.MonHocId)
+                <span class="badge badge-subtle badge-primary ml-4">@item.ThietBi.LoaiThietBi.TenLoaiThietBi</span>
+
+            </span>
+            <span class="badge badge-secondary badge-pill">Đã chọn</span>
+        </label>
+
+    }
+    else
+    {
+        <label id="itemThietBiSelect" class="list-group-item custom-control custom-checkbox mb-0">
+            <input type="checkbox" value="@item.KhoThietBiId" class="custom-control-input select-thietbi">
+            <span class="custom-control-label">
+                <span>
+                    <b>@item.ThietBi.TenThietBi</b> (@item.ThietBi.MonHocId)
+                    <span class="badge badge-subtle badge-primary ml-4">@item.ThietBi.LoaiThietBi.TenLoaiThietBi</span>
+                </span>
+            </span>
+        </label>
+    }
+}

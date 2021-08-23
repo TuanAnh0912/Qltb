@@ -1,0 +1,267 @@
+﻿@using qltb.Data.ResVMs
+@model ReportKiemKeResVM
+@{
+    ViewBag.Title = "Báo cáo kiểm kê";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<header class="page-title-bar">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/bao-cao/danh-muc-bao-cao"><i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Thống kê / báo cáo</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <a href="#">Báo cáo kiểm kê</a>
+            </li>
+        </ol>
+    </nav>
+    <h1 class="page-title"> Báo cáo kiểm kê</h1>
+</header>
+<div class="page-section">
+    <div class="row">
+        <div class="col-md-3 col-12">
+            <select class="form-control" data-toggle="select2" id="nam-hoc-select" data-placeholder="Chọn năm học">
+            </select>
+        </div>
+        <div class="col-md-3 col-12">
+            <button class="btn btn-block btn-primary" onclick="location.reload()">Xem báo cáo</button>
+        </div>
+    </div>
+    <div class="nav-scroller border-bottom">
+        <!-- .nav-tabs -->
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#tb">Danh sách thiết bị</a>
+            </li>
+        </ul><!-- /.nav-tabs -->
+    </div>
+    <div class="tab-content pt-4" id="clientDetailsTabs">
+        <div class="tab-pane  active show  fade" id="tb" role="tabpanel" aria-labelledby="client-invoices-tab">
+            <!-- .card -->
+            <div class="card">
+                <!-- .card-header -->
+                <div class="card-header ">
+                    <!-- .dropdown -->
+                    <form id="search-chi-tiet-thiet-bi-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <input class="form-control" type="text" name="TenThietBi" placeholder="Tên thiết bị..." value="" />
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <select class="form-control" name="KhoPhongId" data-toggle="select2" data-placeholder="Chọn kho phòng" data-allow-clear="true">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <select class="form-control" name="Thang" data-toggle="select2" data-placeholder="Chọn tháng" data-allow-clear="true">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <button type="button" class="btn btn-outline-primary" id="search-chi-tiet-thiet-bi-btn">Tìm kiếm</button>
+                            </div>
+                        </div>
+                    </form>
+                </div><!-- /.card-header -->
+                <!-- .table-responsive -->
+                <div class="table-responsive">
+                    <!-- .table -->
+                    <table class="table">
+                        <!-- thead -->
+                        <thead>
+                            <tr>
+                                <th style="min-width:256px"> Thiết bị </th>
+                                <th class="text-center"> Số phiếu </th>
+                                <th class="text-center"> Kho / phòng </th>
+                                <th class="text-center"> Ngày kiểm kê </th>
+                                <th class="text-center"> Số lượng còn dùng được </th>
+                                <th class="text-center"> Số lượng hỏng </th>
+                                <th class="text-center"> Số lượng mất </th>
+                            </tr>
+                        </thead><!-- /thead -->
+                        <!-- tbody -->
+                        <tbody id="thiet-bi-tbody">
+                        </tbody><!-- /tbody -->
+                    </table><!-- /.table -->
+                    <ul class="pagination justify-content-center mt-4" id="pagination">
+                    </ul>
+                </div><!-- /.table-responsive -->
+            </div><!-- /.card -->
+
+        </div>
+        <!-- .tab-pane -->
+        <!-- /.tab-pane -->
+        <!-- .tab-pane -->
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/assets/javascript/hanhnd_1.js"></script>
+    <script>
+        // get ds
+        function GetMonHocs(item) {
+            return $.ajax({
+                url: "/tu-dien/danh-sach-mon-hoc",
+                type: "get",
+                success: function (response) {
+                    item.html('').select2({ data: [{ id: '', text: '' }] });
+                    item.select2({
+                        data: response.map(ele => {
+                            return { ...ele, id: ele.MonHocId, text: ele.TenMonHoc ? ele.TenMonHoc : '' }
+                        }),
+                        language: {
+                            noResults: function () {
+                                return "Không có dữ liệu";
+                            }
+                        },
+                    })
+                },
+                error: function (xhr) {
+                    //Do Something to handle error
+                }
+            });
+
+        }
+
+        function GetKhoPhongs(item) {
+            return $.ajax({
+                url: "/tu-dien/danh-sach-kho-phong",
+                type: "get",
+                success: function (response) {
+                    item.html('').select2({ data: [{ id: '', text: '' }] });
+                    item.select2({
+                        data: response.map(ele => {
+                            return { ...ele, id: ele.KhoPhongId, text: ele.TenKhoPhong ? ele.TenKhoPhong : '' }
+                        }),
+                        language: {
+                            noResults: function () {
+                                return "Không có dữ liệu";
+                            }
+                        },
+                    })
+                },
+                error: function (xhr) {
+                    //Do Something to handle error
+                }
+            });
+
+        }
+
+
+        function GetMonths(item) {
+            let months = [];
+            for (let i = 1; i <= 12; i++) {
+                months.push({ id: i.toString(), text: 'Tháng ' + i })
+            }
+            item.html('').select2({ data: [{ id: '', text: '' }] });
+            item.select2({
+                data: months,
+                language: {
+                    noResults: function () {
+                        return "Không có dữ liệu";
+                    }
+                },
+            })
+        }
+
+        function DrawPagination(paginations) {
+            let content = "";
+            paginations.forEach(ele => {
+                let active = ele.IsActived ? "active" : "";
+                let disabled = ele.IsDisabled ? "disabled" : "";
+                content += `<li class="page-item ` + active + ` ` + disabled + `">`;
+                content += `<a class="page-link" href="javascript:void(0)" onClick="GetThietBis('` + ele.Url + `')" tabindex="-1">` + ele.Text + `</a>`;
+                content += `</li>`;
+            })
+
+            $("#pagination").html(content);
+        }
+
+        function DrawThietBis(thietBis) {
+            let content = ``;
+            thietBis.forEach(ele => {
+                content += `<tr>
+                                <td class="align-middle text-truncate">
+                                    <div class="media align-items-center">
+                                        <a href="#" class="tile bg-pink text-white mr-2">SP</a>
+                                        <div class="media-body">
+                                            <a href="#">`+ ele.TenThietBi + `</a> <small class="d-block text-muted">` + ele.TenLoaiThietBi + `</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center align-middle">`+ ele.SoPhieuKiemKe + `</td>
+                                <td class="text-center align-middle">`+ ele.TenKhoPhong + `</td>
+                                <td class="text-center align-middle">`+ ele.NgayKiemKe + `</td>
+                                <td class="text-center align-middle">`+ ele.SoLuongConDungDuoc + `</td>
+                                <td class="text-center align-middle">`+ ele.SoLuongHong + `</td>
+                                <td class="text-center align-middle">`+ ele.SoLuongMat + `</td>
+                            </tr>`;
+            })
+            $("#thiet-bi-tbody").html(content);
+        }
+
+        function GetThietBis(queryParams) {
+            let url = "";
+            if (queryParams) {
+                url = '/bao-cao/thong-tin-bao-cao-kiem-ke' + queryParams
+            }
+            else {
+                console.log($('#nam-hoc-select').select2('data')[0].id)
+                queryParams = $('#search-chi-tiet-thiet-bi-form').serialize();
+                url = '/bao-cao/thong-tin-bao-cao-kiem-ke?namHoc=' + $('#nam-hoc-select').select2('data')[0].id + "&" + queryParams
+            }
+
+            $.ajax({
+                url: url,
+                type: "get",
+                success: function (response) {
+                    console.log(response)
+                    DrawThietBis(response.ThietBis.Objects)
+                    DrawPagination(response.ThietBis.Paginations)
+                },
+                error: function (xhr) {
+                    //Do Something to handle error
+                }
+            });
+        }
+
+        let namHoc = @(Model.NamHoc.Value)
+        $(document).ready(function () {
+            GetMonHocs($("#search-chi-tiet-thiet-bi-form select[name=MonHocId]"))
+
+            GetKhoPhongs($("#search-chi-tiet-thiet-bi-form select[name=KhoPhongId]"))
+
+            GetMonths($("#search-chi-tiet-thiet-bi-form select[name=Thang]"))
+
+            let minYear = 1950;
+            let maxYear = (new Date()).getFullYear();
+            let years = [];
+            for (let i = maxYear; i >= minYear; i--) {
+                years.push({ id: i.toString(), text: 'Năm học ' + i + ' - ' + (i + 1) })
+            }    
+            $('#nam-hoc-select').select2({
+                data: years,
+                language: {
+                    noResults: function () {
+                        return "Không có dữ liệu";
+                    }
+                },
+            })          
+            $('#nam-hoc-select').val(namHoc).trigger("change");
+            $('#nam-hoc-select').on('change.select2', function () {
+                window.location.href = '/bao-cao/chi-tiet-bao-cao-kiem-ke?namHoc=' + $('#nam-hoc-select').select2('data')[0].id
+            })
+
+            GetThietBis();
+
+            $("#search-chi-tiet-thiet-bi-btn").click(function () {
+                GetThietBis();
+            })
+
+        })
+    </script>
+}

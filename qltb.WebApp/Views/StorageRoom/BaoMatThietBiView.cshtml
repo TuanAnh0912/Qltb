@@ -1,0 +1,91 @@
+﻿@model qltb.WebApp.Models.StorageRoomViewModel.BaoMatThietBiModel
+@{
+    Layout = null;
+}
+<form id="formBaoMatThietBi" enctype='multipart/form-data'>
+    <input hidden name="KhoPhongId" value="@Model.KhoPhongId" />
+    <input hidden name="PhieuGhiHongThietBiId" value="@Model.PhieuGhiMatThietBiId" />
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                            <div class="form-group">
+                                <label>Số phiếu</label>
+                                <input class="form-control" type="text" name="SoPhieu" placeholder="Số phiếu..." value="@Model.SoPhieu" readonly>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                            <div class="form-group">
+                                <label>Ngày lập</label>
+                                <input class="form-control" type="date" name="NgayLap" value="@Model.NgayLap">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-4 col-sm-4 col-12">
+                            <div class="form-group">
+                                <label>Ghi chú</label>
+                                <input class="form-control" type="text" name="GhiChu" placeholder="Nội dung..." value="" @Model.GhiChu>
+                            </div>
+                        </div>
+                        @* <div class="col-12">
+                                <div class="form-group">
+                                    <label>Tài liệu đính kèm</label>
+                                    <input type="file" name="FileDinhKem">
+                                </div>
+                                <div id="tai-lieu-dinh-kem-div">
+                                    <div class="row">
+                                    </div>
+                                </div>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <h5>Danh sách thiết bị</h5>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div id="thiet-bi-da-chon-table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table dataTable no-footer" id="thiet-bi-da-chon-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Mã thiết bị</th>
+                                                <th>Tên thiết bị</th>
+                                                <th>Số lượng</th>
+                                                <th>Số lượng báo mất</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="listThietBiBaoMat">
+                                            @if (Model.BaoMatThietBiChiTietModels.Count > 0)
+                                            {
+                                                foreach (var item in Model.BaoMatThietBiChiTietModels)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <input hidden name="ThietBiId" value="@item.ThietBiId" />
+                                                            @item.MaThietBi
+                                                        </td>
+                                                        <td>@item.TenThietBi</td>
+                                                        <td>@item.SoLuong</td>
+                                                        <td><input type="number" name="SoLuongMat" value="@item.SoLuongMat" max="@item.SoLuong" /></td>
+                                                    </tr>
+                                                }
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

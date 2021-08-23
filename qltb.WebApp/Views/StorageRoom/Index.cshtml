@@ -1,0 +1,462 @@
+﻿@using qltb.Data
+@model IEnumerable<qltb.Data.ResVMs.KhoPhongResVM>
+@{
+    ViewBag.Title = "Phòng bộ môn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto"> Phòng bộ môn</h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="#" type="button" data-toggle="modal" data-target="#storage_insert_modal" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới</span></a>
+    </div>
+</div>
+<div class="page-section">
+    <!-- .card -->
+    <div class="card card-fluid">
+        <!-- .card-header -->
+        <!--<div class="card-header d-flex">
+            <div class="form-group">
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#storage_insert_modal">Xuất excel</button>
+            </div>--><!-- /.form-group -->
+            <!--<button type="button" class="btn btn-primary ml-auto" data-toggle="modal" data-target="#storage_insert_modal">Thêm mới</button>
+        </div>--><!-- /.card-header -->
+        <div class="card-body storage-table table-responsive">
+            <table id="storage-table" class="table table-bordered table-hover">
+                <!-- thead -->
+                <thead class="bg-light">
+                    <tr>
+                        <th style="width:5%" class=""> # </th>
+                        <th style="width:20%"class=""> Mã kho phòng </th>
+                        <th style="width:25%"class=""> Tên kho phòng </th>
+                        <th style="width:10%"class="text-center"> Diện tích </th>
+                        <th style="width:10%"class="text-center"> Năm đưa vào sử dụng </th>
+                        <th style="width:30%"class="text-center"> &nbsp; </th>
+                    </tr>
+                </thead><!-- /thead -->
+                <!-- tbody -->
+                <tbody>
+                    <!-- create empty row to passing html validator -->
+                    @foreach (var equip in Model)
+                    {
+                        <tr>
+                            <td class="">@equip.STT</td>
+                            <td class=""><code>@equip.MaKhoPhong</code></td>
+                            <td class="">@equip.TenKhoPhong</td>
+                            <td class="text-center">@equip.DienTich</td>
+                            <td class="text-center">@equip.NamSuDung</td>
+                            <td class="align-middle text-center">
+                                <a href="/StorageRoom/Equipment?storage_id=@equip.KhoPhongId" class="btn btn-sm btn-icon btn-subtle-success storage_equipment" ><i class="fad fa-briefcase" data-toggle="tooltip" data-placement="top" title="Thiết bị trong kho/phòng"></i> <span class="sr-only">Equipment</span></a>
+                                <a href="#" class="btn btn-sm btn-icon btn-subtle-primary storage_update" data-id="@equip.KhoPhongId" data-toggle="modal" data-target="#storage_update_modal"><i class="fa fa-pencil-alt"></i> <span class="sr-only">Edit</span></a>
+                                <a href="#" class="btn btn-sm btn-icon btn-subtle-danger storage_delete" data-id="@equip.KhoPhongId" data-name="@equip.TenKhoPhong" data-toggle="modal" data-target="#storage_delete_modal"><i class="far fa-trash-alt"></i> <span class="sr-only">Remove</span></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody><!-- /tbody -->
+            </table><!-- /.table -->
+        </div><!-- /.card-body -->
+    </div><!-- /.card -->
+</div><!-- /.page-section -->
+
+<form id="storage_insert_form" action="/StorageRoom/Insert" method="post">
+    <div id="storage_insert_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <!-- .modal-dialog -->
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <!-- .modal-content -->
+            <div class="modal-content">
+                <!-- .modal-header -->
+                <div class="modal-header">
+                    <h5 class="modal-title"> Thêm mới kho phòng bộ môn</h5>
+                </div><!-- /.modal-header -->
+                <!-- .modal-body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label>Tên kho phòng <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="storage_name" name="TenKhoPhong" aria-describedby="" placeholder="Tên kho phòng.." required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tf1">Số người quản lý <span class="text-danger">*</span></label>
+                                    <div class="custom-number">
+                                        <input type="number" class="form-control" id="storage_number_incharge" name="SoNguoiQuanLy" min="0" step="1" value="0" placeholder="Số lượng tối thiểu.." required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Kiểu sử dụng <span class="text-danger">*</span></label>
+                                    <select id="used_type_select" name="KieuSuDungKhoPhongId" class="used_type_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn môn học --</option>
+                                        @foreach (var type in ViewBag.KieuSuDung as List<KieuSuDungKhoPhong>)
+                                        {
+                                            <option value="@type.KieuSuDungKhoPhongId"> @type.TenKieuSuDung </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Loại kho phòng <span class="text-danger">*</span></label>
+                                    <select id="storage_type_select" name="LoaiKhoPhongId" class="storage_type_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn loại kho phòng --</option>
+                                        @foreach (var storage_type in ViewBag.LoaiKhoPhong as List<LoaiKhoPhong>)
+                                        {
+                                            <option value="@storage_type.LoaiKhoPhongId"> @storage_type.TenLoaiKhoPhong </option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="tf1">Diện tích  <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="storage_acreage" name="DienTich" aria-describedby="" placeholder="Diện tích.." required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tf1">Năm đưa vào sử dụng <span class="text-danger">*</span></label>
+                                    <div class="custom-number">
+                                        <input type="number" class="form-control" id="storage_year" name="NamSuDung" min="0" step="1" value="@DateTime.Now.Year" placeholder="Số lượng tối thiểu.." required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Xếp Hạng <span class="text-danger">*</span></label>
+                                    <select id="rank_select" name="XepHangKhoPhongId" class="rank_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn loại kho phòng --</option>
+                                        @foreach (var rank in ViewBag.XepHang as List<XepHangKhoPhong>)
+                                        {
+                                            <option value="@rank.XepHangKhoPhongId"> @rank.TenXepHang </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="d-block">Phòng học chức năng</label>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="true" name="LaPhongChucNang" id="rd1"> <label class="custom-control-label" for="rd1">Có</label>
+                                    </div>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="false" name="LaPhongChucNang" id="rd2"> <label class="custom-control-label" for="rd2">Không</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.modal-body -->
+                <!-- .modal-footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                    <button type="submit" class="btn btn-subtle-success" id="storage_insert_btn"><i class="fal fa-check mr-2"></i>Thêm mới</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>
+<form id="storage_update_form" action="/StorageRoom/Update" method="post">
+    <div id="storage_update_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <!-- .modal-dialog -->
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <!-- .modal-content -->
+            <div class="modal-content">
+                <!-- .modal-header -->
+                <div class="modal-header">
+                    <h5 class="modal-title"> Cập nhật thông tin kho phòng</h5>
+                </div><!-- /.modal-header -->
+                <!-- .modal-body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label>Tên kho phòng <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="storage_id_update" name="KhoPhongId" aria-describedby="" placeholder="Mã kho phòng.." hidden required>
+                                    <input type="text" class="form-control" id="storage_id_update_code" name="MaKhoPhong" placeholder="Mã kho phòng.." hidden >
+                                    <input type="text" class="form-control" id="storage_name_update" name="TenKhoPhong" aria-describedby="" placeholder="Tên kho phòng.." required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tf1">Số người quản lý <span class="text-danger">*</span></label>
+                                    <div class="custom-number">
+                                        <input type="number" class="form-control" id="storage_number_incharge_update" name="SoNguoiQuanLy" min="0" step="1" value="0" placeholder="Số lượng tối thiểu.." required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Kiểu sử dụng <span class="text-danger">*</span></label>
+                                    <select id="used_type_select_update" name="KieuSuDungKhoPhongId" class="used_type_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn môn học --</option>
+                                        @foreach (var type in ViewBag.KieuSuDung as List<KieuSuDungKhoPhong>)
+                                        {
+                                            <option value="@type.KieuSuDungKhoPhongId"> @type.TenKieuSuDung </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Loại kho phòng <span class="text-danger">*</span></label>
+                                    <select id="storage_type_select_update" name="LoaiKhoPhongId" class="storage_type_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn loại kho phòng --</option>
+                                        @foreach (var storage_type in ViewBag.LoaiKhoPhong as List<LoaiKhoPhong>)
+                                        {
+                                            <option value="@storage_type.LoaiKhoPhongId"> @storage_type.TenLoaiKhoPhong </option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="tf1">Diện tích  <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="storage_acreage_update" name="DienTich" aria-describedby="" placeholder="Diện tích.." required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tf1">Năm đưa vào sử dụng <span class="text-danger">*</span></label>
+                                    <div class="custom-number">
+                                        <input type="number" class="form-control" id="storage_year_update" name="NamSuDung" min="0" step="1" placeholder="Số lượng tối thiểu.." required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Xếp Hạng <span class="text-danger">*</span></label>
+                                    <select id="rank_select_update" name="XepHangKhoPhongId" class="rank_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn loại kho phòng --</option>
+                                        @foreach (var rank in ViewBag.XepHang as List<XepHangKhoPhong>)
+                                        {
+                                            <option value="@rank.XepHangKhoPhongId"> @rank.TenXepHang </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="d-block">Phòng học chức năng</label>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="true" name="LaPhongHocChucNang" id="rd1_update"> <label class="custom-control-label" for="rd1_update">Có</label>
+                                    </div>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="false" name="LaPhongHocChucNang" id="rd2_update"> <label class="custom-control-label" for="rd2_update">Không</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.modal-body -->
+                <!-- .modal-footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                    <button type="submit" class="btn btn-subtle-success" id="storage_update_btn"><i class="fal fa-check mr-2"></i>Xác nhận</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>
+<form id="storage_delete_form" action="/StorageRoom/Delete" method="post">
+    <div id="storage_delete_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <!-- .modal-dialog -->
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <!-- .modal-content -->
+            <div class="modal-content">
+                <!-- .modal-header -->
+                <div class="modal-header">
+                    <h5 class="modal-title"> Hủy bỏ kho phòng</h5>
+                </div><!-- /.modal-header -->
+                <!-- .modal-body -->
+                <div class="modal-body">
+                    <input id="storage_id_delete" hidden />
+                    <p>Xóa bỏ kho phòng <b id="storage_to_delete"></b> khỏi hệ thống</p>
+                </div><!-- /.modal-body -->
+                <!-- .modal-footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                    <button type="submit" class="btn btn-subtle-success" id="storage_delete_btn"><i class="fal fa-check mr-2"></i>Xác nhận</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>
+<div id="storage_equipment_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <!-- .modal-dialog -->
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <!-- .modal-content -->
+        <div class="modal-content">
+            <!-- .modal-header -->
+            <div class="modal-header">
+                <h5 class="modal-title"> Danh sách thiết bị trong kho phòng</h5>
+            </div><!-- /.modal-header -->
+            <!-- .modal-body -->
+            <div class="modal-body">
+                <div class="card-body storage-table">
+                    <table id="storage-equipment-table" class="table table-hover table-bordered">
+                        <!-- thead -->
+                        <thead class="bg-light">
+                            <tr>
+                                <th> # </th>
+                                <th> Mã thiết bị </th>
+                                <th> Tên thiết bị </th>
+                                <th> Số lượng </th>
+                                <th> Số lượng còn lại </th>
+                            </tr>
+                        </thead><!-- /thead -->
+                        <!-- tbody -->
+                        <tbody id="storage-equipment-table-body">
+
+                        </tbody><!-- /tbody -->
+                    </table><!-- /.table -->
+                </div><!-- /.card-body -->
+            </div><!-- /.modal-body -->
+            <!-- .modal-footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                <button type="submit" class="btn btn-subtle-success" id="storage_equipment_btn" hidden><i class="fal fa-check mr-2"></i>Xác nhận</button>
+            </div><!-- /.modal-footer -->
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+    $(function () {
+        $("#storage-table").DataTable();
+        $(".dataTables_length select").css("width", "55");
+
+        $(".used_type_select").selectize({
+            create: 0,
+            placeholder: "Chọn loại sử dụng",
+            dropdownParent: "body"
+        })
+        $(".rank_select").selectize({
+            create: 0,
+            placeholder: "Chọn loại kho phòng",
+            dropdownParent: "body"
+        })
+        $("#storage_type_select").selectize({
+            create: 0,
+            placeholder: "Có loại kho phòng",
+            dropdownParent: "body"
+        });
+    })
+
+    $("#storage_insert_form").submit(function (event) {
+        var form = $(this);
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: form.serialize(),
+            dataType: 'html',
+            beforeSend: function () {
+                $("#storage_insert_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công!');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công.');
+                }
+            },
+            complete: function () {
+                $("#storage_insert_btn").removeAttr("disabled");
+                $("#storage_insert_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+    $(".storage_equipment").click(function () {
+        var storage_id = $(this).data('id');
+        $.get("/StorageRoom/GetThietBiKhoPhong", { storage_id: storage_id }, function (data) {
+            var html = "";
+            $("#storage-equipment-table-body").empty();
+            $.each(data, function (index, equip) {
+                html += '<tr>' +
+                    '<td class="text-center">' + equip.STT + '</td>' +
+                    '<td class="text-center">' + equip.MaThietBi + '</td>' +
+                    '<td class="text-center">' + equip.TenThietBi + '</td>' +
+                    '<td class="text-center">' + equip.SoLuong + '</td>' +
+                    '<td class="text-center">' + equip.SoLuongConLai + '</td>';
+                html += '</tr>';
+            });
+            $("#storage-equipment-table-body").html(html);
+
+            if (data.length == 0) {
+                html = '<tr><td colspan="5"><div class="text-center m-2">Kho phòng chưa có thiết bị</div></td></tr>';
+                $("#storage-equipment-table-body").html(html);
+            }
+        });
+    })
+    $(".storage_update").click(function () {
+        var storage_id = $(this).data('id');
+        $.get("/StorageRoom/GetKhoPhong", { storage_id: storage_id }, function (data) {
+            $("#storage_id_update").val(data.KhoPhongId);
+            $("#storage_name_update").val(data.TenKhoPhong);
+            $("#storage_acreage_update").val(data.DienTich);
+            $("#storage_id_update_code").val(data.MaKhoPhong);
+            $("#storage_year_update").val(data.NamSuDung);
+            $("#storage_number_incharge_update").val(data.SoNguoiQuanLy);
+            $("#storage_type_select_update").selectize()[0].selectize.setValue(data.LoaiKhoPhongId);
+            $("#rank_select_update").selectize()[0].selectize.setValue(data.XepHangKhoPhongId);
+            $("#used_type_select_update").selectize()[0].selectize.setValue(data.KieuSuDungKhoPhongId);
+            if (data.LaPhongHocChucNang == true) {
+                $("#rdi1_update").attr("checked", "checked");
+            }
+            if (data.LaPhongHocChucNang == false) {
+                $("#rdi2_update").attr("checked", "checked");
+            }
+        });
+    })
+    $("#storage_update_form").submit(function (event) {
+        var form = $(this);
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: form.serialize(),
+            dataType: 'html',
+            beforeSend: function () {
+                $("#storage_update_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công!');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công.');
+                }
+            },
+            complete: function () {
+                $("#storage_update_btn").removeAttr("disabled");
+                $("#storage_update_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+    $(".storage_delete").click(function () {
+        var storage_id = $(this).data('id');
+        var storage_name = $(this).data('name');
+        $("#storage_id_delete").val(storage_id);
+        $("#storage_to_delete").text(storage_name);
+    })
+    $("#storage_delete_form").submit(function (event) {
+        var form = $(this);
+        var storage_id = $("#storage_id_delete").val();
+        if (storage_id == null) {
+            return false;
+        }
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: { storage_id: storage_id },
+            dataType: 'html',
+            beforeSend: function () {
+                $("#storage_update_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công! ');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công. ');
+                }
+            },
+            complete: function () {
+                $("#storage_delete_btn").removeAttr("disabled");
+                $("#storage_delete_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+</script>

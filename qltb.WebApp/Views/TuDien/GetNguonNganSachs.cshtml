@@ -1,0 +1,314 @@
+﻿@using qltb.Data.ResVMs
+@model ListWithPaginationResVM
+@{
+    ViewBag.Title = "Nguồn ngân sách";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var SuccessNotification = TempData["SUCCESS"];
+    var WarningNotification = TempData["WARNING"];
+
+    // get ten tinh param
+    string TenNguonNganSachQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("TenNguonNganSach", out TenNguonNganSachQueryParam);
+}
+<div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm mới nguồn ngân sách</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-nguon-ngan-sach-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Mã nguồn ngân sách</label>
+                                <input type="text" class="form-control" name="MaNguonNganSach" />
+                            </div>
+                            <div class="form-group">
+                                <label>Tên nguồn ngân sách</label>
+                                <input type="text" class="form-control" name="TenNguonNganSach" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="add-nguon-ngan-sach-btn">Thêm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-nguon-ngan-sach-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Mã nguồn ngân sách</label>
+                                <input type="text" class="form-control" name="MaNguonNganSach" />
+                            </div>
+                            <div class="form-group">
+                                <label>Tên nguồn ngân sách</label>
+                                <input type="text" class="form-control" name="TenNguonNganSach" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="update-nguon-ngan-sach-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bạn có chắc chắn muốn xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="delete-nguon-ngan-sach-btn">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto"> Danh sách nguồn ngân sách</h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="#" type="button" onclick="Add()" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới</span></a>
+    </div><!-- /.btn-toolbar -->
+</div>
+<div class="page-section">
+    <div class="row">
+        @*<div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <button onclick="Search()" class="btn btn-sm btn-outline-info">Tìm kiếm</button>
+                    <div class="float-right">
+                        <button class="btn btn-sm btn-primary" onclick="Add()">Thêm mới</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="search-nguon-ngan-sach-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Tên nguồn ngân sách</label>
+                                    <input class="form-control" type="text" name="TenNguonNganSach" placeholder="Tên nguồn ngân sách..." value="@TenNguonNganSachQueryParam" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>*@
+
+        <div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <form id="search-nguon-ngan-sach-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="TenNguonNganSach" placeholder="Tên nguồn ngân sách..." value="@TenNguonNganSachQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <button onclick="Search()" class="btn btn-primary">Tìm kiếm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body" style="overflow-x: auto">
+                    <div class="table-responsive" style="min-width: 1000px">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã nguồn ngân sách</th>
+                                    <th>Tên nguồn ngân sách</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var nguonNganSachResVM in (List<NguonNganSachResVM>)Model.Objects)
+                                    {
+                                        <tr>
+                                            <td>@nguonNganSachResVM.STT</td>
+                                            <td><code>@nguonNganSachResVM.MaNguonNganSach</code></td>
+                                            <td>@nguonNganSachResVM.TenNguonNganSach</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-info" onclick="Edit('@(nguonNganSachResVM.NguonNganSachId)')"><i class="fas fa-pencil"></i></button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="Delete('@(nguonNganSachResVM.NguonNganSachId)')"><i class="fas fa-trash-alt"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <ul class="pagination justify-content-center mt-4">
+                            @{
+                                foreach (var paginationResVM in (List<PaginationResVM>)Model.Paginations)
+                                {
+                                    <li class="page-item @(paginationResVM.IsActived.Value ? "active":  "") @(paginationResVM.IsDisabled.Value ? "disabled":  "")">
+                                        <a class="page-link" href="/tu-dien/nguon-ngan-sach@(paginationResVM.Url)" tabindex="-1">@Html.Raw(paginationResVM.Text)</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/assets/javascript/hanhnd_1.js"></script>
+    <script>
+        function Add() {
+            $('#add-modal').modal('show');
+            $('#add-nguon-ngan-sach-form input[name=MaNguonNganSach]').val('');
+            $('#add-nguon-ngan-sach-form input[name=TenNguonNganSach]').val('');
+            $("#add-nguon-ngan-sach-btn").unbind();
+            $("#add-nguon-ngan-sach-btn").click(function () {
+                AddNguonNganSach();
+            });
+        }
+
+        function Edit(nguonNganSachId) {
+            $.ajax({
+                url: "/tu-dien/thong-tin-nguon-ngan-sach",
+                data: {
+                    nguonNganSachId: nguonNganSachId
+                },
+                type: "get",
+                success: function (response) {
+                    if (response) {
+                        setTimeout(function () {
+                            $('#edit-modal').modal('show');
+                            $('#editModalLabel').html(response.TenNguonNganSach)
+                            $('#edit-nguon-ngan-sach-form input[name=MaNguonNganSach]').val(response.MaNguonNganSach);
+                            $('#edit-nguon-ngan-sach-form input[name=TenNguonNganSach]').val(response.TenNguonNganSach);
+                            $("#update-nguon-ngan-sach-btn").unbind();
+                            $("#update-nguon-ngan-sach-btn").click(function () {
+                                UpdateNguonNganSach(response.NguonNganSachId);
+                            });
+                        }, 500);
+                    }
+                    else {
+                        setTimeout(function () { toastr["warning"]('Không tìm thấy dữ liệu') }, 500)
+                    }
+
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Delete(nguonNganSachId) {
+            $('#delete-modal').modal('show');
+            $("#delete-nguon-ngan-sach-btn").unbind();
+            $("#delete-nguon-ngan-sach-btn").click(function () {
+                DeleteNguonNganSach(nguonNganSachId);
+            });
+        }
+
+        function DeleteNguonNganSach(nguonNganSachId) {
+            console.log(nguonNganSachId)
+            $.ajax({
+                url: "/tu-dien/xoa-thong-tin-nguon-ngan-sach",
+                data: {
+                    NguonNganSachId: nguonNganSachId
+                },
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function UpdateNguonNganSach(nguonNganSachId) {
+            let data = {
+                NguonNganSachId: nguonNganSachId
+            }
+            $('#edit-nguon-ngan-sach-form').serializeArray().forEach(ele => {
+                data[ele.name] = ele.value
+            })
+
+            $.ajax({
+                url: "/tu-dien/cap-nhat-thong-tin-nguon-ngan-sach",
+                data: data,
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function AddNguonNganSach() {
+            let data = {}
+            $('#add-nguon-ngan-sach-form').serializeArray().forEach(ele => {
+                data[ele.name] = ele.value
+            })
+
+            $.ajax({
+                url: "/tu-dien/them-thong-tin-nguon-ngan-sach",
+                data: data,
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Search() {
+            let queryParams = $('#search-nguon-ngan-sach-form').serialize();
+            console.log(queryParams);
+            location.replace("/tu-dien/nguon-ngan-sach?" + queryParams);
+        }
+
+        $(document).ready(function () {
+            if ('@(SuccessNotification)') {
+                toastr["success"]('@(SuccessNotification)')
+            }
+            else if ('@(WarningNotification)') {
+                toastr["warning"]('@(WarningNotification)')
+            }
+
+            $("#search-nguon-ngan-sach-form").submit(function (e) {
+                e.preventDefault();
+            })
+        })
+    </script>
+}

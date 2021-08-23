@@ -1,0 +1,358 @@
+﻿@model qltb.Data.DonVi
+@{
+    Layout = null;
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><!-- End Required meta tags -->
+    <!-- Begin SEO tag -->
+    <title>@ViewBag.Title</title>
+    <!-- FAVICONS -->
+    <link rel="apple-touch-icon" sizes="144x144" href="~/assets/apple-touch-icon.png">
+    <link rel="shortcut icon" href="~/assets/favicon.ico">
+    <meta name="theme-color" content="#3063A0"><!-- End FAVICONS -->
+    <!-- GOOGLE FONT -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600&display=swap" rel="stylesheet">
+    <!-- BEGIN PLUGINS STYLES -->
+    <link href="~/assets/vendor/fontawesome-pro-5.15.2-web/css/all.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/vendor/tributejs/tribute.css">
+    <link rel="stylesheet" href="~/assets/vendor/open-iconic/font/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/vendor/at.js/css/jquery.atwho.min.css">
+    <link rel="stylesheet" href="~/assets/libs/selectize/css/selectize.bootstrap3.css" />
+    <!--<link rel="stylesheet" href="~/assets/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">--><!-- END PLUGINS STYLES -->
+    <!-- END PLUGINS STYLES -->
+    <link href="~/assets/vendor/fullcalendar/main.min.css" rel="stylesheet" />
+    <link href="~/assets/vendor/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/assets/stylesheets/custom.css" rel="stylesheet" />
+    <link href="~/assets/vendor/flatpickr/flatpickr.min.css" rel="stylesheet" />
+    <!-- BEGIN THEME STYLES -->
+    <link rel="stylesheet" href="~/assets/stylesheets/theme.min.css" data-skin="default" />
+    <link rel="stylesheet" href="~/assets/stylesheets/theme-dark.min.css" data-skin="dark" />
+    <link href="~/assets/vendor/jstree/themes/default/style.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    <link href="~/assets/initunit.css" rel="stylesheet" />
+    <script src="~/assets/vendor/jquery/jquery.min.js"></script>
+    <script src="~/assets/libs/selectize/js/standalone/selectize.min.js"></script>
+    <script src="~/assets/vendor/toastr/build/toastr.min.js"></script>
+    <script src="~/assets/vendor/select2/js/select2.min.js"></script>
+    <script src="~/assets/vendor/jstree/jstree.min.js"></script>
+    <script src="~/assets/vendor/popper.js/umd/popper.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    <script>
+        var skin = localStorage.getItem('skin') || 'default';
+        var disabledSkinStylesheet = document.querySelector('link[data-skin]:not([data-skin="' + skin + '"])');
+        // Disable unused skin immediately
+        disabledSkinStylesheet.setAttribute('rel', '');
+        disabledSkinStylesheet.setAttribute('disabled', true);
+        // add loading class to html immediately
+        document.querySelector('html').classList.add('loading');
+    </script><!-- END THEME STYLES -->
+</head>
+<body>
+    <!-- .app -->
+    <div class="app">
+        <!--[if lt IE 10]>
+        <div class="page-message" role="alert">You are using an <strong>outdated</strong> browser. Please <a class="alert-link" href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</div>
+        <![endif]-->
+        <!-- .app-header -->
+        <header class="app-header app-header-dark">
+            <!-- .top-bar -->
+            <div class="top-bar">
+                <!-- .top-bar-brand -->
+                <div class="top-bar-brand">
+                    <!-- toggle aside menu -->
+                    Quản lý thiết bị trường học
+                </div><!-- /.top-bar-brand -->
+                <!-- .top-bar-list -->
+                <div class="top-bar-list">
+                    <!-- .top-bar-item -->
+                    <div class="top-bar-item px-2 d-md-none d-lg-none d-xl-none">
+                        <!-- toggle menu -->
+                        <button class="hamburger hamburger-squeeze" type="button" data-toggle="aside" aria-label="toggle menu"><span class="hamburger-box"><span class="hamburger-inner"></span></span></button> <!-- /toggle menu -->
+                    </div><!-- /.top-bar-item -->
+                    <!-- .top-bar-item -->
+                    <div class="top-bar-item top-bar-item-right px-0">
+                        <!-- .nav -->
+                        <ul class="header-nav nav">
+                            <!-- .nav-item -->
+                            <!-- .nav-item -->
+                        </ul><!-- /.nav -->
+                        <!-- .btn-account -->
+                        <div class="dropdown d-none d-sm-flex">
+                            <button class="btn-account" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="user-avatar user-avatar-md"><img src="~/assets/images/avatars/profile.jpg" alt=""></span>
+                                <span class="account-summary pr-lg-4 d-none d-lg-block">
+                                    <span class="account-name">@Session["FullName"]</span>
+                                    <span class="account-description">@@@Session["UserName"]</span>
+                                </span>
+                            </button> <!-- .dropdown-menu -->
+                            <div class="dropdown-menu">
+                                <div class="dropdown-arrow d-lg-none" x-arrow=""></div>
+                                <div class="dropdown-arrow ml-3 d-none d-lg-block"></div>
+                                <h6 class="dropdown-header d-none d-sm-block d-lg-none"> @Session["FullName"] </h6>
+                                <a class="dropdown-item" href="#"><span class="dropdown-icon oi oi-person"></span> Trang cá nhân</a>
+                                <a class="dropdown-item" href="/Auth/Logout"><span class="dropdown-icon oi oi-account-logout"></span> Đăng xuất</a>
+
+                            </div><!-- /.dropdown-menu -->
+                        </div><!-- /.btn-account -->
+                    </div><!-- /.top-bar-item -->
+                </div><!-- /.top-bar-list -->
+            </div><!-- /.top-bar -->
+        </header><!-- /.app-header -->
+        <!-- .app-aside -->
+        <main class="app-main">
+            <div class="page-inner">
+                <div class="d-md-flex align-items-md-start mb-3">
+                    <h1 class="page-title mr-sm-auto mt-3"> Thiết lập cấu hình đơn vị </h1><!-- .btn-toolbar -->
+                </div>
+                @if (TempData["Alert"] != null)
+                {
+                    @Html.Raw(TempData["Alert"]);
+                }
+                <div class="page-section">
+                    <form method="post">
+                        <input hidden value="@Model.DonViId" name="DonViId" />
+                        
+                        <div class="row">
+                            <div class="col-md-4 col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <fieldset>
+                                            <legend>
+                                                Thông tin đơn vị
+                                            </legend>
+                                        </fieldset>
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-3 col-form-label">Tên đơn vị <span class="text-danger">*</span></label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" name="TenDonVi" value="@Model.TenDonVi" />
+                                                @Html.ValidationMessage("TenDonVi", "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-3 col-form-label">Khối trường</label>
+                                            <div class="col-sm-9">
+                                                @Html.DropDownList("KhoiTruongId", new SelectList(ViewData["KhoiTruongs"] as Dictionary<int, string>, "Key", "Value", Model.KhoiTruongId), new { @class = "form-control" })
+                                                @Html.ValidationMessage("KhoiTruongId", "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-3 col-form-label">Tiêu chuẩn<span class="text-danger">*</span></label>
+                                            <div class="col-sm-9">
+                                                <select class="form-select form-control" id="TieuChuanPhongId" name="TieuChuanPhongId" data-toggle="select2">
+                                                </select>
+                                                @*  @Html.DropDownList("TieuChuanPhongId", new SelectList(ViewData["TieuChuanPhongs"] as Dictionary<int, string>, "Key", "Value", Model.TieuChuanPhongId), new { @class = "form-control" })*@
+                                                @Html.ValidationMessage("TieuChuanPhongId", "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-3 col-form-label">Tiêu chuẩn cơ sở vật chất <span class="text-danger">*</span></label>
+                                            <div class="col-sm-9">
+                                                <select class="form-select form-control" id="TieuChuanCoSoVatChatId" name="TieuChuanCoSoVatChatId" data-toggle="select2">
+                                                </select>
+                                                @* @Html.DropDownList("TieuChuanCoSoVatChatId", new SelectList(ViewData["TieuChuanCoSoVatChats"] as Dictionary<int, string>, "Key", "Value", Model.TieuChuanCoSoVatChatId), new { @class = "form-control" })*@
+                                                @Html.ValidationMessage("TieuChuanCoSoVatChatId", "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-3 col-form-label">Tỉnh</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-select form-control" id="TinhId" name="TinhId" data-toggle="select2">
+                                                </select>
+                                                @Html.ValidationMessage("TinhId", "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-3 col-form-label">Quận huyện</label>
+                                            <div class="col-sm-9">
+
+                                                <select class="form-select form-control" id="HuyenId" name="HuyenId" data-toggle="select2">
+                                                </select>
+                                                @Html.ValidationMessage("HuyenId", "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-3 col-form-label">Xã phường</label>
+                                            <div class="col-sm-9">
+
+                                                <select class="form-select form-control" id="XaId" name="XaId" data-toggle="select2">
+                                                </select>
+                                                @Html.ValidationMessage("XaId", "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-3 col-form-label">Địa chỉ</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" name="DiaChi" value="@Model.DiaChi" />
+                                                @Html.ValidationMessage("DiaChi", "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-3 col-form-label">Hiệu trưởng</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" name="HieuTruong" value="@Model.HieuTruong" />
+                                                @Html.ValidationMessage("HieuTruong", "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-3 col-form-label">Email</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" name="Email" value="@Model.Email" />
+                                                @Html.ValidationMessage("Email", "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-3 col-form-label">Số điện thoại</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" name="DienThoai" value="@Model.DienThoai" />
+                                                @Html.ValidationMessage("DienThoai", "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-3 col-form-label">Website</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" name="Website" value="@Model.Website" />
+                                                @Html.ValidationMessage("Website", "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label class="col-sm-3 col-form-label">Fax</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" name="FAX" value="@Model.FAX" />
+                                                @Html.ValidationMessage("FAX", "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <button type="submit" onclick="sumbitinit()" class="btn btn-subtle-primary mb-3"><i class="fal fa-check mr-2"></i> Cập nhật thông tin</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8 col-12">
+                                <div class="card tieu-chuan-content ">
+                                    <div class="card-body">
+                                        <fieldset>
+                                            <legend>Danh mục phòng & thiết bị cơ bản</legend>
+                                        </fieldset>
+                                        <div class="accordion" id="accordionExample">
+                                            <div class="card">
+                                                <div class="card-header" id="headingOne">
+                                                    <h2 class="mb-0">
+                                                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseTieuChuanTruong" aria-expanded="true" aria-controls="collapseOne">
+                                                            Tiêu chuẩn các loại phòng
+                                                        </button>
+                                                    </h2>
+                                                </div>
+
+                                                <div id="collapseTieuChuanTruong" class="collapse show collapse-content" aria-labelledby="headingOne" data-parent="#collapseTieuChuanTruong">
+
+                                                </div>
+                                            </div>
+                                            <div class="card">
+                                                <div class="card-header" id="headingTwo">
+                                                    <h2 class="mb-0">
+                                                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTieuChuanCoSo" aria-expanded="false" aria-controls="collapseTwo">
+                                                            Tiêu chuẩn cơ sở vật chất
+                                                        </button>
+                                                    </h2>
+                                                </div>
+                                                <div id="collapseTieuChuanCoSo" class="collapse collapse-content" aria-labelledby="headingTwo" data-parent="#collapseTieuChuanCoSo">
+                                                    <div class="card-body">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- .app-footer -->
+            <footer class="app-footer">
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a class="text-muted" href="#">Hỗ trợ</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a class="text-muted" href="#">Hướng dẫn sử dụng</a>
+                    </li>
+                </ul>
+                <div class="copyright"> Copyright © 2018. All right reserved. </div>
+            </footer><!-- /.app-footer -->
+
+        </main><!-- /.app-main -->
+    </div><!-- /.app -->
+    <!-- BEGIN BASE JS -->
+    <script src="~/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!-- BEGIN PLUGINS JS -->
+    <script src="~/assets/vendor/fullcalendar/main.js"></script>
+    <script src="~/assets/vendor/pace-progress/pace.min.js"></script>
+    <script src="~/assets/vendor/stacked-menu/js/stacked-menu.min.js"></script>
+    <script src="~/assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="~/assets/vendor/flatpickr/flatpickr.min.js"></script>
+    <script src="~/assets/vendor/easy-pie-chart/jquery.easypiechart.min.js"></script>
+    <script src="~/assets/vendor/chart.js/Chart.min.js"></script>  END PLUGINS JS
+    <script src="~/assets/vendor/pace-progress/pace.min.js"></script>
+    <script src="~/assets/vendor/handlebars/handlebars.min.js"></script>
+    <script src="~/assets/vendor/typeahead.js/typeahead.bundle.min.js"></script>
+    <script src="~/assets/vendor/tributejs/tribute.min.js"></script>
+    <script src="~/assets/vendor/jquery.caret/jquery.caret.min.js"></script>
+    <script src="~/assets/vendor/at.js/js/jquery.atwho.min.js"></script>
+    <script src="~/assets/vendor/zxcvbn/zxcvbn.js"></script>
+    <script src="~/assets/vendor/flatpickr/plugins/monthSelect/index.js"></script>
+    <script src="~/assets/vendor/vanilla-text-mask/vanillaTextMask.js"></script>
+    <script src="~/assets/vendor/text-mask-addons/textMaskAddons.js"></script>
+    <!-- END PLUGINS JS -->
+    <!-- BEGIN THEME JS -->
+    <script src="~/assets/javascript/theme.min.js"></script> <!-- END THEME JS -->
+    <!-- BEGIN PAGE LEVEL JS -->
+    <!--<script src="~/assets/javascript/pages/dashboard-demo.js"></script>--> <!-- END PAGE LEVEL JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        function sumbitinit(){
+            $("body").LoadingOverlay("show", {
+                image: "/assets/images/load.png",
+                progress: true
+            });
+        }
+        $("#TinhId").load("/Extend/SelectTinh?value=@Model.TinhId", function (response, status, xhr) {});
+        $("#HuyenId").load("/Extend/SelectHuyen?value=@Model.HuyenId", function (response, status, xhr) { });
+        $("#XaId").load("/Extend/SelectXa?value=@Model.XaId", function (response, status, xhr) { });
+
+        $("#TieuChuanCoSoVatChatId").load("/InitUnit/SelectTieuChuanCoSoVatChat?KhoiTruongId=@Model.KhoiTruongId&value=@Model.TieuChuanCoSoVatChatId", function (response, status, xhr) { });
+        $("#TieuChuanPhongId").load("/InitUnit/SelectTieuChuanPhong?KhoiTruongId=@Model.KhoiTruongId&value=@Model.TieuChuanPhongId", function (response, status, xhr) { });
+
+        $('#KhoiTruongId').on('change', function () {
+            $("#TieuChuanCoSoVatChatId").load("/InitUnit/SelectTieuChuanCoSoVatChat?KhoiTruongId=" + this.value + "&value=@Model.HuyenId", function (response, status, xhr) { });
+            $("#TieuChuanPhongId").load("/InitUnit/SelectTieuChuanPhong?KhoiTruongId=" + this.value+"&value=@Model.HuyenId", function (response, status, xhr) { });
+            $("#collapseTieuChuanCoSo").load("/InitUnit/Device?KhoiTruongId=" + this.value, function (response, status, xhr) { });
+            $("#collapseTieuChuanTruong").load("/InitUnit/Standard?KhoiTruongId=" + this.value, function (response, status, xhr) { });
+        });
+        $('#TinhId').on('change', function () {
+            $("#HuyenId").load("/Extend/SelectHuyen?id=" + this.value+"&value=@Model.HuyenId", function (response, status, xhr) { });
+        });
+        $('#HuyenId').on('change', function () {
+            $("#XaId").load("/Extend/SelectXa?id=" + this.value+"&value=@Model.XaId", function (response, status, xhr) { });
+        });
+         $("#collapseTieuChuanCoSo").load("/InitUnit/Device?KhoiTruongId=@Model.KhoiTruongId", function (response, status, xhr) { });
+            $("#collapseTieuChuanTruong").load("/InitUnit/Standard?KhoiTruongId=@Model.KhoiTruongId", function (response, status, xhr) { });
+        $("body").LoadingOverlay("hide", true);
+    </script>
+</body>
+</html>
+

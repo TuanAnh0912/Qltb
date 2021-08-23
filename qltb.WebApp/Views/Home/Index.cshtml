@@ -1,0 +1,304 @@
+﻿@using qltb.Data.ResVMs
+@model ThongKeChungResVM
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<header class="page-title-bar mb-0">
+    <div class="d-flex flex-column flex-md-row">
+        <p class="lead">
+            <span class="font-weight-bold">Xin chào, @Session["FullName"]</span> <span class="d-block text-muted">Thống kê nhanh toàn bộ hệ thống</span>
+        </p>
+    </div>
+</header>
+<div class="page-section">
+    <div class="metric-row">
+        <!-- metric column -->
+        <div class="col-6 col-sm-6 col-lg-3">
+            <!-- .metric -->
+            <div class="card-metric">
+                <div class="metric">
+                    <p class="metric-value h3">
+                        <sub><i class="fad fa-check-circle text-success"></i></sub> <span class="value">@(Model.TongSoThietBiCoTheSuDung.HasValue ? Model.TongSoThietBiCoTheSuDung.Value : 0)</span>
+                    </p>
+                    <h2 class="metric-label text-success"> Thiết bị còn dùng được trong kho </h2>
+                </div>
+            </div><!-- /.metric -->
+        </div><!-- /metric column -->
+        <!-- metric column -->
+        <div class="col-6 col-sm-6 col-lg-3">
+            <!-- .metric -->
+            <div class="card-metric">
+                <div class="metric">
+                    <p class="metric-value h3">
+                        <sub><i class="fad fa-exclamation-circle text-danger"></i></sub> <span class="value">@(Model.TongSoThietBiHongMat.HasValue ? Model.TongSoThietBiHongMat.Value : 0)</span>
+                    </p>
+                    <h2 class="metric-label text-danger"> Thiết bị hỏng, mất </h2>
+                </div>
+            </div><!-- /.metric -->
+        </div><!-- /metric column -->
+        <!-- metric column -->
+        <div class="col-6 col-sm-6 col-lg-3">
+            <!-- .metric -->
+            <div class="card-metric">
+                <div class="metric">
+                    <p class="metric-value h3">
+                        <sub><i class="fad fa-chart-pie text-warning"></i></sub> <span class="value">@(Model.TongSoThietBiDangMuon.HasValue ? Model.TongSoThietBiDangMuon.Value : 0)</span>
+                    </p>
+                    <h2 class="metric-label text-warning"> Thiết bị đang mượn </h2>
+                </div>
+            </div><!-- /.metric -->
+        </div><!-- /metric column -->
+        <!-- metric column -->
+        <div class="col-6 col-sm-6 col-lg-3">
+            <!-- .metric -->
+            <div class="card-metric">
+                <div class="metric">
+                    <p class="metric-value h3">
+                        <sub><i class="fad fa-archive text-primary"></i></sub> <span class="value">@(Model.TongSoThietBiTrongKho.HasValue ? Model.TongSoThietBiTrongKho.Value : 0)</span>
+                    </p>
+                    <h2 class="metric-label text-primary"> Tổng số thiết bị <br /> <small style="color: gray"> (Không tính hỏng, mất)</small> </h2>
+                   
+                </div>
+            </div><!-- /.metric -->
+        </div><!-- /metric column -->
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <fieldset>
+                        <legend>Biểu đồ thiết bị</legend>
+                    </fieldset>
+                    <div class="text-center">
+                        @if (Model.TongSoThietBiTrongKho + Model.TongSoThietBiCoTheSuDung + Model.TongSoThietBiHongMat + Model.TongSoThietBiDangMuon == 0)
+                        {
+                            <img src="~/assets/images/empty_xct9.svg" width="150" style="opacity:.5" />
+                            <p class="text-center text-muted mt-2">Chưa có dữ liệu thống kê</p>
+                        }
+                        else
+                        {
+                            <canvas id="bieu-do-thiet-bi"></canvas>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <fieldset>
+                        <legend>Biểu đồ phiếu mượn thiết bị</legend>
+                    </fieldset>
+                    <div class="text-center">
+                        @if (Model.TongSoPhieuDangKy + Model.TongSoPhieuDangMuon + Model.TongSoPhieuDaTra == 0)
+                        {
+                            <img src="~/assets/images/empty_xct9.svg" width="150" style="opacity:.5" />
+                            <p class="text-center text-muted mt-2">Chưa có dữ liệu thống kê</p>
+                        }
+                        else
+                        {
+                            <canvas id="bieu-do-muon-thiet-bi"></canvas>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <fieldset>
+                        <legend>Biểu đồ hỏng / mất thiết bị</legend>
+                    </fieldset>
+                    <div class="text-center">
+                        <div class="text-center">
+                            @if (Model.TongSoThietBiHong + Model.TongSoThietBiMat + Model.TongSoThietBiDaSua == 0)
+                            {
+                                <img src="~/assets/images/empty_xct9.svg" width="150" style="opacity:.5" />
+                                <p class="text-center text-muted mt-2">Chưa có dữ liệu thống kê</p>
+                            }
+                            else
+                            {
+                                <canvas id="bieu-do-hong-mat-thiet-bi"></canvas>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-12">
+            <div class="card">
+                <div class="card-header text-uppercase"> Đăng ký mượn thiết bị</div><!-- .card-body -->
+                <div class="card-body px-0">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th width="30%" class="text-muted text-uppercase">Người mượn</th>
+                                    <th width="30%" class="text-muted text-uppercase">Ngày mượn</th>
+                                    <th class="text-muted text-uppercase">Trạng thái</th>
+                                    <th width="10%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var phieuMuon in Model.PhieuMuonTBs)
+                                {
+                                    <tr>
+                                        <td class="align-middle">
+                                            <a href="#">@@@phieuMuon.TenGiaoVien</a>
+                                        </td>
+                                        <td class="align-middle">
+                                            @phieuMuon.NgayMuon.Value.ToString("dd/MM/yyyy")<br />
+                                            <small>Lúc @phieuMuon.NgayMuon.Value.ToString("hh:mm")</small>
+                                        </td>
+                                        <td class="align-middle">
+                                            <span class="badge badge-subtle badge-primary">@phieuMuon.TenTrangThai</span>
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="/muon-tra/chi-tiet-phieu-muon?maPhieu=@phieuMuon.MaPhieuMuon" class="btn btn-sm btn-subtle-info"><i class="fal fa-info-circle"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!-- /.card-body -->
+                <!-- .card-footer -->
+                <div class="card-footer">
+                    <a href="/muon-tra/thiet-bi" class="card-footer-item">Xem tất cả <i class="fad fa-chevron-double-right ml-2"></i></a>
+                </div><!-- /.card-footer -->
+            </div>
+        </div>
+        <div class="col-md-6 col-12">
+            <div class="card">
+                <div class="card-header text-uppercase"> Đăng ký mượn phòng</div><!-- .card-body -->
+                <div class="card-body px-0">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="text-muted text-uppercase">Người mượn</th>
+                                    <th class="text-muted text-uppercase">Phòng mượn</th>
+                                    <th class="text-muted text-uppercase">Ngày mượn</th>
+                                    <th class="text-muted text-uppercase">Trạng thái</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.PhieuMuonPhongs)
+                                {
+                                    <tr>
+                                        <td class="align-middle">
+                                            <a href="#">@@@item.TenGiaoVien</a>
+                                        </td>
+                                        <td class="align-middle">
+                                            <b>@item.TenKhoPhong</b>
+                                        </td>
+                                        <td class="align-middle">
+                                            <span>
+                                                @item.NgayMuon.Value.ToString("dd/MM/yyyy") <br />
+                                                <small>lúc @item.NgayMuon.Value.ToString("hh:mm")</small>
+                                            </span>
+                                        </td>
+                                        <td class="align-middle">
+                                            <span class="badge badge-subtle badge-@item.MaMau">@item.TenTrangThai</span>
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="/muon-tra/chi-tiet-phieu-muon-phong?maPhieu=@item.MaPhieuMuon" class="btn btn-sm btn-subtle-info"><i class="fal fa-info-circle"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!-- /.card-body -->
+                <!-- .card-footer -->
+                <div class="card-footer">
+                    <a href="/muon-tra/phong" class="card-footer-item">Xem tất cả <i class="fad fa-chevron-double-right ml-2"></i></a>
+                </div><!-- /.card-footer -->
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        new Chart(document.getElementById('bieu-do-thiet-bi').getContext('2d'), {
+            type: 'pie',
+            data: {
+                labels: ['Hỏng mất', 'Mượn', 'Còn lại'],
+                datasets: [{
+                    label: '',
+                    data: [ @(Model.TongSoThietBiHongMat), @(Model.TongSoThietBiDangMuon), @(Model.TongSoThietBiCoTheSuDung)],
+                    backgroundColor: [
+                        '#ea6759',
+                        '#f5b548',
+                        '#0179a8',
+                    ],
+                    borderColor: [
+                        '#ea6759',
+                        '#f5b548',
+                        '#0179a8',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+         new Chart(document.getElementById('bieu-do-muon-thiet-bi').getContext('2d'), {
+            type: 'pie',
+            data: {
+                labels: ['Đang mượn', 'Đã trả', 'Đăng ký'],
+                datasets: [{
+                    label: '',
+                    data: [@(Model.TongSoPhieuDangMuon), @(Model.TongSoPhieuDaTra), @(Model.TongSoPhieuDangKy)],
+                    backgroundColor: [
+                        '#f7c46c',
+                        '#00a28a',
+                        '#888c9b',
+                    ],
+                    borderColor: [
+                        '#f7c46c',
+                        '#00a28a',
+                        '#888c9b',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+         });
+
+        new Chart(document.getElementById('bieu-do-hong-mat-thiet-bi').getContext('2d'), {
+            type: 'pie',
+            data: {
+                labels: ['Hỏng', 'Mất', 'Đã sửa'],
+                datasets: [{
+                    label: '',
+                    data: [@(Model.TongSoThietBiHong), @(Model.TongSoThietBiMat), @(Model.TongSoThietBiDaSua)],
+                    backgroundColor: [
+                        '#f7c46c',
+                        '#ea6759',
+                        '#00a28a',
+                    ],
+                    borderColor: [
+                        '#f7c46c',
+                        '#ea6759',
+                        '#00a28a',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
+}

@@ -1,0 +1,296 @@
+﻿@model qltb.Data.ViewModels.PhongBanViewModel
+@{
+    ViewBag.Title = Model.TenPhongBan;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<header class="page-title-bar">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active">
+                <a href="/cai-dat/phong-ban"><i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Tất cả phòng ban</a>
+            </li>
+        </ol>
+    </nav>
+    <h1 class="page-title"><i class="far fa-building text-muted mr-2"></i> @Model.TenPhongBan</h1>
+</header>
+@if (TempData["Alert"] != null)
+{
+    @Html.Raw(TempData["Alert"])
+}
+<div class="modal modal-alert fade has-shown" id="deleteModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalAlertWarningLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/Setting/XoaChucVu" method="post">
+                <input type="hidden" name="PhongBanId" id="XPhongBanId" />
+                <input type="hidden" name="ChucVuId" id="XChucVuId" />
+                <div class="modal-header">
+                    <h5 id="exampleModalAlertWarningLabel" class="modal-title">
+                        <i class="fad fa-siren-on text-warning mr-1"></i> Xóa chức vụ <span id="XTenChucVu"></span>
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <p> Khi xóa chức vụ này, tất cả người dùng sẽ bị mất chức vụ đã xóa. Bạn vẫn muốn tiếp tục? </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-warning"><i class="fal fa-check mr-2"></i>Xác nhận xóa</button>
+                    <button type="button" class="btn btn-light" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addChucVuModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="post" action="/Setting/AddNewChucVu">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Thêm chức vụ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="@Model.PhongBanId" name="PhongBanId" />
+                    <div class="form-group">
+                        <label>Tên chức vụ</label>
+                        <input type="text" class="form-control" name="TenChucVu" placeholder="Tên chức vụ" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Mô tả</label>
+                        <textarea rows="3" class="form-control" name="Mota" placeholder="Mô tả"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                    <button type="submit" class="btn btn-subtle-success"><i class="fal fa-check mr-2"></i>Thêm mới</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="updateChucVuModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="post" action="/Setting/UpdateChucVu">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Thêm chức vụ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="UChucVuId" name="ChucVuId" />
+                    <input type="hidden" id="UPhongBanId" name="PhongBanId" />
+                    <div class="form-group">
+                        <label>Tên chức vụ</label>
+                        <input type="text" class="form-control" id="UTenChucVu" name="TenChucVu" placeholder="Tên chức vụ" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Mô tả</label>
+                        <textarea rows="3" class="form-control" id="UMota" name="Mota" placeholder="Mô tả"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                    <button type="submit" class="btn btn-subtle-success"><i class="fal fa-check mr-2"></i>Cập nhật</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="page-section">
+    <div class="nav-scroller border-bottom">
+        <!-- .nav-tabs -->
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link show active" data-toggle="tab" href="#info">Thông tin chung</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#client-tasks">Cập nhật</a>
+            </li>
+        </ul><!-- /.nav-tabs -->
+    </div>
+    <div class="tab-content mt-4" id="clientDetailsTabs">
+        <!-- .tab-pane -->
+        <div class="tab-pane fade active show" id="info" role="tabpanel" aria-labelledby="client-billing-contact-tab">
+            <!-- .card -->
+            <div class="card">
+                <!-- .card-body -->
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 id="client-billing-contact-tab" class="card-title">Thông tin phòng ban </h2>
+                    </div>
+                    <address>Tên phòng: <b>@Model.TenPhongBan</b><br /> Điện thoại: <b>@Model.DienThoai</b><br> Mô tả: <br /> @Model.MoTa</address>
+                </div><!-- /.card-body -->
+            </div><!-- /.card -->
+            <!-- .card -->
+            <div class="row">
+                <div class="col-md-6 col-12">
+                    <div class="card">
+                        <!-- .card-body -->
+                        <div class="card-body">
+                            <h2 class="card-title"> Chức vụ <span class="badge badge-success badge-pill">@Model.ChucVus.Count()</span></h2><!-- .table-responsive -->
+                            <div class="list-group list-group-bordered shadow-none">
+                                @if (Model.ChucVus.Count() > 0)
+                                {
+                                    foreach (var item in Model.ChucVus)
+                                    {
+                                        <div class="list-group-item">
+                                            <div class="list-group-item-figure">
+                                                <a href="#" class="tile tile-circle bg-success"><i class="fad fa-tags"></i></a>
+                                            </div>
+                                            <div class="list-group-item-body"> <b>@item.TenChucVu</b></div>
+                                            <div class="list-group-item-figure">
+                                                <a href="#" class="btn btn-sm btn-subtle-primary mr-1" onclick="openUpdateModal('@item.ChucVuId')" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Cập nhật"><i class="fal fa-edit"></i></a>
+                                                <a href="#" class="btn btn-sm btn-subtle-danger" onclick="openDeleteModal('@item.ChucVuId')" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Xóa chức vụ"><i class="fal fa-trash-alt"></i></a>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="text-center">
+                                        <img src="~/assets/images/empty_xct9.svg" width="150" style="opacity:.5" />
+                                        <p class="text-center text-muted mt-2">Chưa có chức vụ trong phòng ban</p>
+                                    </div>
+                                }
+                            </div>
+                        </div><!-- /.card-body -->
+                        <!-- .card-footer -->
+                        <div class="card-footer">
+                            <a href="#addChucVuModal" class="card-footer-item" data-toggle="modal"><i class="far fa-plus mr-1"></i> Thêm chức vụ</a>
+                        </div><!-- /.card-footer -->
+                    </div><!-- /.card -->
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="card">
+                        <!-- .card-body -->
+                        <div class="card-body">
+                            <h2 class="card-title"> Thành viên <span class="badge badge-primary badge-pill">@Model.SoLuongNguoiDung</span></h2><!-- .table-responsive -->
+                            @if (Model.NguoiDungs != null && Model.NguoiDungs.Count() > 0)
+                            {
+                                foreach (var item in Model.NguoiDungs)
+                                {
+                                    <div class="row align-items-center mb-3">
+                                        <!-- grid column -->
+                                        <div class="col-auto">
+                                            <div class="tile tile-circle bg-indigo">
+                                                <span class="fad fa-user-alt"></span>
+                                            </div>
+                                        </div><!-- /grid column -->
+                                        <!-- grid column -->
+                                        <div class="col">
+                                            <h3 class="card-title">
+                                                <a href="#">@item.HoTen</a>
+                                                <small class="text-muted ml-1">@@@item.TenDangNhap</small>
+                                            </h3>
+                                            <h6 class="card-subtitle text-muted">
+                                                Chức vụ: @foreach (var c in item.ChucVus)
+                                                {
+                                                    <span class="badge badge-subtle badge-success">@c.TenChucVu</span>
+                                                }
+                                            </h6>
+                                        </div><!-- /grid column -->
+                                        <!-- /grid column -->
+                                        <div class="col-auto">
+                                            <div class="dropdown d-inline-block">
+                                                <a href="/nguoi-dung/thong-tin-nguoi-dung?id=@item.NguoiDungId" class="btn btn-xs btn-subtle-primary">Chi tiết</a>
+                                            </div><!-- /.dropdown -->
+                                        </div><!-- /grid column -->
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="text-center">
+                                    <img src="~/assets/images/empty_xct9.svg" width="150" style="opacity:.5" />
+                                    <p class="text-center text-muted mt-2">Chưa có người dùng trong phòng ban</p>
+                                </div>
+                            }
+                        </div><!-- /.card-body -->
+                    </div><!-- /.card -->
+                </div>
+            </div>
+
+        </div><!-- /.tab-pane -->
+        <!-- .tab-pane -->
+        <div class="tab-pane fade" id="client-tasks" role="tabpanel" aria-labelledby="client-tasks-tab">
+            <!-- .card -->
+            <div class="card">
+                <!-- .card-body -->
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h3 id="client-tasks-tab" class="card-title"> Thông tin phòng ban </h3>
+                    </div>
+                    <form method="post" action="/Setting/UpdatePhongBan">
+                        <div class="col-md-6 col-12">
+                            <input type="hidden" value="@Model.PhongBanId" name="PhongBanId" />
+                            <div class="form-group">
+                                <label>Tên Phòng ban</label>
+                                <input type="text" value="@Model.TenPhongBan" class="form-control" name="TenPhongBan" />
+                            </div>
+                            <div class="form-group">
+                                <label>Điện thoại</label>
+                                <input type="text" value="@Model.DienThoai" name="DienThoai" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label>Mô tả</label>
+                                <input type="text" value="@Model.MoTa " name="MoTa" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <button type="submit" class="btn btn-subtle-success"><i class="fal fa-check mr-1"></i> Cập nhật thông tin</button>
+                        </div>
+                    </form>
+                </div><!-- /.card-body -->
+            </div><!-- /.card -->
+        </div><!-- /.tab-pane -->
+        <!-- .tab-pane -->
+    </div>
+</div>
+<script>
+    function openUpdateModal(id) {
+        $.ajax({
+            type: "GET",
+            url: '/Setting/GetChucVu',
+            data: { id: id },
+            dataType: 'html',
+            beforeSend: function () {
+                
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                $("#UChucVuId").val(data.ChucVuId);
+                $("#UPhongBanId").val(data.PhongBanId);
+                $("#UTenChucVu").val(data.TenChucVu);
+                $("#UMota").val(data.Mota);
+                $("#updateChucVuModal").modal('show');
+            },
+            complete: function () {
+                
+            }
+        });
+    }
+    
+    function openDeleteModal(id) {
+        $.ajax({
+            type: "GET",
+            url: '/Setting/GetChucVu',
+            data: { id: id },
+            dataType: 'html',
+            beforeSend: function () {
+
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                $("#XChucVuId").val(data.ChucVuId);
+                $("#XPhongBanId").val(data.PhongBanId);
+                $("#XTenChucVu").val(data.TenChucVu);
+                $("#deleteModal").modal('show');
+            },
+            complete: function () {
+
+            }
+        });
+    }
+</script>

@@ -1,0 +1,20 @@
+﻿@model List<qltb.Data.Huyen>
+@{
+    ViewBag.Title = "SelectHuyen";
+}
+<option value="0">Chọn huyện</option>
+@foreach (var item in Model)
+{
+    if (item.HuyenId.Equals((string)ViewBag.selected))
+    {
+        <option value="@item.HuyenId" selected>@item.TenHuyen </option>
+        
+    }
+    else
+    {
+        <option value="@item.HuyenId">@item.TenHuyen </option>
+    }
+
+}
+
+

@@ -1,0 +1,152 @@
+﻿@model IEnumerable<qltb.Data.ViewModels.PhongBanViewModel>
+@{
+    ViewBag.Title = "AllDepartment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-md-flex align-items-md-start mb-2">
+    <h1 class="page-title mr-sm-auto"> Danh sách phòng ban </h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="#" type="button" data-toggle="modal" data-target="#addPhongBanModal" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới phòng ban</span></a>
+    </div><!-- /.btn-toolbar -->
+</div>
+@if (TempData["Alert"] != null)
+{
+    @Html.Raw(TempData["Alert"])
+}
+<div class="modal fade" id="addPhongBanModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Thêm phòng ban</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="toast" id="toast-success" data-autohide="true" data-delay="3000" style="position: fixed; bottom: 0; right: 0; width:400px">
+                    <div class="toast-header">
+                        <strong class="mr-auto text-success"><i class="fad fa-check-circle mr-1"></i>Thành công</strong>
+                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                    </div>
+                    <div class="toast-body">
+                        <span id="mess"></span>
+                    </div>
+                </div>
+                <div class="toast" id="toast-fail" data-autohide="true" data-delay="3000" style="position: fixed; bottom: 0; right: 0; width:400px">
+                    <div class="toast-header">
+                        <strong class="mr-auto text-danger"><i class="fad fa-check-circle mr-1"></i>Thất bại</strong>
+                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                    </div>
+                    <div class="toast-body">
+                        <span id="mess1"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Tên phòng ban</label>
+                    <input type="text" class="form-control" id="TenPhongBan" placeholder="Tên phòng ban" />
+                </div>
+                <div class="form-group">
+                    <label>Điện thoại</label>
+                    <input type="text" class="form-control" id="DienThoai" placeholder="Điện thoại" />
+                </div>
+                <div class="form-group">
+                    <label>Mô tả</label>
+                    <textarea rows="3" class="form-control" id="MoTa" placeholder="Mô tả"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                <button type="button" class="btn btn-subtle-success" onclick="Insert()"><i class="fal fa-check mr-2"></i>Thêm mới</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-section">
+    <!-- .card -->
+    <div class="card card-fluid">
+        <!-- .card-header -->
+        <div class="card-body">
+            <div class="list-group list-group-flush list-group-divider">
+                @foreach (var item in Model)
+                {
+                    <!-- .list-group-item -->
+                    <div class="list-group-item">
+                        <div class="list-group-item-figure">
+                            <div class="tile bg-warning">
+                                <span class="fad fa-users-class"></span>
+                            </div>
+                        </div>
+                        <div class="list-group-item-body">
+                            <div class="d-sm-flex justify-content-sm-between align-items-sm-center">
+                                <div class="team">
+                                    <h4 class="list-group-item-title">
+                                        <a href="/cai-dat/chi-tiet-phong-ban?phongbanId=@item.PhongBanId"><b class="text-primary">@item.TenPhongBan</b></a>
+                                    </h4>
+                                    <p class="list-group-item-text"><code>@item.MaPhongBan</code></p>
+                                </div>
+                                <ul class="list-inline text-muted mb-0">
+                                    <li class="list-inline-item mr-3" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Số thành viên">
+                                        <i class="fas fa-users text-primary"></i> <b>@item.SoLuongNguoiDung</b>
+                                    </li>
+                                    <li class="list-inline-item mr-3" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Chức vụ">
+                                        <i class="fas fa-tags text-warning"></i> <b>@item.ChucVus.Count()</b>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="list-group-item-figure">
+                            <a href="/cai-dat/chi-tiet-phong-ban?phongbanId=@item.PhongBanId" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Xem chi tiết" class="btn btn-sm btn-icon btn-subtle-info stop-propagation"><i class="fal fa-info"></i></a>
+                        </div>
+                    </div>
+                }
+                <!-- .list-group-item -->
+            </div>
+        </div><!-- /.card-body -->
+    </div><!-- /.card -->
+</div>
+<script>
+    function Insert() {
+        var TenPhongBan = $("#TenPhongBan").val();
+        var DienThoai = $("#DienThoai").val();
+        var MoTa = $("#MoTa").val();
+        if (TenPhongBan) {
+            $.ajax({
+                type: "POST",
+                url: '/Setting/AddNewPhongBan',
+                data: {
+                    TenPhongBan: TenPhongBan,
+                    DienThoai: DienThoai,
+                    MoTa: MoTa
+                },
+                dataType: 'html',
+                beforeSend: function () {
+
+                },
+                success: function (response) {
+                    var data = JSON.parse(response);
+                    if (data.Status == true) {
+                        $("#mess").text(data.Message);
+                        $("#toast-success").toast('show');
+                    }
+                    else {
+                        $("#mess1").text(data.Message);
+                        $("#toast-fail").toast('show');
+                    }
+                },
+                complete: function () {
+                    var TenPhongBan = $("#TenPhongBan").val('');
+                    var DienThoai = $("#DienThoai").val('');
+                    var MoTa = $("#MoTa").val('');
+                }
+            });
+        }
+        else {
+            $("#mess1").text("Tên phòng ban không được để trống");
+            $("#toast-fail").toast('show');
+        }
+    }
+    $('#addPhongBanModal').on('hidden.bs.modal', function () {
+        location.reload();
+    });
+</script>

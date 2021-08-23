@@ -1,0 +1,578 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0381699F-9E2A-40AD-B960-F3BFD5F5DCF4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>qltb.Data</RootNamespace>
+    <AssemblyName>qltb.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Html.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Html.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Html.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.4.5.0\lib\netstandard2.0\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApplicationDbcontext.cs" />
+    <Compile Include="BaiHocSuDungThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CanBoThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChiTietBaiHocSuDungThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChiTietPhieuDeNghiMuaSam.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChiTietPhieuGhiGiamThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChiTietPhieuGhiHongThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChiTietPhieuGhiMatThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChiTietPhieuKiemKe.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChiTietPhieuSuaChua.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChiTietThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChucNang.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChucVu.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChuongTrinhHoc.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DonVi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DonViTinh.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FileTrongPhieuDeNghiMuaSam.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FileTrongPhieuGhiGiam.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FileTrongPhieuGhiHong.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FileTrongPhieuGhiMat.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FileTrongPhieuGhiTang.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FileTrongPhieuKiemKe.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FileTrongPhieuSuaChua.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GiaoVien.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GioiTinh.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\CountTime.cs" />
+    <Compile Include="Helpers\ExceptionHelpers\WarningException.cs" />
+    <Compile Include="Helpers\HtmlHelper.cs" />
+    <Compile Include="Helpers\MailProvider.cs" />
+    <Compile Include="Helpers\MapData.cs" />
+    <Compile Include="Helpers\MapDataHelper.cs" />
+    <Compile Include="Helpers\PaginationHelper.cs" />
+    <Compile Include="Helpers\ParseStringToDateTime.cs" />
+    <Compile Include="Helpers\RamdomHelper.cs" />
+    <Compile Include="Helpers\SecurityHelper.cs" />
+    <Compile Include="HocKy.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Huyen.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="KhoiLop.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="KhoiLopTieuChuan.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="KhoiPhongTieuChuan.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="KhoiTruong.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="KhoPhong.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="KhoThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="KieuSuDungKhoPhong.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LienKetKhoiLopThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LienKetNguoiDungChucVu.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LienKetNguoiNguoiDungPhongBan.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LienKetThietBiPhieuMuon.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LienKetTietHocPhieuMuon.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoaiBaiHoc.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoaiKhoPhong.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoaiPhieuMuon.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoaiPhuTrach.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoaiThayDoi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoaiThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoaiThietBiTieuChuan.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LogPhieuMuon.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LogThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Lop.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\HongMatThietViModel.cs" />
+    <Compile Include="Models\ResponseModel.cs" />
+    <Compile Include="MonHoc.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MonHocTieuChuan.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MucDichSuDung.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NguoiDung.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NguonCap.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NguonKinhPhiCapTren.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NguonNganSach.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NhomChucNang.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NhomNguoiDung.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PhieuDeNghiMuaSam.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PhieuGhiGiamThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PhieuGhiHongThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PhieuGhiMatThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PhieuGhiTangThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PhieuGhiTangThietBi_ChiTietThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PhieuKiemKe.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PhieuMuon.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PhieuSuaChua.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Phong.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PhongBan.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\BaiHocSuDungThietBiProvider.cs" />
+    <Compile Include="Providers\CanBoThietBiProvider.cs" />
+    <Compile Include="Providers\ChiTietPhieuGhiHongThietBiProvider.cs" />
+    <Compile Include="Providers\ChiTietPhieuGhiMatThietBiProvider.cs" />
+    <Compile Include="Providers\ChucNangProvider.cs" />
+    <Compile Include="Providers\ChucVuProvider.cs" />
+    <Compile Include="Providers\DonViProvider.cs" />
+    <Compile Include="Providers\GetForSelectProvider.cs" />
+    <Compile Include="Providers\GiaoVienProvider.cs" />
+    <Compile Include="Providers\HuyenProvider.cs" />
+    <Compile Include="Providers\KhoiLopProvider.cs" />
+    <Compile Include="Providers\KhoiLopTieuChuanProvider.cs" />
+    <Compile Include="Providers\KhoiPhongTieuChuanProvider.cs" />
+    <Compile Include="Providers\KhoiTruongProvider.cs" />
+    <Compile Include="Providers\KhoPhongProvider.cs" />
+    <Compile Include="Providers\KhoThietBiProvider.cs" />
+    <Compile Include="Providers\LienKetKhoiLopThietBiProvider.cs" />
+    <Compile Include="Providers\LienKetNguoiDungChucVuProvider.cs" />
+    <Compile Include="Providers\LoaiKhoPhongProvider.cs" />
+    <Compile Include="Providers\LoaiThietBiProvider.cs" />
+    <Compile Include="Providers\LoaiThietBiTieuChuanProvider.cs" />
+    <Compile Include="Providers\LogPhieuMuonProvider.cs" />
+    <Compile Include="Providers\MonHocProvider.cs" />
+    <Compile Include="Providers\MonHocTieuChuanProvider.cs" />
+    <Compile Include="Providers\NguoiDungProvider.cs" />
+    <Compile Include="Providers\PhieuGhiHongThietBiProvider.cs" />
+    <Compile Include="Providers\PhieuGhiMatThietBiProvider.cs" />
+    <Compile Include="Providers\PhieuMuonProvider.cs" />
+    <Compile Include="Providers\PhongBanProvider.cs" />
+    <Compile Include="Providers\PhongProvider.cs" />
+    <Compile Include="Providers\QuanLyThietBiProvider.cs" />
+    <Compile Include="Providers\QuyenTruyCapProvider.cs" />
+    <Compile Include="Providers\ReportProvider.cs" />
+    <Compile Include="Providers\SuDungPhongProvider.cs" />
+    <Compile Include="Providers\ThietBiProvider.cs" />
+    <Compile Include="Providers\ThietBiTieuChuanProvider.cs" />
+    <Compile Include="Providers\ThoiKhoaBieuPhongProvider.cs" />
+    <Compile Include="Providers\ThongKeProvider.cs" />
+    <Compile Include="Providers\TieuChuanCoSoVaChatProvider.cs" />
+    <Compile Include="Providers\TieuChuanPhongProvider.cs" />
+    <Compile Include="Providers\TinhProvider.cs" />
+    <Compile Include="Providers\ToBoMonProvider.cs" />
+    <Compile Include="Providers\TuDienProvider.cs" />
+    <Compile Include="Providers\XaPovider.cs" />
+    <Compile Include="qltb.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>qltb.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="qltb.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="qltb.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>qltb.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="QuyDinhSoTietSuDungThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QuyDinhSuDungSoTiet.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="QuyenTruyCap.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReqVMs\AddChiTietKiemKeReqVM.cs" />
+    <Compile Include="ReqVMs\AddChiTietPhieuDeNghiMuaSamReqVM.cs" />
+    <Compile Include="ReqVMs\AddChiTietPhieuSuaChuaReqVM.cs" />
+    <Compile Include="ReqVMs\AddChiTietThietBiGiamReqVM.cs" />
+    <Compile Include="ReqVMs\AddChiTietThietBiHongReqVM.cs" />
+    <Compile Include="ReqVMs\AddChiTietThietBiMatReqVM.cs" />
+    <Compile Include="ReqVMs\AddChiTietThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\AddChuongTrinhHocReqVM.cs" />
+    <Compile Include="ReqVMs\AddDonViTinhResVM.cs" />
+    <Compile Include="ReqVMs\AddHuyenReqVM.cs" />
+    <Compile Include="ReqVMs\AddKhoiLopReqVM.cs" />
+    <Compile Include="ReqVMs\AddLoaiBaiHocReqVM.cs" />
+    <Compile Include="ReqVMs\AddLoaiKhoPhongReqVM.cs" />
+    <Compile Include="ReqVMs\AddLoaiPhuTrachReqVM.cs" />
+    <Compile Include="ReqVMs\AddLoaiThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\AddLopReqVM.cs" />
+    <Compile Include="ReqVMs\AddMonHocReqVM.cs" />
+    <Compile Include="ReqVMs\AddMucDichSuDungReqVM.cs" />
+    <Compile Include="ReqVMs\AddNguonCapReqVM.cs" />
+    <Compile Include="ReqVMs\AddNguonKinhPhiCapTrenReqVM.cs" />
+    <Compile Include="ReqVMs\AddNguonNganSachReqVM.cs" />
+    <Compile Include="ReqVMs\AddPhieuDeNghiMuaSamReqVM.cs" />
+    <Compile Include="ReqVMs\AddPhieuGhiGiamThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\AddPhieuGhiHongThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\AddPhieuGhiMatThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\AddPhieuGhiTangThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\AddPhieuKiemKeReqVM.cs" />
+    <Compile Include="ReqVMs\AddPhieuSuaChuaReqVM.cs" />
+    <Compile Include="ReqVMs\AddTaiLieuDinhKeqReqVM.cs" />
+    <Compile Include="ReqVMs\AddThietBiBaiHocReqVM.cs" />
+    <Compile Include="ReqVMs\AddTietHocReqVM.cs" />
+    <Compile Include="ReqVMs\AddTinhReqVM.cs" />
+    <Compile Include="ReqVMs\AddXaReqVM.cs" />
+    <Compile Include="ReqVMs\ChotPhieuDeNghiMuaSamReqVM.cs" />
+    <Compile Include="ReqVMs\DeleteChiTietThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\DeleteChuongTrinhHocReqVM.cs" />
+    <Compile Include="ReqVMs\DeleteDonViTinhReqVM.cs" />
+    <Compile Include="ReqVMs\DeleteKhoiLopReqVM.cs" />
+    <Compile Include="ReqVMs\DeleteLoaiBaiHocReqVM.cs" />
+    <Compile Include="ReqVMs\DeleteLoaiKhoPhongReqVM.cs" />
+    <Compile Include="ReqVMs\DeleteLoaiPhuTrachReqVM.cs" />
+    <Compile Include="ReqVMs\DeleteLoaiThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\DeleteLopReqVM.cs" />
+    <Compile Include="ReqVMs\DeleteMonHocReqVM.cs" />
+    <Compile Include="ReqVMs\DeleteMucDichSuDungReqVM.cs" />
+    <Compile Include="ReqVMs\DeleteNguonCapReqVM.cs" />
+    <Compile Include="ReqVMs\DeleteNguonKinhPhiCapTrenReqVM.cs" />
+    <Compile Include="ReqVMs\DeleteNguonNganSachReqVM.cs" />
+    <Compile Include="ReqVMs\DeletePhieuDeNghiMuaSamReqVM.cs" />
+    <Compile Include="ReqVMs\DeletePhieuGhiGiamThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\DeletePhieuGhiHongThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\DeletePhieuGhiMatThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\DeletePhieuGhiTangThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\DeletePhieuKiemKeReqVM.cs" />
+    <Compile Include="ReqVMs\DeletePhieuSuaChuaReqVM.cs" />
+    <Compile Include="ReqVMs\DeleteTietHocReqVM.cs" />
+    <Compile Include="ReqVMs\ToBoMonReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateBaiHocSuDungThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateCanBoThietBiReqVm.cs" />
+    <Compile Include="ReqVMs\UpdateChiThietThietBiTrongPhieuGhiTangThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateChiTietThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateChuongTrinhHocReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateDonViTinhReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateGiaoVienReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateKhoiLopReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateKhoPhongReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateLoaiBaiHocReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateLoaiKhoPhongReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateLoaiPhuTrachReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateLoaiThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateLopReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateMonHocReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateMucDichSuDungReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateNguonCapReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateNguonKinhPhiCapTrenReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateNguonNganSachReqVM.cs" />
+    <Compile Include="ReqVMs\UpdatePhieuDeNghiMuaSamReqVM.cs" />
+    <Compile Include="ReqVMs\UpdatePhieuGhiGiamThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\UpdatePhieuGhiHongThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\UpdatePhieuGhiMatThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\UpdatePhieuGhiTangThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\UpdatePhieuKiemKeReqVM.cs" />
+    <Compile Include="ReqVMs\UpdatePhieuSuaChuaReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateQuyDinhSoTietSuDungThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateThietBiReqVM.cs" />
+    <Compile Include="ReqVMs\UpdateTietHocReqVM.cs" />
+    <Compile Include="ReqVMs\XuLyPhieuDeNghiMuaSamReqVM.cs" />
+    <Compile Include="ResVMs\BaiGiangChuaThietBiResVM.cs" />
+    <Compile Include="ResVMs\BaiHocCoSuDungThietBiResVM.cs" />
+    <Compile Include="ResVMs\CanBoThietBiResVM.cs" />
+    <Compile Include="ResVMs\ChiTietThietBiResVM.cs" />
+    <Compile Include="ResVMs\ChuongTrinhHocResVM.cs" />
+    <Compile Include="ResVMs\DonViTinhResVM.cs" />
+    <Compile Include="ResVMs\FileResVM.cs" />
+    <Compile Include="ResVMs\GiaoVienResVM.cs" />
+    <Compile Include="ResVMs\HuyenResVM.cs" />
+    <Compile Include="ResVMs\KhoiLopResVM.cs" />
+    <Compile Include="ResVMs\KhoPhongResVM.cs" />
+    <Compile Include="ResVMs\ListWithPaginationResVM.cs" />
+    <Compile Include="ResVMs\LoaiBaiHocResVM.cs" />
+    <Compile Include="ResVMs\LoaiKhoPhongResVM.cs" />
+    <Compile Include="ResVMs\LoaiPhuTrachResVM.cs" />
+    <Compile Include="ResVMs\LoaiThietBiResVM.cs" />
+    <Compile Include="ResVMs\LogThietBiResVM.cs" />
+    <Compile Include="ResVMs\LopResVM.cs" />
+    <Compile Include="ResVMs\MonHocResVM.cs" />
+    <Compile Include="ResVMs\MucDichSuDungResVM.cs" />
+    <Compile Include="ResVMs\NguonCapResVM.cs" />
+    <Compile Include="ResVMs\NguonKinhPhiCapTrenResVM.cs" />
+    <Compile Include="ResVMs\NguonNganSachResVM.cs" />
+    <Compile Include="ResVMs\PaginationResVM.cs" />
+    <Compile Include="ResVMs\PhieuDeNghiMuaSamResVM.cs" />
+    <Compile Include="ResVMs\PhieuGhiGiamThietBiResVM.cs" />
+    <Compile Include="ResVMs\PhieuGhiHongThietBiResVM.cs" />
+    <Compile Include="ResVMs\PhieuGhiMatThietBiResVM.cs" />
+    <Compile Include="ResVMs\PhieuGhiTangThietBiResVM.cs" />
+    <Compile Include="ResVMs\PhieuKiemKeResVM.cs" />
+    <Compile Include="ResVMs\PhieuMuonResVM.cs" />
+    <Compile Include="ResVMs\PhieuSuaChuaResVM.cs" />
+    <Compile Include="ResVMs\QuyDinhSoTietSuDungThietBiResVM.cs" />
+    <Compile Include="ResVMs\QuyDinhSoTietSuDungThietBiViewResVM.cs" />
+    <Compile Include="ResVMs\ReportHongMatResVM.cs" />
+    <Compile Include="ResVMs\ReportKiemKeResVM.cs" />
+    <Compile Include="ResVMs\ReportMuonTraTheoGiaoVienResVM.cs" />
+    <Compile Include="ResVMs\ThietBiCuaBaiGiangResVM.cs" />
+    <Compile Include="ResVMs\ThietBiResVM.cs" />
+    <Compile Include="ResVMs\ThongKeChungResVM.cs" />
+    <Compile Include="ResVMs\TietHocResVM.cs" />
+    <Compile Include="ResVMs\TinhResVM.cs" />
+    <Compile Include="ResVMs\ToBoMonResVM.cs" />
+    <Compile Include="ResVMs\XaResVM.cs" />
+    <Compile Include="sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_helpdiagrams_Result.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SuDungPhong.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysdiagram.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ThietBi.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ThietBiTieuChuan.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ThoiKhoaBieuPhong.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TietHoc.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TieuChuanCoSoVatChat.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TieuChuanPhong.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tinh.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ToBoMon.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrangThaiHongMat.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrangThaiPhieuMuon.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TrangTraiPhong.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VaiTroCanBo.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\ChiTietPhongViewModel.cs" />
+    <Compile Include="ViewModels\ChucNangViewModel.cs" />
+    <Compile Include="ViewModels\ChucVuViewModel.cs" />
+    <Compile Include="ViewModels\FilterThietBiViewModel.cs" />
+    <Compile Include="ViewModels\LoaiKhoPhongViewModel.cs" />
+    <Compile Include="ViewModels\LogPhieuMuonViewModel.cs" />
+    <Compile Include="ViewModels\NguoiDungViewModel.cs" />
+    <Compile Include="ViewModels\PhieuMuonViewModel.cs" />
+    <Compile Include="ViewModels\PhongBanViewModel.cs" />
+    <Compile Include="ViewModels\PhongViewModel.cs" />
+    <Compile Include="ViewModels\ResultViewModel.cs" />
+    <Compile Include="ViewModels\SelectedThietBiViewModel.cs" />
+    <Compile Include="ViewModels\SelectThietBiViewmodel.cs" />
+    <Compile Include="ViewModels\SelectViewModel.cs" />
+    <Compile Include="ViewModels\TietHocTrongPhieuMuonViewModel.cs" />
+    <Compile Include="ViewModels\TreeNoteStateViewModel.cs" />
+    <Compile Include="ViewModels\TreeViewModel.cs" />
+    <Compile Include="Xa.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="XepHangKhoPhong.cs">
+      <DependentUpon>qltb.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="qltb.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>qltb.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="packages.config" />
+    <None Include="qltb.edmx.diagram">
+      <DependentUpon>qltb.edmx</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="qltb.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>qltb.Context.cs</LastGenOutput>
+      <DependentUpon>qltb.edmx</DependentUpon>
+    </Content>
+    <Content Include="qltb.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>qltb.edmx</DependentUpon>
+      <LastGenOutput>qltb.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

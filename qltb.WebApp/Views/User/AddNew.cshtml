@@ -1,0 +1,92 @@
+﻿@model qltb.Data.NguoiDung
+@{
+    ViewBag.Title = "AddNew";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<header class="page-title-bar">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active">
+                <a href="/nguoi-dung/tat-ca-nguoi-dung"><i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Tất cả người dùng</a>
+            </li>
+        </ol>
+    </nav>
+    <h1 class="page-title"> Thêm mới người dùng </h1>
+</header>
+<div class="section-block">
+    <div class="row">
+        <div class="col-md-8 col-12">
+            @using (Html.BeginForm("AddNew", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="card">
+                    <div class="card-body">
+
+                        <fieldset>
+                            <legend>Thông tin người dùng</legend>
+                            <div class="row">
+                                <div class="form-group col-md-6 col-12">
+                                    <label>Tên đăng nhập <span class="text-red">(*)</span></label>
+                                    @Html.EditorFor(model => model.TenDangNhap, new { htmlAttributes = new { @class = "form-control", placeholder = "Tên đăng nhập" } })
+                                    @Html.ValidationMessageFor(model => model.TenDangNhap, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-md-6 col-12">
+                                    <label>Mật khẩu<span class="text-red">(*)</span></label>
+                                    @Html.EditorFor(model => model.MatKhau, new { htmlAttributes = new { @class = "form-control", placeholder = "Mật khẩu" } })
+                                    @Html.ValidationMessageFor(model => model.MatKhau, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Họ tên</label>
+                                @Html.EditorFor(model => model.HoTen, new { htmlAttributes = new { @class = "form-control", placeholder = "Họ Tên" } })
+                                @Html.ValidationMessageFor(model => model.HoTen, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6 col-12">
+                                    <label>Điện thoại</label>
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", placeholder = "Điện thoại" } })
+                                    @Html.ValidationMessageFor(model => model.DienThoai, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-md-6 col-12">
+                                    <label>Email</label>
+                                    @Html.EditorFor(model => model.DienThoai, new { htmlAttributes = new { @class = "form-control", placeholder = "Email người dùng" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            @*<div class="form-group">
+                                <label>Địa chỉ</label>
+                                @Html.EditorFor(model => model.DiaChi, new { htmlAttributes = new { @class = "form-control", placeholder = "Địa chỉ" } })
+                                @Html.ValidationMessageFor(model => model.DiaChi, "", new { @class = "text-danger" })
+                            </div>*@
+                        <div class="row">
+                            <div class="form-group col-md-6 col-12">
+                                <label class="d-block">Kích hoạt</label>
+                                <select class="custom-select" name="isActive">
+                                    <option value="true"> Kích hoạt</option>
+                                    <option value="false"> Không kích hoạt </option>
+                                </select>
+                                <small class="text-warning">Chọn kích hoạt để tài khoản có thể đăng nhập hệ thống</small>
+                            </div>
+                            <div class="form-group col-md-6 col-12">
+                                <label class="d-block">Giới tính</label>
+                                <select class="custom-select" name="GioiTinhId">
+                                    <option value="1"> Nam</option>
+                                    <option value="2"> Nữ </option>
+                                    <option value="2"> Không xác định </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <a href="#" class="btn btn-light"><i class="fal fa-arrow-left mr-1"></i>Quay lại</a>
+                    <button type="submit" class="btn btn-subtle-success"><i class="fal fa-check mr-1"></i>Thêm mới</button>
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+

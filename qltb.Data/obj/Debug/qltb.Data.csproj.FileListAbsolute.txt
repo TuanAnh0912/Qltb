@@ -1,0 +1,16 @@
+D:\qltb\qltb.Data\obj\Debug\qltb.Data.csproj.CoreCompileInputs.cache
+D:\qltb\qltb.Data\bin\Debug\qltb.Data.dll.config
+D:\qltb\qltb.Data\bin\Debug\qltb.Data.dll
+D:\qltb\qltb.Data\bin\Debug\qltb.Data.pdb
+D:\qltb\qltb.Data\bin\Debug\EntityFramework.dll
+D:\qltb\qltb.Data\bin\Debug\EntityFramework.SqlServer.dll
+D:\qltb\qltb.Data\bin\Debug\Microsoft.AspNetCore.Html.Abstractions.dll
+D:\qltb\qltb.Data\bin\Debug\System.Text.Encodings.Web.dll
+D:\qltb\qltb.Data\bin\Debug\EntityFramework.xml
+D:\qltb\qltb.Data\bin\Debug\EntityFramework.SqlServer.xml
+D:\qltb\qltb.Data\bin\Debug\Microsoft.AspNetCore.Html.Abstractions.xml
+D:\qltb\qltb.Data\bin\Debug\System.Text.Encodings.Web.xml
+D:\qltb\qltb.Data\obj\Debug\qltb.Data.csproj.CopyComplete
+D:\qltb\qltb.Data\obj\Debug\qltb.Data.dll
+D:\qltb\qltb.Data\obj\Debug\qltb.Data.pdb
+D:\qltb\qltb.Data\obj\Debug\qltb.Data.csprojAssemblyReference.cache

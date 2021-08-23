@@ -1,0 +1,100 @@
+﻿@model List<qltb.WebApp.Models.ScheduleViewModel>
+@{
+    ViewBag.Title = "Lịch phòng học";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<header class="page-title-bar">
+    <h4><i class="fad fa-calendar-alt mr-2 text-indigo"></i>Lịch phòng học</h4>
+</header>
+<div class="page-section">
+    <div class="row">
+        <form method="get">
+            <div class="col-md-4 col-6"></div>
+            <div class="col-md-2 col-6">
+                <input class="form-control" name="room" placeholder="Nhập tên phòng học" />
+            </div>
+            <div class="col-md-2 col-6">
+                <select class="form-control" name="week">
+                    @for (int i = 1; i <= ViewBag.WeekNumberInYear; i++)
+                    {
+                        <option value="@i">Tuần @i</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-block btn-primary">Xem lịch</button>
+            </div>
+        </form>
+    </div>
+    <div class="table-responsive card mt-4">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Phòng</th>
+                    <th width="12%">Thứ 2</th>
+                    <th width="12%">Thứ 3</th>
+                    <th width="12%">Thứ 4</th>
+                    <th width="12%">Thứ 5</th>
+                    <th width="12%">Thứ 6</th>
+                    <th width="12%">Thứ 7</th>
+                    <th width="12%">Chủ nhật</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <b class="text-primary">
+                               @item.khoPhong.TenKhoPhong
+                            </b>
+                        </td>
+                        <td>
+                            @foreach (var item2 in item.Monday)
+                            {
+                                <a href="#" class="tile bg-warning" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sáng: Tiết @item2.TietHoc">@item2.Lop.TenLop</a>
+                            }
+                        </td>
+                        <td>
+                            @foreach (var item2 in item.Tuesday)
+                            {
+                                <a href="#" class="tile bg-warning" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sáng: Tiết @item2.TietHoc">@item2.Lop.TenLop</a>
+                            }
+                        </td>
+                        <td>
+                            @foreach (var item2 in item.Wednesday)
+                            {
+                                <a href="#" class="tile bg-warning" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sáng: Tiết @item2.TietHoc">@item2.Lop.TenLop</a>
+                            }
+                        </td>
+                        <td>
+                            @foreach (var item2 in item.Monday)
+                            {
+                                <a href="#" class="tile bg-warning" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sáng: Tiết @item2.TietHoc">@item2.Lop.TenLop</a>
+                            }
+                        </td>
+                        <td>
+                            @foreach (var item2 in item.Thursday)
+                            {
+                                <a href="#" class="tile bg-warning" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sáng: Tiết @item2.TietHoc">@item2.Lop.TenLop</a>
+                            }
+                        </td>
+                        <td>
+                            @foreach (var item2 in item.Friday)
+                            {
+                                <a href="#" class="tile bg-warning" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sáng: Tiết @item2.TietHoc">@item2.Lop.TenLop</a>
+                            }
+                        </td>
+                        <td>
+                            @foreach (var item2 in item.Sunday)
+                            {
+                                <a href="#" class="tile bg-warning" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sáng: Tiết @item2.TietHoc">@item2.Lop.TenLop</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+﻿@using qltb.Data.Providers
+@{
+    ViewBag.Title = "RoomDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<header class="page-title-bar">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/quan-ly-phong/tat-ca-loai-phong"><i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Quản lý phòng</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/quan-ly-phong/danh-sach">Khối phòng học tập</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <a href="#"> Phòng học tập 101 </a>
+            </li>
+        </ol>
+    </nav>
+    <h1 class="page-title">Thông tin phòng</h1>
+</header>
+<div class="page-section">
+    <div class="row">
+        <div class="col-md-12 col-12">
+            <div class="card card-body position-relative">
+                <h5>Phòng học tập 101</h5>
+                <span class="badge badge-subtle badge-success position-absolute" style="top:20px; right:20px">Có thể sử dụng</span>
+                <p class="mb-0 mt-3">Mã phòng: <code>PHT04355</code> </p>
+                <p class="mb-0">Diên tích: <b>100m2</b></p>
+                <p class="mb-0">Năm đưa vào sử dụng: <b>2021</b></p>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5>Danh sách thiết bị</h5>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th width="10%">Mã thiết bị</th>
+                                    <th>Tên thiết bị</th>
+                                    <th width="=10%">Số lượng</th>
+                                    <th width="15%">Loại thiết bị</th>
+                                    <th width="15%">Môn học</th>
+                                    <th width="10%">Trạng thái</th>
+                                    <th width="10%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in new ThietBiProvider().GetAllThietBi().Where(t => t.LoaiThietBiId == 2))
+                                {
+                                    <tr>
+                                        <td>
+                                            <code class="fz-15 fwb">@item.MaThietBi</code>
+                                        </td>
+                                        <td>@item.TenThietBi</td>
+                                        <td>1</td>
+                                        <td>
+                                            <span class="badge badge-subtle badge-primary">@item.TenLoaiThietBi</span>
+                                        </td>
+                                        <td>
+                                            <b class="text-danger">Môn học 1</b>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-subtle badge-success">Có thể sử dụng</span>
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="#" onclick="openUpdateStatusModel()" class="btn btn-sm btn-icon btn-subtle-primary"><i class="far fa-edit"></i></a>
+                                            <a href="/quan-ly-phong/chi-tiet-phong" class="btn btn-sm btn-icon btn-subtle-danger"><i class="far fa-info-circle"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="updateStatusModel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Cập nhật trạng thái thiết bị</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Trạng thái</label>
+                    <select class="form-control" data-toggle="select2">
+                        <option class="text-success">Có thể sử dụng</option>
+                        <option class="text-warning">Hỏng</option>
+                        <option class="text-danger">Mất</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Số lượng hỏng / mất</label>
+                    <input class="form-control" placeholder="Ghi chú thiết bị" type="number" />
+                </div>
+                <div class="form-group">
+                    <label>Ghi chú</label>
+                    <textarea class="form-control" placeholder="Ghi chú thiết bị" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-subtle-dark" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                <button type="button" class="btn btn-subtle-primary"><i class="fal fa-check mr-2"></i>Cập nhật trạng thái</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function openUpdateStatusModel() {
+        $("#updateStatusModel").modal('show')
+    }
+</script>

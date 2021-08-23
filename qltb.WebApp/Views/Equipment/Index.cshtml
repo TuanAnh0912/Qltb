@@ -1,0 +1,550 @@
+﻿@using qltb.Data
+@using PagedList
+@using PagedList.Mvc
+@model IPagedList<qltb.Data.ResVMs.ThietBiResVM>
+@using qltb.Data
+@{
+    ViewBag.Title = "Thiết bị giáo dục";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto"> Danh sách thiết bị giáo dục </h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <button type="button" class="btn btn-subtle-primary" data-toggle="modal" data-target="#equipment_insert_modal"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới</span></button>
+    </div><!-- /.btn-toolbar -->
+</div>
+<!-- .page-section -->
+<div class="page-section">
+    <!-- .card -->
+    <div class="card card-fluid">
+        <div class="card-header d-flex">
+            <div class="form-group">
+                <div class="input-group input-group-alt">
+                    <div class="input-group-prepend mr-2">
+                        <select id="filterBySubject" class="custom-select">
+                            <option> Tất cả môn học</option>
+                            <option value="0"> Dùng chung </option>
+                            @foreach (var unit in TempData["MonHoc"] as List<MonHoc>)
+                            {
+                                if (unit.MonHocId != ViewBag.MonHoc)
+                                {
+                                    <option value="@unit.MonHocId"> @unit.TenMonHoc </option>
+
+                                }
+                                else
+                                {
+                                    <option value="@unit.MonHocId" selected> @unit.TenMonHoc </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="input-group-prepend mr-2">
+                        <select id="filterByGrade" class="Grade-select ">
+                            <option> Tất cả khối lớp</option>
+                            @foreach (var unit in TempData["KhoiLop"] as List<KhoiLop>)
+                            {
+                                if (unit.KhoiLopId != ViewBag.KhoiLop)
+                                {
+
+                                    <option value="@unit.KhoiLopId"> @unit.TenKhoiLop </option>
+                                }
+                                else
+                                {
+                                    <option value="@unit.KhoiLopId" selected> @unit.TenKhoiLop </option>
+
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="input-group-prepend">
+                        <select id="filterByTypeOfDevice" class="TypeOfDevice-select">
+                            <option> Tất cả loại thiết bị</option>
+                            @foreach (var unit in TempData["LoaiThietBi"] as List<LoaiThietBi>)
+                            {
+                                if (unit.LoaiThietBiId != ViewBag.LoaiThietBi)
+                                {
+                                    <option value="@unit.LoaiThietBiId"> @unit.TenLoaiThietBi </option>
+                                }
+                                else
+                                {
+                                    <option value="@unit.LoaiThietBiId" selected> @unit.TenLoaiThietBi </option>
+
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="input-group-prepend ml-2">
+                        <input type="text" class="form-control" value="@ViewBag.kytu" id="kytu" placeholder="Tên thiết bị " />
+                    </div>
+                    <!-- /.input-group -->
+                    <div class="ml-3">
+                        <button type="button" onclick="Search();" class="btn btn-primary">Tìm kiếm</button>
+                    </div>
+                </div><!-- /.input-group -->
+            </div><!-- /.form-group -->
+        </div><!-- /.card-header -->
+        <!-- .card-body -->
+        <div class="card-body equipment-table table-responsive">
+            <table id="equipment-table" class="table table-bordered table-hover">
+                <!-- thead -->
+                <thead class="bg-light">
+                    <tr>
+                        <th width="10%" class=""> Mã thiết bị </th>
+                        <th class="text-center"> Tên thiết bị </th>
+                        <th class="text-center"> Loại thiết bị </th>
+                        <th class="text-center"> Môn học </th>
+                        <th class="text-center"> Khối học </th>
+                        <th class="text-center" width="10%"></th>
+                    </tr>
+                </thead><!-- /thead -->
+                <!-- tbody -->
+                <tbody>
+                    <!-- create empty row to passing html validator -->
+                    @foreach (var equip in Model)
+                    {
+                        <tr>
+                            <td class=""><code><b>@equip.MaThietBi</b></code></td>
+                            <td>@equip.TenThietBi</td>
+                            <td class="text-center">@equip.TenLoaiThietBi</td>
+                            @{
+                                var monhoc = equip.TenMonHoc == null ? "Dùng chung" : equip.TenMonHoc;
+                            }
+                            <td class="text-center">@monhoc</td>
+                            <td class="text-center">
+                                @if (equip.DanhSachKhoiLop != null && equip.DanhSachKhoiLop.Count() > 0)
+                                {
+                                    foreach (var item in equip.DanhSachKhoiLop)
+                                    {
+                                        <span class="badge badge-subtle badge-primary">@item.TenKhoiLop</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
+                            </td>
+                            <td class="align-middle text-right">
+                                <a href="#" class="btn btn-sm btn-icon btn-subtle-primary equipment_update" data-id="@equip.ThietBiId" data-toggle="modal" data-target="#equipment_update_modal"><i class="fa fa-pencil-alt"></i> <span class="sr-only">Edit</span></a>
+                                <a href="#" class="btn btn-sm btn-icon btn-subtle-danger equipment_delete" data-id="@equip.ThietBiId" data-name="@equip.TenThietBi" data-toggle="modal" data-target="#equipment_delete_modal"><i class="far fa-trash-alt"></i> <span class="sr-only">Remove</span></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody><!-- /tbody -->
+            </table><!-- /.table -->
+            <form id="equipment_update_form" action="/Equipment/Update" method="post">
+                <div id="equipment_update_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <!-- .modal-dialog -->
+                    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                        <!-- .modal-content -->
+                        <div class="modal-content">
+                            <!-- .modal-header -->
+                            <div class="modal-header">
+                                <h5 class="modal-title"> Cập nhật thông tin thiết bị</h5>
+                            </div><!-- /.modal-header -->
+                            <!-- .modal-body -->
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-horizontal">
+                                            @*<div class="form-group hidden">
+                                            <label>Mã thiết bị <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" name="MaThietBi" aria-describedby="tf1Help" placeholder="Mã thiết bị.." required>
+                                        </div>*@
+                                            <div class="form-group">
+                                                <label>Tên thiết bị <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="equipment_id_update" name="ThietBiId" hidden>
+                                                <input type="text" class="form-control" id="equipment_code_update" name="MaThietBi" aria-describedby="tf1Help" hidden placeholder="Mã thiết bị.." required>
+                                                <input type="text" class="form-control" id="equipment_name_update" name="TenThietBi" aria-describedby="" placeholder="Tên thiết bị.." required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Đơn vị tính <span class="text-danger">*</span></label>
+                                                <select id="unit_select_update" name="DonViTinhId" class="unit_select form-control selectize-select selectize-growth" required>
+                                                    <option value="0" disabled selected>-- Chọn đơn vị tính --</option>
+                                                    @foreach (var unit in TempData["DonViTinh"] as List<DonViTinh>)
+                                                    {
+                                                        <option value="@unit.DonViTinhId"> @unit.TenDonViTinh </option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Loại thiết bị <span class="text-danger">*</span></label>
+                                                <select id="eq_type_select_update" name="LoaiThietBiId" class="eq_type_select form-control selectize-select selectize-growth" required>
+                                                    <option value="0" disabled selected>-- Chọn loại thiết bị --</option>
+                                                    @foreach (var equipment_type in TempData["LoaiThietBi"] as List<LoaiThietBi>)
+                                                    {
+                                                        <option value="@equipment_type.LoaiThietBiId"> @equipment_type.TenLoaiThietBi </option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Mô tả</label>
+                                                <input type="text" class="form-control" name="MoTa" id="description_update" aria-describedby="" placeholder="Mô tả..">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <label for="tf1">Số lượng tối thiểu <span class="text-danger">*</span></label>
+                                                <div class="custom-number">
+                                                    <input type="number" class="form-control" id="equipment_number_update" name="SoLuongToiThieu" min="0" step="1" value="0" placeholder="Số lượng tối thiểu.." required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Môn học <span class="text-danger">*</span></label>
+                                                <select id="subject_select_update" name="MonHocId" class="subject_select form-control selectize-select selectize-growth" required>
+                                                    <option value="0" disabled selected>-- Chọn môn học --</option>
+                                                    @foreach (var subject in TempData["MonHoc"] as List<MonHoc>)
+                                                    {
+                                                        <option value="@subject.MonHocId"> @subject.TenMonHoc </option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Khối lớp <span class="text-danger"></span></label>
+                                                <select id="grade_select_update" name="KhoiHocID" class="grade_select form-control selectize-select selectize-growth" multiple="multiple" >
+                                                    <option value="0" disabled>-- Chọn khối lớp --</option>
+                                                    @foreach (var grade in TempData["KhoiLop"] as List<KhoiLop>)
+                                                    {
+                                                        <option value="@grade.KhoiLopId"> @grade.TenKhoiLop </option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="d-block">Quản lý tiêu hao</label>
+                                                <div class="custom-control custom-control-inline custom-radio">
+                                                    <input type="radio" class="custom-control-input" value="true" name="QuanLyTieuHao" id="rd1_update"> <label class="custom-control-label" for="rd1_update">Có</label>
+                                                </div>
+                                                <div class="custom-control custom-control-inline custom-radio">
+                                                    <input type="radio" class="custom-control-input" value="false" name="QuanLyTieuHao" id="rd2_update"> <label class="custom-control-label" for="rd2_update">Không</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- /.modal-body -->
+                            <!-- .modal-footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                                <button type="submit" class="btn btn-subtle-success" id="equipment_update_btn"><i class="fal fa-check mr-2"></i>Cập nhật</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </form>
+
+            <form id="equipment_delete_form" action="/Equipment/Delete" method="post">
+                <div id="equipment_delete_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <!-- .modal-dialog -->
+                    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                        <!-- .modal-content -->
+                        <div class="modal-content">
+                            <!-- .modal-header -->
+                            <div class="modal-header">
+                                <h5 class="modal-title"> Hủy bỏ thiết bị</h5>
+                            </div><!-- /.modal-header -->
+                            <!-- .modal-body -->
+                            <div class="modal-body">
+                                <input id="equipment_id_delete" hidden />
+                                <p>Xóa bỏ thiết bị <b id="equipment_to_delete"></b> khỏi hệ thống</p>
+                            </div><!-- /.modal-body -->
+                            <!-- .modal-footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                                <button type="submit" class="btn btn-subtle-success" id="equipment_delete_btn"><i class="fal fa-check mr-2"></i>Xác nhận</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </form>
+        </div>
+        <div class="mt-4 text-right">
+            @*Trang @(@Model.PageCount < @Model.PageNumber ? 0 : @Model.PageNumber) / @Model.PageCount*@
+            @Html.PagedListPager(Model as IPagedList<qltb.Data.ResVMs.ThietBiResVM>, page => Url.Action("Index",
+                 new { page, monhocId = ViewBag.MonHoc, loaiThietBiId = ViewBag.LoaiThietBi, khoiLopId = ViewBag.KhoiLop, kyTu = ViewBag.kytu }),
+                 new PagedListRenderOptions
+                 {
+                     UlElementClasses = new string[] { "pagination pagination-sm pagination-primary justify-content-end" },
+                     LiElementClasses = new string[] { "page-item " },
+                     MaximumPageNumbersToDisplay = 10,
+                 })
+        </div>
+        <!-- /.card-body -->
+    </div><!-- /.card -->
+</div><!-- /.page-section -->
+
+<form id="equipment_insert_form" action="/Equipment/Insert" method="post">
+    <div id="equipment_insert_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <!-- .modal-dialog -->
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <!-- .modal-content -->
+            <div class="modal-content">
+                <!-- .modal-header -->
+                <div class="modal-header">
+                    <h5 class="modal-title"> Thêm mới thiết bị</h5>
+                </div><!-- /.modal-header -->
+                <!-- .modal-body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                @*<div class="form-group">
+                                        <label>Mã thiết bị <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="MaThietBi" aria-describedby="tf1Help" placeholder="Mã thiết bị.." required>
+                                    </div>*@
+                                <div class="form-group">
+                                    <label>Tên thiết bị <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="TenThietBi" aria-describedby="tf1Help" placeholder="Tên thiết bị.." required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Đơn vị tính <span class="text-danger">*</span></label>
+                                    <select id="unit_select" name="DonViTinhId" class="unit_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn đơn vị tính --</option>
+                                        @foreach (var unit in TempData["DonViTinh"] as List<DonViTinh>)
+                                        {
+                                            <option value="@unit.DonViTinhId"> @unit.TenDonViTinh </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Loại thiết bị <span class="text-danger">*</span></label>
+                                    <select id="eq_type_select" name="LoaiThietBiId" class="eq_type_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn loại thiết bị --</option>
+                                        @foreach (var equipment_type in TempData["LoaiThietBi"] as List<LoaiThietBi>)
+                                        {
+                                            <option value="@equipment_type.LoaiThietBiId"> @equipment_type.TenLoaiThietBi </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Mô tả</label>
+                                    <input type="text" class="form-control" aria-describedby="" placeholder="Mô tả..">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="tf1">Số lượng tối thiểu <span class="text-danger">*</span></label>
+                                    <div class="custom-number">
+                                        <input type="number" class="form-control" name="SoLuongToiThieu" min="0" max="10" step="1" value="0" placeholder="Số lượng tối thiểu.." required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Môn học <span class="text-danger">*</span></label>
+                                    <select id="subject_select" name="MonHocId" class="subject_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn môn học --</option>
+                                        @foreach (var subject in TempData["MonHoc"] as List<MonHoc>)
+                                        {
+                                            <option value="@subject.MonHocId"> @subject.TenMonHoc </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Khối lớp <span class="text-danger"></span></label>
+                                    <select id="grade_select" name="KhoiHocID" class="grade_select form-control selectize-select selectize-growth" multiple="multiple" >
+                                        <option value="" disabled>-- Chọn khối lớp --</option>
+                                        @foreach (var grade in TempData["KhoiLop"] as List<KhoiLop>)
+                                        {
+                                            <option value="@grade.KhoiLopId"> @grade.TenKhoiLop </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="d-block">Quản lý tiêu hao</label>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="true" name="QuanLyTieuHao" id="rd1" checked> <label class="custom-control-label" for="rd1">Có</label>
+                                    </div>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="false" name="QuanLyTieuHao" id="rd2"> <label class="custom-control-label" for="rd2">Không</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.modal-body -->
+                <!-- .modal-footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                    <button type="submit" class="btn btn-subtle-success" id="equipment_insert_btn"><i class="fal fa-check mr-2"></i>Thêm mới</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>
+
+<script>
+    $(function () {
+        $("#losing_select").selectize({
+            create: 0,
+            placeholder: "Có quản lý tiêu hao hay không",
+            dropdownParent: "body"
+        })
+        $("#table-search").keyup(function () {
+            var keyword = $(this).val();
+            $.post('/Equipment/Equipment').always(function () {
+                $('.equipment-table').load('/Equipment/Equipment', { keyword: keyword });
+            });
+        });
+        $(".dataTables_length select").css("width", "55");
+        $(".unit_select").selectize({
+            create: 0,
+            placeholder: "Chọn đơn vị tính",
+            dropdownParent: "body"
+        })
+        $(".eq_type_select").selectize({
+            create: 0,
+            placeholder: "Chọn loại thiết bị",
+            dropdownParent: "body"
+        })
+        $(".subject_select").selectize({
+            create: 0,
+            placeholder: "Chọn môn học",
+            dropdownParent: "body"
+        })
+        $(".grade_select").selectize({
+            placeholder: "Chọn khối lớp"
+        })
+        $("#losing_select").selectize({
+            create: 0,
+            placeholder: "Có quản lý tiêu hao hay không",
+            dropdownParent: "body"
+        })
+    })
+    function Search() {
+        let monhocId = $("#filterBySubject option:selected").val();
+        let khoiLopId = $("#filterByGrade option:selected").val();
+        let loaiThietBiId = $("#filterByTypeOfDevice option:selected").val();
+        let kytu = $("#kytu").val();
+        window.location.href = "/Equipment/Index?monhocId=" + monhocId + "&loaiThietBiId=" + loaiThietBiId + "&khoiLopId=" + khoiLopId + "&kyTu=" + kytu;
+    }
+    $("#filterBySubject").select2();
+    $("#filterByGrade").select2();
+    $("#filterByTypeOfDevice").select2();
+    $(".equipment_update").click(function () {
+        var equipment_id = $(this).data('id');
+        $.get("/Equipment/GetThietBi", { equipment_id: equipment_id }, function (data) {
+            if (data.CheckTonTaiTrongKho == true) {
+                $("#equipment_name_update").prop("disabled", true);
+                $('#subject_select_update')[0].selectize.lock();
+            }
+            if (data.CheckTonTaiTrongKho == false) {
+                $("#equipment_name_update").prop("disabled", false);
+                $('#subject_select_update')[0].selectize.unlock();
+            }
+            console.log(data.CheckTonTaiTrongKho);
+            $("#equipment_id_update").val(data.ThietBiId);
+            $("#equipment_code_update").val(data.MaThietBi);
+            $("#equipment_name_update").val(data.TenThietBi);
+            $("#equipment_number_update").val(data.SoLuongToiThieu);
+            $("#description_update").val(data.MoTa);
+            $("#unit_select_update").selectize()[0].selectize.setValue(data.DonViTinhId);
+            $("#eq_type_select_update").selectize()[0].selectize.setValue(data.LoaiThietBiId);
+            $("#subject_select_update").selectize()[0].selectize.setValue(data.MonHocId);
+            if (data.QuanLyTieuHao == true) {
+                $("#rd1_update").prop("checked", true);
+            }
+            if (data.QuanLyTieuHao == false) {
+                $("#rd2_update").prop("checked", true);
+            }
+            var KhoiHocID = [];
+            $.each(data.DanhSachKhoiLop, function (key, val) {
+                KhoiHocID.push(val.KhoiLopId);
+            })
+            $("#grade_select_update").selectize()[0].selectize.setValue(KhoiHocID);
+        });
+    })
+    $("#equipment_update_form").submit(function (event) {
+        var form = $(this);
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: form.serialize(),
+            dataType: 'html',
+            beforeSend: function () {
+                $("#equipment_update_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công! ');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công. ');
+                }
+            },
+            complete: function () {
+                $("#equipment_update_btn").removeAttr("disabled");
+                $("#equipment_update_modal").modal("hide");
+                setTimeout(function () { window.location.reload(); }, 2000)
+            }
+        });
+        event.preventDefault();
+    });
+    $(".equipment_delete").click(function () {
+        var equipment_id = $(this).data('id');
+        var equipment_name = $(this).data('name');
+        $("#equipment_id_delete").val(equipment_id);
+        $("#equipment_to_delete").text(equipment_name);
+    })
+    $("#equipment_delete_form").submit(function (event) {
+        var form = $(this);
+        var equipment_id = $("#equipment_id_delete").val();
+        if (equipment_id == null) {
+            return false;
+        }
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: { equipment_id: equipment_id },
+            dataType: 'html',
+            beforeSend: function () {
+                $("#equipment_delete_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công! ');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công. ');
+                }
+            },
+            complete: function () {
+                $("#equipment_delete_btn").removeAttr("disabled");
+                $("#equipment_delete_modal").modal("hide");
+                setTimeout(function () { window.location.reload(); }, 2000)
+            }
+        });
+        event.preventDefault();
+    });
+    $("#equipment_insert_form").submit(function (event) {
+        var form = $(this);
+
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: form.serialize(),
+            dataType: 'html',
+            beforeSend: function () {
+                $("#equipment_insert_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công! ');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công. ');
+                }
+            },
+            complete: function () {
+                $("#equipment_insert_btn").removeAttr("disabled");
+                $("#equipment_insert_modal").modal("hide");
+                setTimeout(function () { window.location.reload(); }, 2000)
+            }
+        });
+        event.preventDefault();
+    });
+
+</script>

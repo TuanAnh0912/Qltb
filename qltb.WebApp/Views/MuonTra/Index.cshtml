@@ -1,0 +1,126 @@
+﻿@using qltb.Data
+@model IPagedList<qltb.Data.PhieuMuon>
+@using PagedList
+@using PagedList.Mvc
+@{
+    ViewBag.Title = "Phiếu mượn thiết bị";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var user = Session["User"] as NguoiDung;
+}
+
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto"> Danh sách phiếu mượn </h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="/muon-tra/them-phieu-muon-thiet-bi" type="button" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm phiếu mượn</span></a>
+    </div><!-- /.btn-toolbar -->
+</div>
+<div class="page-section">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 col-6">
+                    <input class="form-control" placeholder="Mã phiếu" />
+                </div>
+                <div class="col-md-3 col-6">
+                    <select class="form-control" data-toggle="select2" data-placeholder="Chọn trạng thái phiếu">
+                        <option>Tất cả trạng thái</option>
+                        <option>Đã trả</option>
+                        <option>Đang mượn</option>
+                    </select>
+                </div>
+            </div>
+            <hr />
+            <div class="table-responsive">
+                @if (Model.Count() > 0)
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-muted">Mã phiếu</th>
+                                <th class="text-uppercase text-muted">Giáo viên</th>
+                                <th class="text-uppercase text-muted">Lớp</th>
+                                <th class="text-uppercase text-muted" width="10%">Ngày mượn</th>
+                                <th class="text-uppercase text-muted" width="10%">Ngày trả</th>
+                                <th class="text-uppercase text-muted" width="10%">Trạng thái</th>
+                                <th width="20%"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="align-middle">
+                                        <a href="/muon-tra/chi-tiet-phieu-muon?maPhieu=@item.MaPhieuMuon">
+                                            <h6 class="mb-0">
+                                                <code>#@item.MaPhieuMuon</code>
+                                            </h6>
+                                        </a>
+                                    </td>
+                                    <td class="align-middle">
+                                        <a href="#">
+                                            @@@item.GiaoVien.TenGiaoVien
+                                        </a>
+                                    </td>
+                                    <td class="align-middle">
+                                        @if (item.LopHocId != null)
+                                        {
+                                            <b>@item.Lop.TenLop</b>
+                                        }
+
+                                    </td>
+                                    <td class="align-middle">
+                                        <span>@String.Format("{0:dd/MM/yyyy}", item.NgayMuon) <br /> <small>lúc @String.Format("{0:HH:mm tt}", item.NgayMuon)</small></span>
+                                    </td>
+                                    <td class="align-middle">
+                                        <span>@String.Format("{0:dd/MM/yyyy}", item.NgayTra) <br /> <small>lúc @String.Format("{0:HH:mm tt}", item.NgayTra)</small></span>
+                                    </td>
+                                    <td class="align-middle">
+                                        <span class="badge badge-subtle badge-@item.TrangThaiPhieuMuon.MaMau">@item.TrangThaiPhieuMuon.TenTrangThai</span>
+                                    </td>
+                                    <td class="text-right align-middle">
+                                        <a href="/muon-tra/chi-tiet-phieu-muon?maPhieu=@item.MaPhieuMuon" class="btn btn-sm btn-subtle-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Xem chi tiết"><i class="fal fa-info-circle"></i></a>
+                                        @if (item.TrangThaiPhieuMuonId == 1 && user.NhomNguoiDungId == 1)
+                                        {
+                                            <a href="/muon-tra/tra-thiet-bi?maPhieu=@item.MaPhieuMuon" class="btn btn-sm btn-subtle-success" data-toggle="tooltip" data-placement="top" title="" data-original-title="Trả thiết bị"><i class="fal fa-sign-out-alt"></i></a>
+                                        }
+                                        @if (item.TrangThaiPhieuMuonId != 2)
+                                        {
+                                            <a href="/muon-tra/cap-nhat-phieu-muon?maPhieu=@item.MaPhieuMuon" class="btn btn-sm btn-subtle-dark" data-toggle="tooltip" data-placement="top" title="" data-original-title="Cập nhật phiếu"><i class="fal fa-edit"></i></a>
+                                        }
+                                        @if (item.TrangThaiPhieuMuonId == 3)
+                                        {
+
+                                            <a href="#" class="btn btn-sm btn-subtle-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Xóa phiếu"><i class="fal fa-trash-alt"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <span class="text-muted">Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount</span>
+                    <div class="paginatoin-area">
+                        @Html.PagedListPager(Model, pageNum => Url.Action("CustomerSell",
+                        new { pageNum, trangThaiId = ViewBag.TrangThai }), new PagedListRenderOptions
+                        {
+                            UlElementClasses = new string[] { "pagination justify-content-center" },
+                            LiElementClasses = new string[] { "page-item" },
+                            DisplayLinkToFirstPage = PagedListDisplayMode.Never,
+                            DisplayLinkToLastPage = PagedListDisplayMode.Never,
+                            DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                            DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                            MaximumPageNumbersToDisplay = 10
+                        })
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center">
+                        <img src="~/assets/images/empty_xct9.svg" width="150" style="opacity:.5" />
+                        <p class="text-center text-muted mt-2">Không có dữ liệu</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,460 @@
+﻿@using qltb.Data
+@using qltb.Data.ResVMs
+@model IEnumerable<qltb.Data.ResVMs.GiaoVienResVM>
+@{
+    ViewBag.Title = "Danh sách Giáo viên";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto"> Danh sách Giáo viên</h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="#" type="button" data-toggle="modal" data-target="#teacher_insert_modal" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới</span></a>
+    </div>
+</div>
+
+<div class="page-section">
+    <!-- .card -->
+    <div class="card card-fluid">
+        <div class="card-header d-flex">
+            <div class="form-group">
+                <select id="tobomon_select_filter" class="custom-select">
+                    <option value=''> Chọn tổ bộ môn</option>
+                    <option value=""> Tất cả </option>
+                    @foreach (var tobomon in ViewBag.ToBoMon as List<ToBoMonResVM>)
+                    {
+                        <option value="@tobomon.ToBoMonId"> @tobomon.TenToBoMon </option>
+                    }
+                </select>
+            </div><!-- /.form-group -->
+            <div class="btn-group ml-auto">
+                @*<button type="button" class="btn btn-success">Xuất excel</button>*@
+            </div>
+        </div><!-- /.card-header -->
+        <!-- .card-body -->
+        <div class="card-body teacher-table table-responsive">
+            <table id="teacher-table" class="table table-bordered table-hover">
+                <!-- thead -->
+                <thead class="bg-light">
+                    <tr>
+                        <th style="width:10%" class=""> # </th>
+                        <th style="width:20%" class=""> Mã giáo viên </th>
+                        <th style="width:20%" class=""> Họ và tên </th>
+                        <th style="width:20%" class="text-center"> Ngày vào ngành </th>
+                        <th style="width:20%" class="text-center"> Ngày nghỉ việc </th>
+                        <th style="width:10%" class="text-center"> &nbsp; </th>
+                    </tr>
+                </thead><!-- /thead -->
+                <!-- tbody -->
+                <tbody>
+                    <!-- create empty row to passing html validator -->
+                    @foreach (var teacher in Model)
+                    {
+                        var gender = (teacher.GioiTinhId == 1) ? "venus" : "mars";
+                        var gender_display = (teacher.GioiTinhId == 1) ? "blue" : "danger";
+                        var working = (teacher.DangLamViec == true) ? "Đang làm việc" : "Đã nghỉ việc";
+                        var working_display = (teacher.DangLamViec == true) ? "success" : "danger";
+                        <tr>
+                            <td class="">@teacher.STT</td>
+                            <td class=""><code>@teacher.MaGiaoVien</code></td>
+                            <td class="">
+                                <b><span><i class="fad fa-@gender text-@gender_display"></i></span> @teacher.TenGiaoVien </b><br />
+                                <span class="badge badge-@working_display badge-subtle">@working</span>
+                            </td>
+                            <td class="text-center">@teacher.NgayVaoNganh</td>
+                            <td class="text-center">@teacher.NgayNghiViec</td>
+                            <td class="align-middle text-center">
+                                <a href="#" class="btn btn-sm btn-icon btn-subtle-primary teacher_update" data-id="@teacher.GiaoVienId" data-toggle="modal" data-target="#teacher_update_modal"><i class="fa fa-pencil-alt"></i> <span class="sr-only">Edit</span></a>
+                                <a href="#" class="btn btn-sm btn-icon btn-subtle-danger teacher_delete" data-id="@teacher.GiaoVienId" data-name="@teacher.TenGiaoVien" data-toggle="modal" data-target="#teacher_delete_modal"><i class="far fa-trash-alt"></i> <span class="sr-only">Remove</span></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody><!-- /tbody -->
+            </table><!-- /.table -->
+        </div><!-- /.card-body -->
+    </div><!-- /.card -->
+</div><!-- /.page-section -->
+
+<form id="teacher_insert_form" action="/teacher/Insert" method="post">
+    <div id="teacher_insert_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <!-- .modal-dialog -->
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <!-- .modal-content -->
+            <div class="modal-content">
+                <!-- .modal-header -->
+                <div class="modal-header">
+                    <h5 class="modal-title"> Thêm mới Giáo viên</h5>
+                </div><!-- /.modal-header -->
+                <!-- .modal-body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="tf1">Tên đăng nhập <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="identity_number" name="TenDangNhap"  placeholder="Nhập tài khoản." required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tên Giáo viên <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="teacher_name" name="TenGiaoVien" aria-describedby="" placeholder="Tên giáo viên.." required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="ngayvaonganh">Ngày vào ngành</label>
+                                    <input id="ngayvaonganh" name="NgayVaoNganh" type="text" placeholder="Ngày vào ngành.." class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="ngayvaonganh">Ngày sinh</label>
+                                    <input id="birthday" name="NgaySinh" type="text" placeholder="Ngày sinh.." class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Tổ bộ môn <span class="text-danger">*</span></label>
+                                    <select id="tobomon_select" name="ToBoMonId" class="tobomon_select form-control selectize-select selectize-growth" required>
+                                        <option value="-1" disabled selected>-- Chọn tổ bộ môn --</option>
+                                        @foreach (var tobomon in ViewBag.ToBoMon as List<ToBoMonResVM>)
+                                        {
+                                            <option value="@tobomon.ToBoMonId"> @tobomon.TenToBoMon </option>
+                                        }
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        <i class="fa fa-exclamation-circle fa-fw"></i> Vui lòng không bỏ trống thông tin
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="d-flex justify-content-between" for="lbl5"><span>Mật khẩu <span class="text-danger">*</span></span><a href="#lbl5" data-toggle="password"><i class="fa fa-eye fa-fw"></i> <span>Show</span></a></label>
+                                    <input type="password" name="MatKhau" class="form-control" placeholder="Nhập mật khẩu" id="lbl5">
+
+                                </div>
+                                <div class="form-group">
+                                    <label for="tf1">Số CMND <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="identity_number" name="SoCMND" min="0" step="1" placeholder="Số chứng minh nhân dân.." required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="ngaynghiviec">Ngày nghỉ việc</label>
+                                    <input id="ngaynghiviec" name="NgayNghiViec" type="text" placeholder="Ngày nghỉ việc.." class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="d-block">Giới tính</label>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="1" name="GioiTinhId" id="rd1"> <label class="custom-control-label" for="rd1">Nam</label>
+                                    </div>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="2" name="GioiTinhId" id="rd2"> <label class="custom-control-label" for="rd2">Nữ</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="d-block">Đang làm việc</label>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="true" name="DangLamViec" id="rd3"> <label class="custom-control-label" for="rd3">Có</label>
+                                    </div>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="false" name="DangLamViec" id="rd4"> <label class="custom-control-label" for="rd4">Không</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.modal-body -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                    <button type="submit" class="btn btn-subtle-success" id="teacher_insert_btn"><i class="fal fa-check mr-2"></i>Thêm mới</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>
+<form id="teacher_update_form" action="/Teacher/Update" method="post">
+    <div id="teacher_update_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <!-- .modal-dialog -->
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <!-- .modal-content -->
+            <div class="modal-content">
+                <!-- .modal-header -->
+                <div class="modal-header">
+                    <h5 class="modal-title"> Cập nhật thông tin giáo viên</h5>
+                </div><!-- /.modal-header -->
+                <!-- .modal-body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label>Tên Giáo viên <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="teacher_id_update" name="GiaoVienId" aria-describedby="" placeholder="Mã giáo viên.." hidden required>
+                                    <input type="text" class="form-control" id="teacher_code_update" name="MaGiaoVien" aria-describedby="" placeholder="Mã giáo viên.." hidden required>
+                                    <input type="text" class="form-control" id="teacher_name_update" name="TenGiaoVien" aria-describedby="" placeholder="Tên giáo viên.." required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="ngayvaonganh_update">Ngày vào ngành</label>
+                                    <input id="ngayvaonganh_update" name="NgayVaoNganh" type="text" placeholder="Ngày vào ngành.." class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="birthday_update">Ngày sinh</label>
+                                    <input id="birthday_update" name="NgaySinh" type="text" placeholder="Ngày sinh.." class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Tổ bộ môn <span class="text-danger">*</span></label>
+                                    <select id="tobomon_select_update" name="ToBoMonId" class="tobomon_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn tổ bộ môn --</option>
+                                        @foreach (var tobomon in ViewBag.ToBoMon as List<ToBoMonResVM>)
+                                        {
+                                            <option value="@tobomon.ToBoMonId"> @tobomon.TenToBoMon </option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="tf1">Số CMND <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="identity_number_update" name="SoCMND" min="0" step="1" placeholder="Số chứng minh nhân dân.." required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="ngaynghiviec_update">Ngày nghỉ việc</label>
+                                    <input id="ngaynghiviec_update" name="NgayNghiViec" type="text" placeholder="Ngày nghỉ việc.." class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="d-block">Giới tính</label>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="1" name="GioiTinhId" id="rd1_update"> <label class="custom-control-label" for="rd1_update">Nam </label>
+                                    </div>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="2" name="GioiTinhId" id="rd2_update"> <label class="custom-control-label" for="rd2_update">Nữ</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="d-block">Đang làm việc</label>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="true" name="DangLamViec" id="rd3_update"> <label class="custom-control-label" for="rd3_update">Có</label>
+                                    </div>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="false" name="DangLamViec" id="rd4_update"> <label class="custom-control-label" for="rd4_update">Không</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.modal-body -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                    <button type="submit" class="btn btn-subtle-success" id="teacher_update_btn"><i class="fal fa-check mr-2"></i>Cập nhật</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>
+<form id="teacher_delete_form" action="/teacher/Delete" method="post">
+    <div id="teacher_delete_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <!-- .modal-dialog -->
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <!-- .modal-content -->
+            <div class="modal-content">
+                <!-- .modal-header -->
+                <div class="modal-header">
+                    <h5 class="modal-title"> Hủy bỏ giáo viên</h5>
+                </div><!-- /.modal-header -->
+                <!-- .modal-body -->
+                <div class="modal-body">
+                    <input id="teacher_id_delete" hidden />
+                    <p>Xóa bỏ giáo viên <b id="teacher_to_delete"></b> khỏi hệ thống</p>
+                </div><!-- /.modal-body -->
+                <!-- .modal-footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                    <button type="submit" class="btn btn-subtle-success" id="teacher_delete_btn"><i class="fal fa-check mr-2"></i>Xoá</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>
+<script>
+    $(function () {
+        $("#ngayvaonganh").flatpickr({
+            dateFormat: "d/m/Y",
+            altFormat: "d/m/Y"
+        });
+        $(".dataTables_length select").css("width", "55");
+
+        $("#ngaynghiviec").flatpickr({
+            dateFormat: "d/m/Y",
+            altFormat: "d/m/Y"
+        });
+        $("#birthday").flatpickr({
+            dateFormat: "d/m/Y",
+            altFormat: "d/m/Y"
+        });
+        $("#ngayvaonganh_update").flatpickr({
+            dateFormat: "d/m/Y",
+            altFormat: "d/m/Y"
+        });
+        $("#ngaynghiviec_update").flatpickr({
+            dateFormat: "d/m/Y",
+            altFormat: "d/m/Y"
+        });
+        $("#birthday_update").flatpickr({
+            dateFormat: "d/m/Y",
+            altFormat: "d/m/Y"
+        });
+        $("#teacher-equipment-table").DataTable({ lengthChange: false, info: false });
+        $("#teacher-table").DataTable(
+            {
+                autoWidth: false
+            });
+        $(".tobomon_select").selectize({
+            create: 0,
+            placeholder: "Chọn tổ bộ môn",
+            dropdownParent: "body"
+        })
+        $(".rank_select").selectize({
+            create: 0,
+            placeholder: "Chọn loại giáo viên",
+            dropdownParent: "body"
+        })
+        $("#teacher_type_select").selectize({
+            create: 0,
+            placeholder: "Có loại giáo viên",
+            dropdownParent: "body"
+        });
+    })
+    $("#ngayvaonganh").click(function () {
+        console.log($("#ngayvaonganh").val());
+        console.log($("#birthday").val());
+    })
+    $("#tobomon_select_filter").change(function () {
+        var tobomon_id = $(this).val();
+        window.location.href = "/Teacher/Index?tobomon_id=" + tobomon_id;
+    })
+    $("#teacher_insert_form").submit(function (event) {
+        var form = $(this);
+       
+        var teacher_select = $("#tobomon_select option:selected").val();
+        if (teacher_select == -1) {
+            $("#tobomon_select").addClass("is-invalid");
+            return false;
+        }
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: form.serialize(),
+            dataType: 'html',
+            beforeSend: function () {
+                $("#teacher_insert_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công!');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công.');
+                }
+            },
+            complete: function () {
+                $("#teacher_insert_btn").removeAttr("disabled");
+                $("#teacher_insert_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+    $(".teacher_update").click(function () {
+        var teacher_id = $(this).data('id');
+        //var teacher_select = $("#tobomon_select option:selected").val();
+        //if (teacher_select == -1) {
+        //    $("#tobomon_select").addClass("is-invalid");
+        //    return false;
+        //}
+        $.get("/Teacher/GetGiaoVien", { teacher_id: teacher_id }, function (data) {
+            console.log(data);
+            $("#teacher_id_update").val(data.GiaoVienId);
+            $("#teacher_name_update").val(data.TenGiaoVien);
+            $("#identity_number_update").val(data.SoCMND);
+            $("#ngaynghiviec_update").val(data.NgayNghiViec);
+            $("#teacher_code_update").val(data.MaGiaoVien);
+            $("#ngayvaonganh_update").val(data.NgayVaoNganh);
+            $("#birthday_update").val(data.NgaySinh);
+            $("#tobomon_select_update").selectize()[0].selectize.setValue(data.ToBoMonId);
+            if (data.GioiTinhId == 1) {
+                $("#rd1_update").prop("checked", true);
+            }
+            if (data.GioiTinhId == 2) {
+                $("#rd2_update").prop("checked", true);
+            }
+            if (data.DangLamViec == true) {
+                $("#rd3_update").prop("checked", true);
+            }
+            if (data.DangLamViec == false) {
+                $("#rd4_update").prop("checked", true);
+            }
+        });
+    })
+    $("#teacher_update_form").submit(function (event) {
+        var form = $(this);
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: form.serialize(),
+            dataType: 'html',
+            beforeSend: function () {
+                $("#teacher_update_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công!');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công.');
+                }
+            },
+            complete: function () {
+                $("#teacher_update_btn").removeAttr("disabled");
+                $("#teacher_update_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+
+    $(".teacher_delete").click(function () {
+        var teacher_id = $(this).data('id');
+        var teacher_name = $(this).data('name');
+        $("#teacher_id_delete").val(teacher_id);
+        $("#teacher_to_delete").text(teacher_name);
+    })
+    $("#teacher_delete_form").submit(function (event) {
+        var form = $(this);
+        var teacher_id = $("#teacher_id_delete").val();
+        if (teacher_id == null) {
+            return false;
+        }
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: { teacher_id: teacher_id },
+            dataType: 'html',
+            beforeSend: function () {
+                $("#teacher_delete_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công! ');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công. ');
+                }
+            },
+            complete: function () {
+                $("#teacher_delete_btn").removeAttr("disabled");
+                $("#teacher_delete_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+
+</script>

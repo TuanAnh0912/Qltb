@@ -1,0 +1,65 @@
+﻿@model IEnumerable<qltb.Data.NguoiDung>
+@{
+    ViewBag.Title = "AllUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-md-flex align-items-md-start mb-2">
+    <h1 class="page-title mr-sm-auto"> Danh sách người dùng </h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="/nguoi-dung/them-moi" type="button" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới người dùng</span></a>
+    </div><!-- /.btn-toolbar -->
+</div>
+@if (TempData["Alert"] != null)
+{
+    @Html.Raw(TempData["Alert"])
+}
+<div class="card card-body">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Họ tên</th>
+                    <th>Tên đăng nhập</th>
+                    <th>
+                        Email
+                    </th>
+                    <th>Điện thoại</th>
+                    <th width="10%">Trạng thái</th>
+                    <th width="15%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="tile tile-sm tile-circle bg-@item.GioiTinh.Color mr-1">
+                                <span class="@item.GioiTinh.Icon"></span>
+                            </div>
+                            <b class="text-primary">@item.HoTen</b>
+                        </td>
+                        <td>
+                            <a href="#">@@@item.TenDangNhap</a>
+                        </td>
+                        <td>@item.Email</td>
+                        <td>@item.DienThoai</td>
+                        <td>
+                            @if (item.IsActive.Value)
+                            {
+                                <span class="badge badge-success">Kích hoạt</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Không kích hoạt</span>
+                            }
+                        </td>
+                        <td class="text-right">
+                            <a href="/nguoi-dung/thong-tin-nguoi-dung?id=@item.NguoiDungId" class="badge badge-subtle badge-info">Chi tiết</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

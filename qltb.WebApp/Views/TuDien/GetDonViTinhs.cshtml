@@ -1,0 +1,306 @@
+﻿@using qltb.Data.ResVMs
+@model ListWithPaginationResVM
+@{
+    ViewBag.Title = "Đơn vị tính";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var SuccessNotification = TempData["SUCCESS"];
+    var WarningNotification = TempData["WARNING"];
+
+    // get ten tinh param
+    string TenDonViTinhQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("TenDonViTinh", out TenDonViTinhQueryParam);
+}
+<div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm mới đơn vị tính</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-don-vi-tinh-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Mã đơn vị tính</label>
+                                <input type="text" class="form-control" name="MaDonViTinh" />
+                            </div>
+                            <div class="form-group">
+                                <label>Tên đơn vị tính</label>
+                                <input type="text" class="form-control" name="TenDonViTinh" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="add-don-vi-tinh-btn">Thêm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-don-vi-tinh-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Mã đơn vị tính</label>
+                                <input type="text" class="form-control" name="MaDonViTinh" />
+                            </div>
+                            <div class="form-group">
+                                <label>Tên đơn vị tính</label>
+                                <input type="text" class="form-control" name="TenDonViTinh" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="update-don-vi-tinh-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bạn có chắc chắn muốn xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="delete-don-vi-tinh-btn">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-section">
+    <header class="page-title-bar">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active">
+                    <a href="#"><i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Danh sách đơn vị tính</a>
+                </li>
+            </ol>
+        </nav>
+    </header>
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <button onclick="Search()" class="btn btn-sm btn-outline-info">Tìm kiếm</button>
+                    <div class="float-right">
+                        <button class="btn btn-sm btn-primary" onclick="Add()">Thêm mới</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="search-don-vi-tinh-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Tên đơn vị tính</label>
+                                    <input class="form-control" type="text" name="TenDonViTinh" placeholder="Tên đơn vị tính..." value="@TenDonViTinhQueryParam" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <h5>Danh sách đơn vị tính</h5>
+                </div>
+                <div class="card-body" style="overflow-x: auto">
+                    <div class="table-responsive" style="min-width: 1000px">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã đơn vị tính</th>
+                                    <th>Tên đơn vị tính</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var donViTinhResVM in (List<DonViTinhResVM>)Model.Objects)
+                                    {
+                                        <tr>
+                                            <td>@donViTinhResVM.STT</td>
+                                            <td>@donViTinhResVM.MaDonViTinh</td>
+                                            <td>@donViTinhResVM.TenDonViTinh</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-info" onclick="Edit('@(donViTinhResVM.DonViTinhId)')"><i class="fas fa-pencil"></i></button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="Delete('@(donViTinhResVM.DonViTinhId)')"><i class="fas fa-trash-alt"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <ul class="pagination justify-content-center mt-4">
+                            @{
+                                foreach (var paginationResVM in (List<PaginationResVM>)Model.Paginations)
+                                {
+                                    <li class="page-item @(paginationResVM.IsActived.Value ? "active":  "") @(paginationResVM.IsDisabled.Value ? "disabled":  "")">
+                                        <a class="page-link" href="/tu-dien/don-vi-tinh@(paginationResVM.Url)" tabindex="-1">@Html.Raw(paginationResVM.Text)</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/assets/javascript/hanhnd_1.js"></script>
+    <script>
+        function Add() {
+            $('#add-modal').modal('show');
+            $('#add-don-vi-tinh-form input[name=MaDonViTinh]').val('');
+            $('#add-don-vi-tinh-form input[name=TenDonViTinh]').val('');
+            $("#add-don-vi-tinh-btn").unbind();
+            $("#add-don-vi-tinh-btn").click(function () {
+                AddDonViTinh();
+            });
+        }
+
+        function Edit(donViTinhId) {
+            $.ajax({
+                url: "/tu-dien/thong-tin-don-vi-tinh",
+                data: {
+                    donViTinhId: donViTinhId
+                },
+                type: "get",
+                success: function (response) {
+                    if (response) {
+                        setTimeout(function () {
+                            console.log(123)
+                            $('#edit-modal').modal('show');
+                            $('#editModalLabel').html(response.TenDonViTinh)
+                            $('#edit-don-vi-tinh-form input[name=MaDonViTinh]').val(response.MaDonViTinh);
+                            $('#edit-don-vi-tinh-form input[name=TenDonViTinh]').val(response.TenDonViTinh);
+                            $("#update-don-vi-tinh-btn").unbind();
+                            $("#update-don-vi-tinh-btn").click(function () {
+                                UpdateDonViTinh(response.DonViTinhId);
+                            });
+                        }, 500);
+                    }
+                    else {
+                        setTimeout(function () { toastr["warning"]('Không tìm thấy dữ liệu') }, 500)
+                    }
+
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Delete(donViTinhId) {
+            $('#delete-modal').modal('show');
+            $("#delete-don-vi-tinh-btn").unbind();
+            $("#delete-don-vi-tinh-btn").click(function () {
+                DeleteDonViTinh(donViTinhId);
+            });
+        }
+
+        function DeleteDonViTinh(donViTinhId) {
+            console.log(donViTinhId)
+            $.ajax({
+                url: "/tu-dien/xoa-thong-tin-don-vi-tinh",
+                data: {
+                    DonViTinhId: donViTinhId
+                },
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function UpdateDonViTinh(donViTinhId) {
+            let data = {
+                DonViTinhId: donViTinhId
+            }
+            $('#edit-don-vi-tinh-form').serializeArray().forEach(ele => {
+                data[ele.name] = ele.value
+            })
+
+            $.ajax({
+                url: "/tu-dien/cap-nhat-thong-tin-don-vi-tinh",
+                data: data,
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function AddDonViTinh() {
+            let data = {}
+            $('#add-don-vi-tinh-form').serializeArray().forEach(ele => {
+                data[ele.name] = ele.value
+            })
+
+            $.ajax({
+                url: "/tu-dien/them-thong-tin-don-vi-tinh",
+                data: data,
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Search() {
+            let queryParams = $('#search-don-vi-tinh-form').serialize();
+            console.log(queryParams);
+            location.replace("/tu-dien/don-vi-tinh?" + queryParams);
+        }
+
+        $(document).ready(function () {
+            if ('@(SuccessNotification)') {
+                toastr["success"]('@(SuccessNotification)')
+            }
+            else if ('@(WarningNotification)') {
+                toastr["warning"]('@(WarningNotification)')
+            }
+
+            $("#search-don-vi-tinh-form").submit(function (e) {
+                e.preventDefault();
+            })
+        })
+    </script>
+}

@@ -1,0 +1,244 @@
+﻿@using qltb.Data
+@using PagedList
+@using PagedList.Mvc
+@using qltb.Data.ViewModels
+@model IPagedList<qltb.Data.ResVMs.ThietBiCuaBaiGiangResVM>
+@{
+    ViewBag.Title = "Thiết bị bài học";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto"> Thiết bị bài học </h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <button type="button" id="lesson_equipment_insert" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Cập nhật</span></button>
+    </div><!-- /.btn-toolbar -->
+</div>
+<div class="page-section">
+    <div class="card card-fluid sticky-top">
+        <div class="card-header d-flex">
+            <div class="form-group">
+                <div class="input-group input-group-alt">
+                    @*<div class="input-group-prepend mr-2">
+                            <select id="filterBySubject" class="custom-select">
+                                <option> Tất cả môn học</option>
+                                <option value="0"> Dùng chung </option>
+                                @foreach (var unit in TempData["MonHoc"] as List<MonHoc>)
+                                {
+                                    if (unit.MonHocId != ViewBag.MonHoc)
+                                    {
+                                        <option value="@unit.MonHocId"> @unit.TenMonHoc </option>
+
+                                    }
+                                    else
+                                    {
+                                        <option value="@unit.MonHocId" selected> @unit.TenMonHoc </option>
+                                    }
+                                }
+                            </select>
+                        </div>*@
+                    @*<div class="input-group-prepend mr-2">
+                            <select id="filterByGrade" class="Grade-select ">
+                                <option> Tất cả khối lớp</option>
+                                @foreach (var unit in TempData["KhoiLop"] as List<KhoiLop>)
+                                {
+                                    if (unit.KhoiLopId != ViewBag.KhoiLop)
+                                    {
+
+                                        <option value="@unit.KhoiLopId"> @unit.TenKhoiLop </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@unit.KhoiLopId" selected> @unit.TenKhoiLop </option>
+
+                                    }
+                                }
+                            </select>
+                        </div>*@
+                    <div class="input-group-prepend">
+                        <select id="filterByTypeOfDevice" class="TypeOfDevice-select">
+                            <option> Tất cả loại thiết bị</option>
+                            @foreach (var unit in TempData["LoaiThietBi"] as List<LoaiThietBi>)
+                            {
+                                if (unit.LoaiThietBiId != ViewBag.LoaiThietBi)
+                                {
+                                    <option value="@unit.LoaiThietBiId"> @unit.TenLoaiThietBi </option>
+                                }
+                                else
+                                {
+                                    <option value="@unit.LoaiThietBiId" selected> @unit.TenLoaiThietBi </option>
+
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="input-group-prepend ml-2">
+                        <input type="text" class="form-control" value="@ViewBag.kytu" id="kytu" placeholder="Tên thiết bị " />
+                    </div>
+                    <!-- /.input-group -->
+                    <div class="ml-3">
+                        <button type="button" onclick="Search();" class="btn btn-primary">Tìm kiếm</button>
+                    </div>
+                </div><!-- /.input-group -->
+            </div>
+        </div>
+        <div class="card-body lesson-table table-responsive">
+            <table id="lesson-equipment-table" class="table table-bordered table-hover">
+                <!-- thead -->
+                <thead class="bg-light">
+                    <tr>
+                        <th style="width:10%!important" class="text-center">
+                            <div class="custom-control custom-control-inline custom-control-nolabel custom-checkbox" style="margin-left: 0rem">
+                                @{ var check_all = (Model.Any(c => c.CheckThietBi == 0) == true) ? "" : "checked=''"; }
+                                <input type="checkbox" class="custom-control-input" id="ckb0" @check_all> <label class="custom-control-label" for="ckb0">Checkbox</label>
+                            </div>
+                        </th>
+                        <th style="width:20%!important" class="">Mã thiết bị</th>
+                        <th style="width:25%!important" class=""> Tên thiết bị </th>
+                        <th style="width:25%!important" class=""> Loại thiết bị </th>
+                        <th style="width:10%!important" class="text-center"> Đơn vị </th>
+                        <th style="width:10%!important" class="text-center"> Tổng số lượng </th>
+                    </tr>
+                </thead><!-- /thead -->
+                <!-- tbody -->
+                <tbody class="equipment-check">
+                    <!-- create empty row to passing html validator -->
+                    @foreach (var equip in Model)
+                    {
+                        var check = (equip.CheckThietBi == 1) ? "checked=''" : "";
+                        var value = (equip.CheckThietBi == 1) ? equip.SoLuong : 0;
+                        <tr>
+                            <td class="text-center">
+                                <div class="custom-control custom-control-inline custom-control-nolabel custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input equipment-check" id="ckb-@equip.STT" data-id="@equip.STT" data-equipment-id="@equip.ThietBiID" data-equipment-name="@equip.TenThietBi" @check> <label class="custom-control-label" for="ckb-@equip.STT">Checkbox</label>
+                                </div>
+                            </td>
+                            <td class=""><code>@equip.MaThietBi</code></td>
+                            <td class="">@equip.TenThietBi</td>
+                            <td class="">@equip.TenLoaiThietBi</td>
+                            <td class="">@equip.TenDonViTinh</td>
+                            <td class="text-center">
+                                <div class="custom-number">
+                                    <input type="number" class="form-control equipment-number" data-order="@equip.STT" id="quantity-@equip.ThietBiID" name="SoTiet" min="0" step="1" value="@value" placeholder="Số lượng.." required>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody><!-- /tbody -->
+            </table>
+            <div class="mt-4 text-right">
+                @*Trang @(@Model.PageCount < @Model.PageNumber ? 0 : @Model.PageNumber) / @Model.PageCount*@
+                @Html.PagedListPager(Model as IPagedList<qltb.Data.ResVMs.ThietBiCuaBaiGiangResVM>, page => Url.Action("LessonEquipment",
+                     new { page, lesson_id = ViewBag.LessonId, kyTu = ViewBag.kytu, loaiThietBiId = ViewBag.LoaiThietBi }),
+                     new PagedListRenderOptions
+                     {
+                         UlElementClasses = new string[] { "pagination pagination-sm pagination-primary justify-content-end" },
+                         LiElementClasses = new string[] { "page-item " },
+                         MaximumPageNumbersToDisplay = 10,
+                     })
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        //$("#lesson-equipment-table").DataTable({
+        //    autoWidth: false,
+        //    paging: false,
+        //    scrollY: "32rem"
+        //});
+        setTimeout(function () { $("#ckb0").parent().click() }, 0)
+        $(".dataTables_length select").css("width", "55");
+    })
+    $("#filterByTypeOfDevice").select2();
+    function Search() {
+        let kytu = $("#kytu").val();
+        let loaiThietBiId = $("#filterByTypeOfDevice option:selected").val();
+        window.location.href = "/Lesson/LessonEquipment?page=" + null + "&lesson_id=" +@ViewBag.BaiHocID+"&kyTu=" + kytu + "&loaiThietBiId=" + loaiThietBiId;
+    }
+    $(".equipment-number").keydown(function (e) {
+        if (!((e.keyCode > 95 && e.keyCode < 106)
+            || (e.keyCode > 47 && e.keyCode < 58)
+            || e.keyCode == 8)) {
+            return false;
+        }
+    });
+    $(".equipment-number").change(function () {
+        var ckb = $(this).data("order");
+        var value = $(this).val();
+        if (value > 0) {
+            $("#ckb-" + ckb).prop("checked", true);
+        }
+        if (value == 0) {
+            $("#ckb-" + ckb).prop("checked", false);
+        }
+    })
+    $("#ckb0").change(function () {
+        var check = $(this).is(":checked");
+        $(".custom-control-input").prop("checked", check);
+    })
+    $("#lesson_equipment_insert").click(function () {
+        var lesson_equipments = [];
+        var list_equipment = $(".equipment-check input:checked");
+        list_equipment.each(function () {
+            var equipment_id = $(this).data("equipment-id");
+            var equipment_name = $(this).data("equipment-name");
+            var equipment_quantity = $("#quantity-" + equipment_id).val();
+            var equipment = {
+                ThietBiId: equipment_id,
+                TenThietBi: equipment_name,
+                SoLuong: equipment_quantity
+            }
+            lesson_equipments.push(equipment);
+        });
+        removeDumplicateValue(lesson_equipments);
+        if (lesson_equipments.length == 0) {
+            toastr.warning("Chọn thiết bị cần sử dụng trong bài giảng.", 'Thông báo.')
+            return false;
+        }
+        $.ajax({
+            type: "Post",
+            url: "/Lesson/InsertLessonEquipment",
+            data: {
+                lesson_id: @ViewBag.BaiHocID,
+                model: lesson_equipments
+            },
+            dataType: 'html',
+            beforeSend: function () {
+                $("#lesson_insert_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == null) {
+                    data.list_message.forEach(message => toastr.warning(message, 'Thông báo.'));
+                }
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công! ');
+                    setTimeout(function () { window.location.reload() }, 2000);
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công.');
+                }
+            },
+            complete: function () {
+                $("#lesson_insert_btn").removeAttr("disabled");
+                $("#lesson_insert_modal").modal("hide");
+            }
+        });
+        event.preventDefault();
+    });
+    function removeDumplicateValue(myArray) {
+        var newArray = [];
+
+        $.each(myArray, function (key, value) {
+            var exists = false;
+            $.each(newArray, function (k, val2) {
+                if (value.id == val2.id) { exists = true };
+            });
+            if (exists == false && value.id != "") { newArray.push(value); }
+        });
+
+        return newArray;
+    }
+</script>
+
+

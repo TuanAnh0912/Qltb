@@ -1,0 +1,188 @@
+﻿@model IEnumerable<qltb.Data.ViewModels.PhongBanViewModel>
+@{
+    ViewBag.Title = "Permission";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-md-flex align-items-md-start mb-2">
+    <h1 class="page-title mr-sm-auto"> Quyền truy cập </h1><!-- .btn-toolbar -->
+</div>
+<div class="modal fade" id="permissionModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Cập nhật quyền</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="toast" id="toast-success" data-autohide="true" data-delay="3000" style="position: fixed; bottom: 0; right: 0; width:400px">
+                    <div class="toast-header">
+                        <strong class="mr-auto text-success"><i class="fad fa-check-circle mr-1"></i>Thành công</strong>
+                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                    </div>
+                    <div class="toast-body">
+                        Cập nhật quyền thành công!
+                    </div>
+                </div>
+                <div class="toast" id="toast-fail" data-autohide="true" data-delay="3000" style="position: fixed; bottom: 0; right: 0; width:400px">
+                    <div class="toast-header">
+                        <strong class="mr-auto text-danger"><i class="fad fa-check-circle mr-1"></i>Thành công</strong>
+                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                    </div>
+                    <div class="toast-body">
+                        Cập nhật quyền không thành công!
+                    </div>
+                </div>
+                <p>Phòng ban: <b id="TenPhongBan" class="mr-4"></b> Chức vụ: <b id="TenChucVu"></b></p>
+                <input type="hidden" id="ChucVuId" />
+                <p>Quyền truy cập</p>
+                <div id="permission_list"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-1"></i>Trở lại</button>
+                <button type="button" class="btn btn-subtle-success" onclick="UpdatePermission()"><i class="fal fa-check mr-1"></i>Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+<divc class="page-section">
+    <div class="card card-body">
+        @foreach (var item in Model)
+        {
+            <h5 class="text-apple">@item.TenPhongBan</h5>
+            <hr />
+            <div class="mb-3">
+                <table class="table table-bordered">
+                    <tr>
+                        <td><b class="text-muted">Chức vụ</b></td>
+                        <td><b class="text-muted">Quyền truy cập</b></td>
+                    </tr>
+                    @foreach (var chucvu in item.ChucVus)
+                    {
+                        <tr>
+                            <td width="60%" class="text-primary">@chucvu.TenChucVu</td>
+                            <td>
+
+                                @foreach (var c in chucvu.ChucNangs)
+                                {
+                                    if (c.KhoaChaId == null)
+                                    {
+                                        <div>
+                                            <b class="text-primary">@c.TenChucNang</b> <i class="far fa-chevron-double-right mx-2 text-warning"></i>
+                                            @foreach (var i in chucvu.ChucNangs.Where(a => a.KhoaChaId == c.ChucNangId))
+                                            {
+                                                if (chucvu.ChucNangs.Where(a => a.KhoaChaId == i.ChucNangId).Count() > 0)
+                                                {
+                                                    <span>
+                                                        @i.TenChucNang (
+                                                        <span>
+                                                            @foreach (var j in chucvu.ChucNangs.Where(a => a.KhoaChaId == i.ChucNangId))
+                                                            {
+                                                                <i class="text-muted">@j.TenChucNang</i>
+                                                            }
+                                                        </span>
+                                                        ),
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span>
+                                                        @i.TenChucNang,
+                                                    </span>
+                                                }
+
+                                            }
+                                        </div>
+                                    }
+                                }
+                                <div class="text-right mt-1">
+                                    <a href="#" onclick="openPermissionModal('@chucvu.ChucVuId', '@chucvu.TenChucVu', '@item.TenPhongBan')"><small><i class="fal fa-edit mr-1"></i>Cập nhật quyền</small></a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+
+        }
+    </div>
+</divc>
+
+<script>
+    function openPermissionModal(id, chucvu, phongban) {
+        $("#TenPhongBan").text(phongban)
+        $("#TenChucVu").text(chucvu)
+        $("#ChucVuId").val(id)
+        $.ajax({
+            type: "GET",
+            url: '/Setting/GetChucNangByChucVu',
+            data: { ChucVuId: id },
+            dataType: 'html',
+            beforeSend: function () {
+
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                initTree(data);
+            },
+            complete: function () {
+
+            }
+        });
+        $("#permissionModal").modal('show');
+    }
+    function initTree(data) {
+        var $treeview = $("#permission_list");
+        $treeview
+            .jstree({
+                'core': {
+                    'data': data,
+                },
+                "checkbox": {
+                    "keep_selected_style": true
+                },
+                "plugins": ["checkbox"]
+            })
+            .on('loaded.jstree', function () {
+                $treeview.jstree('open_all');
+            });
+    }
+    $('#permissionModal').on('hidden.bs.modal', function () {
+        location.reload();
+    });
+    function showToast() {
+        
+    }
+    function UpdatePermission() {
+        var parent = $('#permission_list').jstree('get_undetermined');
+        var child = $('#permission_list').jstree('get_selected');
+        $.each(parent, function (key, value) {
+            child.push(value);
+        });
+        console.log(child);
+        var chucVuId = $("#ChucVuId").val();
+        $.ajax({
+            type: "POST",
+            url: '/Setting/UpdatePermission',
+            data: {
+                ChucVuId: chucVuId,
+                quyentruycaps: child,
+            },
+            dataType: 'html',
+            beforeSend: function () {
+
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    $("#toast-success").toast('show');
+                }
+            },
+            complete: function () {
+
+            }
+        });
+    }
+</script>

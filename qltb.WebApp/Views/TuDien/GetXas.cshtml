@@ -1,0 +1,269 @@
+﻿@using qltb.Data.ResVMs
+@model ListWithPaginationResVM
+@{
+    ViewBag.Title = "Tìm kiếm xã";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var SuccessNotification = TempData["SUCCESS"];
+    var WarningNotification = TempData["WARNING"];
+
+
+    // get ten tinh param
+    string TenXaQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("TenXa", out TenXaQueryParam);
+
+    // get ten tinh param
+    string TinhIdQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("TinhId", out TinhIdQueryParam);
+
+    // get ten tinh param
+    string HuyenIdQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("HuyenId", out HuyenIdQueryParam);
+}
+
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto"> Danh sách xã</h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="#" type="button" onclick="CapNhatDuLieu()" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Cập nhật dữ liệu</span></a>
+    </div><!-- /.btn-toolbar -->
+</div>
+<div class="page-section">
+    
+    <div class="row">
+        @*<div class="col-12">
+                <div class="card card-fluid">
+                    <div class="card-header">
+                        <button onclick="Search()" class="btn btn-sm btn-outline-info">Tìm kiếm</button>
+                        <div class="float-right">
+                            <button class="btn btn-sm btn-success" onclick="CapNhatDuLieu()">Cập nhật dữ liệu</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form id="search-xa-form">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                    <div class="form-group">
+                                        <label>Tên xã</label>
+                                        <input class="form-control" type="text" name="TenXa" placeholder="Tên xã..." value="@TenXaQueryParam" />
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Tỉnh</label>
+                                        <select id="tinh-select" class="form-control" data-toggle="select2" data-placeholder="Chọn tỉnh" data-allow-clear="true">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Huyện</label>
+                                        <select id="huyen-select" class="form-control" data-toggle="select2" data-placeholder="Chọn huyện" data-allow-clear="true">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>*@
+
+        <div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <form id="search-xa-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="TenXa" placeholder="Tên xã..." value="@TenXaQueryParam" />
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <select id="tinh-select" class="form-control" data-toggle="select2" data-placeholder="Chọn tỉnh" data-allow-clear="true">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <select id="huyen-select" class="form-control" data-toggle="select2" data-placeholder="Chọn huyện" data-allow-clear="true">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <button onclick="Search()" class="btn btn-primary">Tìm kiếm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body" style="overflow-x: auto">
+                    <div class="table-responsive" style="min-width: 1000px">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Mã Xã</th>
+                                    <th>Tên Xã</th>
+                                    <th>Tên Tỉnh</th>
+                                    <th>Tên Huyện</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var xaResVM in (List<XaResVM>)Model.Objects)
+                                    {
+                                        <tr>
+                                            <td>@xaResVM.XaId</td>
+                                            <td>@xaResVM.TenXa</td>
+                                            <td>@xaResVM.TenTinh</td>
+                                            <td>@xaResVM.TenHuyen</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <ul class="pagination justify-content-center mt-4">
+                            @{
+                                foreach (var paginationResVM in (List<PaginationResVM>)Model.Paginations)
+                                {
+                                    <li class="page-item @(paginationResVM.IsActived.Value ? "active":  "") @(paginationResVM.IsDisabled.Value ? "disabled":  "")">
+                                        <a class="page-link" href="/tu-dien/tim-kiem-xa@(paginationResVM.Url)" tabindex="-1">@Html.Raw(paginationResVM.Text)</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/assets/javascript/hanhnd_1.js"></script>
+    <script>
+        function CapNhatDuLieu() {
+            $.ajax({
+                url: "/tu-dien/cap-nhat-dghc",
+                type: "post",
+                success: function (response) {
+                    console.log(response)
+                    location.reload();
+                },
+                error: function (xhr) {
+                    //Do Something to handle error
+                }
+            });
+            let huyenId = $('#huyen-select').select2('data')[0] ? $('#huyen-select').select2('data')[0].id : '';
+            huyenId = huyenId ? huyenId : '';
+            let queryParams = $('#search-xa-form').serialize() + "&TinhId=" + tinhId + "&HuyenId=" + huyenId;
+            location.replace("/tu-dien/tim-kiem-xa?" + queryParams);
+        }
+
+        $(document).ready(function () {
+            let tinhIdQueryParam = '@(TinhIdQueryParam)';
+            let huyenIdQueryParam = '@(HuyenIdQueryParam)';
+
+            // notification
+            if ('@(SuccessNotification)') {
+                toastr["success"]('@(SuccessNotification)')
+            }
+            else if ('@(WarningNotification)') {
+                toastr["warning"]('@(WarningNotification)')
+            }
+
+            function getTinhs() {
+                $.ajax({
+                    url: "/tu-dien/danh-sach-tinh",
+                    type: "get",
+                    data: {
+                        tenTinh: ''
+                    },
+                    success: function (response) {
+                        console.log(response)
+                        $('#tinh-select').html('').select2({ data: [{ id: '', text: '' }] });
+                        $("#tinh-select").select2({
+                            data: response.map(ele => {
+                                return { ...ele, id: ele.TinhId, text: ele.TenTinh }
+                            })
+                        })
+
+                        if (tinhIdQueryParam) {
+                            console.log(huyenIdQueryParam)
+                            $('#tinh-select').val(tinhIdQueryParam).trigger("change");
+                        }
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                    }
+                });
+
+                $('#tinh-select').on('select2:select', function (e) {
+                    let tinhId = e.params.data.id
+                    $.ajax({
+                        url: "/tu-dien/danh-sach-huyen",
+                        type: "get", //send it through get method
+                        data: {
+                            tinhId: tinhId,
+                            tenHuyen: ''
+                        },
+                        success: function (response) {
+                            console.log(response)
+                            $('#huyen-select').html('').select2({ data: [{ id: '', text: '' }] });
+                            $("#huyen-select").select2({
+                                data: response.map(ele => {
+                                    return { ...ele, id: ele.HuyenId, text: ele.TenHuyen }
+                                })
+                            })
+                        },
+                        error: function (xhr) {
+                            //Do Something to handle error
+                        }
+                    });
+                });
+            }
+            getTinhs();
+
+            function getHuyens() {
+                if (tinhIdQueryParam) {
+                    $.ajax({
+                        url: "/tu-dien/danh-sach-huyen",
+                        type: "get",
+                        data: {
+                            tinhId: tinhIdQueryParam,
+                            tenHuyen: ''
+                        },
+                        success: function (response) {
+                            console.log(response)
+                            $('#huyen-select').html('').select2({ data: [{ id: '', text: '' }] });
+                            $("#huyen-select").select2({
+                                data: response.map(ele => {
+                                    return { ...ele, id: ele.HuyenId, text: ele.TenHuyen }
+                                })
+
+                            })
+
+                            if (huyenIdQueryParam) {
+                                console.log(huyenIdQueryParam)
+                                $('#huyen-select').val(huyenIdQueryParam).trigger("change");
+                            }
+                        },
+                        error: function (xhr) {
+                            //Do Something to handle error
+                        }
+                    });
+                }
+            }
+            getHuyens();
+
+
+            $("#search-xa-form").submit(function (e) {
+                e.preventDefault();
+            })
+        })
+
+    </script>
+}
+

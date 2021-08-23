@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewBag.Title = "UpdatePermission";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<header class="page-title-bar">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active">
+                <a href="/Setting/Permission"><i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Quyền truy cập</a>
+            </li>
+        </ol>
+    </nav>
+    <h1 class="page-title"> Cập nhật quyền truy cập </h1>
+</header>
+<div class="page-section">
+    <div class="card">
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-4 col-12">
+                    <h5 class="mb-4">Phòng ban / chức vụ</h5>
+                    <div class="mb-4 col-8">
+                        <select id="PhongBanId" class="form-control" name="PhongBanId">
+                        </select>
+                    </div>
+                    <div class="col-8">
+                        <select id="ChucVuId" class="form-control" name="ChucVuId">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-8 col-12">
+                    <h5 class="mb-4">Quyền truy cập</h5>
+                    <div id="permission_list"></div>
+                    <a href="#" class="btn btn-success" onclick="test()">Cập nhật</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: '/Setting/GetPhongBan',
+            /*            data: {},*/
+            dataType: 'html',
+            beforeSend: function () {
+                $("#PhongBanId").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                $("#PhongBanId").select2({
+                    data: data
+                });
+                var id = $("#PhongBanId").val();
+                $.ajax({
+                    type: "GET",
+                    url: '/Setting/GetChucVuByPhongBan',
+                    data: { id: id },
+                    dataType: 'html',
+                    beforeSend: function () {
+                        $("#ChucVuId").attr("disabled", "disabled");
+                    },
+                    success: function (response) {
+                        var data = JSON.parse(response);
+                        $("#ChucVuId").select2({
+                            data: data
+                        });
+
+                    },
+                    complete: function () {
+                        $("#ChucVuId").removeAttr("disabled");
+
+                    }
+                });
+            },
+            complete: function () {
+                $("#PhongBanId").removeAttr("disabled");
+
+            }
+        });
+    });
+    $("#PhongBanId").change(function () {
+        var id = $("#PhongBanId").val();
+        $('#ChucVuId').html('');
+        $.ajax({
+            type: "GET",
+            url: '/Setting/GetChucVuByPhongBan',
+            data: { id: id },
+            dataType: 'html',
+            beforeSend: function () {
+                $("#ChucVuId").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                $("#ChucVuId").select2({
+                    data: data
+                });
+            },
+            complete: function () {
+                $("#ChucVuId").removeAttr("disabled");
+
+            }
+        });
+    });
+    function createTree(data) {
+        var $treeview = $("#permission_list");
+        $treeview
+            .jstree({
+                'core': {
+                    'data': data,
+                    'icon': false
+                },
+                "checkbox": {
+                    "keep_selected_style": true
+                },
+                /*"plugins": ["checkbox"]*/
+            })
+            .on('loaded.jstree', function () {
+                $treeview.jstree('open_all');
+            });
+    }
+
+    function test() {
+        var result = $('#permission_list').jstree('get_undetermined');
+        var r = $('#permission_list').jstree('get_selected');
+        console.log(result, r);
+    }
+</script>

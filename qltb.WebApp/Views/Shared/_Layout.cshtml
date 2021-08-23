@@ -1,0 +1,272 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><!-- End Required meta tags -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!-- Begin SEO tag -->
+    <title>@ViewBag.Title</title>
+    <!-- FAVICONS -->
+    <link rel="apple-touch-icon" sizes="144x144" href="~/assets/apple-touch-icon.png">
+    <link rel="shortcut icon" href="~/assets/favicon.ico">
+    <meta name="theme-color" content="#3063A0"><!-- End FAVICONS -->
+    <!-- GOOGLE FONT -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600&display=swap" rel="stylesheet">
+    <!-- BEGIN PLUGINS STYLES -->
+    <link href="~/assets/vendor/fontawesome-pro-5.15.2-web/css/all.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/vendor/tributejs/tribute.css">
+    <link rel="stylesheet" href="~/assets/vendor/open-iconic/font/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/vendor/at.js/css/jquery.atwho.min.css">
+    <link rel="stylesheet" href="~/assets/libs/selectize/css/selectize.bootstrap3.css" />
+    <!--<link rel="stylesheet" href="~/assets/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">--><!-- END PLUGINS STYLES -->
+    <!-- END PLUGINS STYLES -->
+    <link href="~/assets/vendor/fullcalendar/main.min.css" rel="stylesheet" />
+    <link href="~/assets/vendor/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/assets/stylesheets/custom.css" rel="stylesheet" />
+    <link href="~/assets/vendor/flatpickr/flatpickr.min.css" rel="stylesheet" />
+    <!-- BEGIN THEME STYLES -->
+    <link rel="stylesheet" href="~/assets/stylesheets/theme.min.css" data-skin="default" />
+    <link rel="stylesheet" href="~/assets/stylesheets/theme-dark.min.css" data-skin="dark" />
+    <link href="~/assets/vendor/jstree/themes/default/style.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+
+    @RenderSection("style", required: false);
+
+    <script src="~/assets/vendor/jquery/jquery.min.js"></script>
+    <script src="~/assets/libs/selectize/js/standalone/selectize.min.js"></script>
+    <script src="~/assets/vendor/toastr/build/toastr.min.js"></script>
+    <script src="~/assets/vendor/select2/js/select2.min.js"></script>
+    <script src="~/assets/vendor/jstree/jstree.min.js"></script>
+    <script src="~/assets/vendor/popper.js/umd/popper.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    <script>
+        var skin = localStorage.getItem('skin') || 'default';
+        var disabledSkinStylesheet = document.querySelector('link[data-skin]:not([data-skin="' + skin + '"])');
+        // Disable unused skin immediately
+        disabledSkinStylesheet.setAttribute('rel', '');
+        disabledSkinStylesheet.setAttribute('disabled', true);
+        // add loading class to html immediately
+        document.querySelector('html').classList.add('loading');
+    </script><!-- END THEME STYLES -->
+
+</head>
+<body>
+    <!-- .app -->
+    <div class="app">
+        <!--[if lt IE 10]>
+        <div class="page-message" role="alert">You are using an <strong>outdated</strong> browser. Please <a class="alert-link" href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</div>
+        <![endif]-->
+        <!-- .app-header -->
+        <header class="app-header app-header-dark">
+            <!-- .top-bar -->
+            <div class="top-bar">
+                <!-- .top-bar-brand -->
+                <div class="top-bar-brand">
+                    <!-- toggle aside menu -->
+                    <button class="hamburger hamburger-squeeze mr-2" type="button" data-toggle="aside-menu" aria-label="toggle aside menu"><span class="hamburger-box"><span class="hamburger-inner"></span></span></button> <!-- /toggle aside menu -->
+                    <a href="/Home">
+                        Quản lý thiết bị trường học
+                    </a>
+                </div><!-- /.top-bar-brand -->
+                <!-- .top-bar-list -->
+                <div class="top-bar-list">
+                    <!-- .top-bar-item -->
+                    <div class="top-bar-item px-2 d-md-none d-lg-none d-xl-none">
+                        <!-- toggle menu -->
+                        <button class="hamburger hamburger-squeeze" type="button" data-toggle="aside" aria-label="toggle menu"><span class="hamburger-box"><span class="hamburger-inner"></span></span></button> <!-- /toggle menu -->
+                    </div><!-- /.top-bar-item -->
+                    <!-- .top-bar-item -->
+                    <div class="top-bar-item top-bar-item-right px-0">
+                        <!-- .nav -->
+                        <ul class="header-nav nav">
+                            <!-- .nav-item -->
+                            <li class="nav-item dropdown header-nav-dropdown">
+                                <a class="nav-link has-badge" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="badge badge-pill badge-warning">2</span> <span class="far fa-bell" style="font-size:large"></span></a> <!-- .dropdown-menu -->
+                                <div class="dropdown-menu dropdown-menu-rich dropdown-menu-right">
+                                    <div class="dropdown-arrow"></div>
+                                    <h6 class="dropdown-header stop-propagation">
+                                        <span>Thông báo <span class="badge">(2)</span></span>
+                                    </h6><!-- .dropdown-scroll -->
+                                    <div class="dropdown-scroll perfect-scrollbar">
+                                        <!-- .dropdown-item -->
+                                        <a href="#" class="dropdown-item unread">
+                                            <div class="user-avatar">
+                                                <img src="~/assets/images/avatars/uifaces15.jpg" alt="">
+                                            </div>
+                                            <div class="dropdown-item-body">
+                                                <p class="text"> @@Admin đã thêm phiếu mượn <code>ZFD-35JSFF</code></p><span class="date">Vừa xong</span>
+                                            </div>
+                                        </a> <!-- /.dropdown-item -->
+                                        <!-- .dropdown-item -->
+                                        <a href="#" class="dropdown-item unread">
+                                            <div class="user-avatar">
+                                                <img src="~/assets/images/avatars/uifaces16.jpg" alt="">
+                                            </div>
+                                            <div class="dropdown-item-body">
+                                                <p class="text"> Anna Vargas logged a chat </p><span class="date">3 hours ago</span>
+                                            </div>
+                                        </a> <!-- /.dropdown-item -->
+                                        <!-- .dropdown-item -->
+                                        <a href="#" class="dropdown-item">
+                                            <div class="user-avatar">
+                                                <img src="~/assets/images/avatars/uifaces17.jpg" alt="">
+                                            </div>
+                                            <div class="dropdown-item-body">
+                                                <p class="text"> Sara Carr invited to Stilearn Admin </p><span class="date">5 hours ago</span>
+                                            </div>
+                                        </a> <!-- /.dropdown-item -->
+                                        <!-- .dropdown-item -->
+                                        <a href="#" class="dropdown-item">
+                                            <div class="user-avatar">
+                                                <img src="~/assets/images/avatars/uifaces18.jpg" alt="">
+                                            </div>
+                                            <div class="dropdown-item-body">
+                                                <p class="text"> Arthur Carroll updated a project </p><span class="date">1 day ago</span>
+                                            </div>
+                                        </a> <!-- /.dropdown-item -->
+                                        <!-- .dropdown-item -->
+                                        <a href="#" class="dropdown-item">
+                                            <div class="user-avatar">
+                                                <img src="~/assets/images/avatars/uifaces19.jpg" alt="">
+                                            </div>
+                                            <div class="dropdown-item-body">
+                                                <p class="text"> Hannah Romero created a task </p><span class="date">1 day ago</span>
+                                            </div>
+                                        </a> <!-- /.dropdown-item -->
+                                        <!-- .dropdown-item -->
+                                        <a href="#" class="dropdown-item">
+                                            <div class="user-avatar">
+                                                <img src="~/assets/images/avatars/uifaces20.jpg" alt="">
+                                            </div>
+                                            <div class="dropdown-item-body">
+                                                <p class="text"> Angela Peterson assign a task to you </p><span class="date">2 days ago</span>
+                                            </div>
+                                        </a> <!-- /.dropdown-item -->
+                                        <!-- .dropdown-item -->
+                                        <a href="#" class="dropdown-item">
+                                            <div class="user-avatar">
+                                                <img src="~/assets/images/avatars/uifaces21.jpg" alt="">
+                                            </div>
+                                            <div class="dropdown-item-body">
+                                                <p class="text"> Shirley Mason and 3 others followed you </p><span class="date">2 days ago</span>
+                                            </div>
+                                        </a> <!-- /.dropdown-item -->
+                                    </div><!-- /.dropdown-scroll -->
+                                    <a href="user-activities.html" class="dropdown-footer">Tất cả thông báo <i class="far fa-fw fa-long-arrow-alt-right"></i></a>
+                                </div><!-- /.dropdown-menu -->
+                            </li><!-- /.nav-item -->
+                            <!-- .nav-item -->
+                        </ul><!-- /.nav -->
+                        <!-- .btn-account -->
+                        <div class="dropdown d-none d-sm-flex">
+                            <button class="btn-account" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="user-avatar user-avatar-md"><img src="~/assets/images/avatars/profile.jpg" alt=""></span>
+                                <span class="account-summary pr-lg-4 d-none d-lg-block">
+                                    <span class="account-name">@Session["FullName"]</span>
+                                    <span class="account-description">@@@Session["UserName"]</span>
+                                </span>
+                            </button> <!-- .dropdown-menu -->
+                            <div class="dropdown-menu">
+                                <div class="dropdown-arrow d-lg-none" x-arrow=""></div>
+                                <div class="dropdown-arrow ml-3 d-none d-lg-block"></div>
+                                <h6 class="dropdown-header d-none d-sm-block d-lg-none"> @Session["FullName"] </h6>
+                                <a class="dropdown-item" href="#"><span class="dropdown-icon oi oi-person"></span> Trang cá nhân</a>
+                                <a class="dropdown-item" href="/Auth/Logout"><span class="dropdown-icon oi oi-account-logout"></span> Đăng xuất</a>
+
+                            </div><!-- /.dropdown-menu -->
+                        </div><!-- /.btn-account -->
+                    </div><!-- /.top-bar-item -->
+                </div><!-- /.top-bar-list -->
+            </div><!-- /.top-bar -->
+        </header><!-- /.app-header -->
+        <!-- .app-aside -->
+        <aside class="app-aside app-aside-expand-md app-aside-light">
+            <!-- .aside-content -->
+            <div class="aside-content">
+                <!-- .aside-header -->
+                <header class="aside-header d-block d-md-none">
+                    <!-- .btn-account -->
+                    <button class="btn-account" type="button" data-toggle="collapse" data-target="#dropdown-aside">
+                        <span class="user-avatar user-avatar-lg"><img src="~/assets/images/avatars/profile.jpg" alt=""></span>
+                        <span class="account-icon"><span class="fa fa-caret-down fa-lg"></span></span> <span class="account-summary">
+                            <span class="account-name">@Session["FullName"]</span> <span class="account-description">Quản lý thư viện</span>
+                        </span>
+                    </button> <!-- /.btn-account -->
+                    <!-- .dropdown-aside -->
+                    <div id="dropdown-aside" class="dropdown-aside collapse">
+                        <!-- dropdown-items -->
+                        <div class="pb-3">
+                            <a class="dropdown-item" href="user-profile.html">
+                                <span class="dropdown-icon oi oi-person"></span> Trang cá nhân
+                            </a>
+                            <a class="dropdown-item" href="/Auth/Logout"><span class="dropdown-icon oi oi-account-logout"></span> Đăng xuất</a>
+                        </div><!-- /dropdown-items -->
+                    </div><!-- /.dropdown-aside -->
+                </header><!-- /.aside-header -->
+                <!-- .aside-menu -->
+                <div class="aside-menu overflow-hidden">
+                    <!-- .stacked-menu -->
+                    @Html.Raw(Session["Menu"])
+                    <!-- /.stacked-menu -->
+                </div><!-- /.aside-menu -->
+                <!-- Skin changer -->
+                <footer class="aside-footer border-top p-2">
+                    <button class="btn btn-light btn-block text-primary" data-toggle="skin"><span class="d-compact-menu-none">Chế độ tối</span> <i class="fad fa-adjust"></i></button>
+                </footer><!-- /Skin changer -->
+            </div><!-- /.aside-content -->
+        </aside><!-- /.app-aside -->
+        <!-- .app-main -->
+        <main class="app-main">
+            <!-- .wrapper -->
+            <div class="page-inner">
+                @RenderBody()
+            </div>
+            <!-- .app-footer -->
+            <footer class="app-footer">
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a class="text-muted" href="#">Hỗ trợ</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a class="text-muted" href="#">Hướng dẫn sử dụng</a>
+                    </li>
+                </ul>
+                <div class="copyright"> Copyright © 2018. All right reserved. </div>
+            </footer><!-- /.app-footer -->
+        </main><!-- /.app-main -->
+    </div><!-- /.app -->
+    <!-- BEGIN BASE JS -->
+    <script src="~/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!-- BEGIN PLUGINS JS -->
+    <script src="~/assets/vendor/fullcalendar/main.js"></script>
+    <script src="~/assets/vendor/pace-progress/pace.min.js"></script>
+    <script src="~/assets/vendor/stacked-menu/js/stacked-menu.min.js"></script>
+    <script src="~/assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="~/assets/vendor/flatpickr/flatpickr.min.js"></script>
+    <script src="~/assets/vendor/easy-pie-chart/jquery.easypiechart.min.js"></script>
+    <script src="~/assets/vendor/chart.js/Chart.min.js"></script>  END PLUGINS JS
+    <script src="~/assets/vendor/pace-progress/pace.min.js"></script>
+    <script src="~/assets/vendor/handlebars/handlebars.min.js"></script>
+    <script src="~/assets/vendor/typeahead.js/typeahead.bundle.min.js"></script>
+    <script src="~/assets/vendor/tributejs/tribute.min.js"></script>
+    <script src="~/assets/vendor/jquery.caret/jquery.caret.min.js"></script>
+    <script src="~/assets/vendor/at.js/js/jquery.atwho.min.js"></script>
+    <script src="~/assets/vendor/zxcvbn/zxcvbn.js"></script>
+    <script src="~/assets/vendor/flatpickr/plugins/monthSelect/index.js"></script>
+    <script src="~/assets/vendor/vanilla-text-mask/vanillaTextMask.js"></script>
+    <script src="~/assets/vendor/text-mask-addons/textMaskAddons.js"></script>
+    <!-- END PLUGINS JS -->
+    <!-- BEGIN THEME JS -->
+    <script src="~/assets/javascript/theme.min.js"></script> <!-- END THEME JS -->
+    <!-- BEGIN PAGE LEVEL JS -->
+    <!--<script src="~/assets/javascript/pages/dashboard-demo.js"></script>--> <!-- END PAGE LEVEL JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

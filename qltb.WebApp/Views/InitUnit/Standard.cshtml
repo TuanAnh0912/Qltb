@@ -1,0 +1,45 @@
+﻿@model IEnumerable<qltb.Data.TieuChuanPhong>
+@{
+    Layout = null;
+}
+
+<div class="card-body">
+    <div class="accordion scrollspy-detail">
+        @foreach (var item in Model)
+        {
+            <h5> @item.TenTieuChuan</h5>
+            <p>
+                @item.MoTa
+            </p>
+
+            if (item.KhoiPhongTieuChuans.Count() > 0)
+            {
+                <ul>
+                    @foreach (var item2 in item.KhoiPhongTieuChuans)
+                    {
+                    <li>
+                        @item2.TenKhoiPhong
+                        <p></p>
+                        @if (item2.Phongs.Count() > 0)
+                        {<ul>
+                                @foreach (var item3 in item2.Phongs)
+                                {
+                                    <li>
+                                        @item3.TenPhong
+                                        <p>
+                                            @item.MoTa
+                                        </p>
+                                    </li>
+
+                                }
+                            </ul>
+                        }
+                    </li>
+                    }
+                </ul>
+            }
+
+        }
+    </div>
+</div>
+

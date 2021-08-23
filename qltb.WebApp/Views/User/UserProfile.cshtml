@@ -1,0 +1,385 @@
+﻿@model qltb.Data.ViewModels.NguoiDungViewModel
+@{
+    ViewBag.Title = "UserProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (TempData["Alert"] != null)
+{
+    @Html.Raw(TempData["Alert"])
+}
+<div class="wrapper">
+    <!-- .page -->
+    <div class="page">
+        <!-- .page-cover -->
+        <header class="page-cover card">
+            <div class="text-center">
+                <a href="user-profile.html" class="user-avatar user-avatar-xl"><img src="/assets/images/avatars/profile.jpg" alt=""></a>
+                <h2 class="h4 mt-2 mb-0">@Model.HoTen</h2>
+                <h5 class="text-primary">@@@Model.TenDangNhap</h5>
+                <div class="my-2">
+                    @if (Model.IsActive.Value)
+                    {
+                        <span class="badge badge-success"><span class="oi oi-media-record pulse mr-1"></span>Đang hoạt động</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-danger"><span class="oi oi-media-record mr-1"></span>Không hoạt động</span>
+                    }
+                </div>
+                <p>
+                    Điện thoại: <b>@Model.DienThoai</b><br />
+                    Email: <b>@Model.Email</b>
+                </p>
+
+            </div><!-- .cover-controls -->
+            <!--<div class="cover-controls cover-controls-bottom">
+                <a href="#" class="btn btn-subtle-danger" data-toggle="modal" data-target="#lockModal"><i class="fad fa-lock-alt mr-2"></i>Khóa tài khoản</a>
+            </div>-->
+            <!-- /.cover-controls -->
+            <!--<div class="modal modal-alert fade has-shown" id="lockModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalAlertWarningLabel" style="display: none;" aria-hidden="true">-->
+            <!-- .modal-dialog -->
+            <!--<div class="modal-dialog" role="document">-->
+            <!-- .modal-content -->
+            <!--<div class="modal-content">-->
+            <!-- .modal-header -->
+            <!--<div class="modal-header">
+                <h5 id="exampleModalAlertWarningLabel" class="modal-title">
+                    <i class="fad fa-siren-on text-warning mr-1"></i> Khóa tài khoản
+                </h5>
+            </div>-->
+            <!-- /.modal-header -->
+            <!-- .modal-body -->
+            <!--<div class="modal-body">
+                <p> Bạn chắc chắn muốn khóa tài khoản này? </p>
+            </div>-->
+            <!-- /.modal-body -->
+            <!-- .modal-footer -->
+            <!--<div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal"><i class="fal fa-check mr-2"></i>Xác nhận</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+            </div>-->
+            <!-- /.modal-footer -->
+            <!--</div>--><!-- /.modal-content -->
+            <!--</div>--><!-- /.modal-dialog -->
+            <!--</div>-->
+        </header><!-- /.page-cover -->
+        <!-- .page-navs -->
+        <div class="nav-scroller">
+            <!-- .nav -->
+            <ul class="nav nav-tabs nav-center" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Phòng ban / chức vụ</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="home-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="home" aria-selected="false">Hoạt động</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="home-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="home" aria-selected="false">Quyền truy cập</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="home-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="home" aria-selected="false">Cập nhật thông tin</a>
+                </li>
+            </ul>
+        </div><!-- /.nav-scroller -->
+        <!-- .page-inner -->
+        <div class="tab-content mt-4" id="myTabContent">
+            <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="page-section">
+                    <div class="row">
+                        <div class="col-md-3 col-12">
+                            <!-- .card -->
+                            <div class="card card-fluid">
+                                <!-- .card-header -->
+                                <div class="card-body">
+                                    <fieldset>
+                                        <legend>Thêm chức vụ<br />
+                                            <small class="text-muted"><i>*Chọn <b>Phòng ban</b> và <b>Chức vụ </b>sau đó bấm vào <b>Thêm chức vụ</b> để thêm chức vụ cho người dùng này</i></small>
+                                        </legend>
+                                        
+                                    </fieldset>
+                                    <form method="post" action="/User/InsertNguoiDungChucVu">
+                                        <div class="mb-4 px-3">
+                                            <input type="hidden" name="Action" value="UserProfile" />
+                                            <input type="hidden" value="@Model.NguoiDungId" id="NguoiDungId" name="NguoiDungId" />
+                                            <div class="form-group">
+                                                <label>Phòng ban</label>
+                                                <select id="PhongBanId" class="form-control" name="PhongBanId">
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Chức vụ</label>
+                                                <select id="ChucVuId" class="form-control" name="ChucVuId">
+                                                </select>
+                                            </div>
+                                            <div class="text-center mt-4">
+                                                <button type="submit" class="btn btn-block btn-subtle-primary"><i class="fal fa-plus mr-1"></i> Thêm chức vụ</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- .card-footer -->
+                            </div><!-- /.card -->
+                        </div><!-- /grid column -->
+                        <!-- grid column -->
+                        <div class="col-md-6 col-12">
+                            <!-- .card -->
+                            <div class="card card-fluid">
+                                <!-- .card-header -->
+                                <div class="card-header border-0">
+                                    <!-- .d-flex -->
+                                    <div class="d-flex align-items-center">
+                                        <span class="mr-auto">Các chức vụ đang nắm giữ</span> <!-- .card-header-control -->
+                                    </div><!-- /.d-flex -->
+                                </div><!-- /.card-header -->
+                                <div class="list-group list-group-flush list-group-divider">
+                                    <!-- .list-group-item -->
+                                    @foreach (var item in Model.ChucVus)
+                                    {
+                                        <div class="list-group-item">
+                                            <div class="list-group-item-figure">
+                                                <a href="#" class="tile tile-circle bg-success"><span class="fad fa-shield-check"></span></a>
+                                            </div>
+                                            <div class="list-group-item-body">
+                                                <h4 class="list-group-item-title">
+                                                    <a href="#"><b>@item.TenChucVu</b></a>
+                                                </h4>
+                                                <p class="list-group-item-text"> @item.TenPhongBan </p>
+                                            </div>
+                                            <div class="list-group-item-figure">
+                                                <a href="/User/DeleteNguoiDungChucVu?NguoiDungId=@Model.NguoiDungId&ChucVuId=@item.ChucVuId&ReturnAction=UserProfile" class="btn btn-sm btn-subtle-danger"><i class="far fa-times mr-1"></i>Xóa</a>
+                                            </div>
+                                        </div><!-- /.list-group-item -->
+                                    }
+                                </div>
+                                <!-- .card-footer -->
+                            </div><!-- /.card -->
+                        </div><!-- /grid column -->
+                        <!-- grid column -->
+                        <div class="col-md-3 col-12">
+
+                        </div>
+                    </div><!-- /grid row -->
+                </div><!-- /.page-section -->
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="page-section">
+                    <!-- grid row -->
+                    <div class="row">
+                        <div class="col-md-3 col-12"></div>
+                        <div class="col-md-6 col-12">
+                            <div class="card card-fluid">
+                                <h6 class="card-header"> Lịch sử hoạt động </h6><!-- .card-body -->
+                                <div class="card-body">
+                                    <div class="text-center">
+                                        <img src="~/assets/images/empty_xct9.svg" width="150" style="opacity:.5" />
+                                        <p class="text-center text-muted mt-2">Chưa có thống kê hoạt động</p>
+                                    </div>
+                                </div><!-- /.card-body -->
+                            </div><!-- /.card -->
+                        </div>
+                        <div class="col-md-3 col-12"></div>
+                    </div><!-- /grid row -->
+                </div>
+            </div>
+            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                <div class="page-section">
+                    <!-- grid row -->
+                    <div class="row">
+                        <div class="col-md-3 col-12"></div>
+                        <div class="col-md-6 col-12">
+                            <div class="card card-fluid">
+                                <h6 class="card-header"> Danh sách quyền truy cập </h6><!-- .card-body -->
+                                <div class="card-body">
+                                    <!-- .media -->
+                                    <div id="permission_list">
+                                    </div><!-- /form -->
+                                </div><!-- /.card-body -->
+                            </div><!-- /.card -->
+                        </div>
+                        <div class="col-md-3 col-12"></div>
+                    </div><!-- /grid row -->
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab1" role="tabpanel" aria-labelledby="contact-tab">
+                <div class="row">
+                    <div class="col-md-3 col-12">
+
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="card card-fluid">
+                            <h6 class="card-header"> Thông tin người dùng </h6>
+                            <div class="card-body">
+                                <form method="post" action="/User/UpdateNguoiDung">
+                                    <input type="hidden" name="NguoiDungId" value="@Model.NguoiDungId" />
+                                    <div class="form-group">
+                                        <label>Tên đăng nhập:</label>
+                                        <b class="text-primary">@@@Model.TenDangNhap</b>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Mật khẩu</label>
+                                        <input type="text" name="MatKhau" placeholder="Mật khẩu đăng nhập hệ thống" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Họ tên</label>
+                                        <input type="text" name="HoTen" value="@Model.HoTen" class="form-control" required />
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6 col-12">
+                                            <label>Điện thoại</label>
+                                            <input type="text" name="DienThoai" value="@Model.DienThoai" class="form-control" />
+                                        </div>
+                                        <div class="form-group col-md-6 col-12">
+                                            <label>Email</label>
+                                            <input type="text" name="Email" value="@Model.Email" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6 col-12">
+                                            <label>Giới tính</label>
+                                            <select class="form-control" name="GioiTinhId" id="GioiTinhId">
+                                                <option value="1">Nam</option>
+                                                <option value="2">Nữ</option>
+                                                <option value="3">Không xác định</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6 col-12">
+                                            <label>Kích hoạt</label>
+                                            @if (Model.IsActive.Value)
+                                            {
+                                                <select class="form-control" name="isActive">
+                                                    <option value="true" selected>Kích hoạt</option>
+                                                    <option value="false">Không kích hoạt</option>
+                                                </select>
+                                            }
+                                            else
+                                            {
+                                                <select class="form-control" name="isActive">
+                                                    <option value="true">Kích hoạt</option>
+                                                    <option value="false" selected>Không kích hoạt</option>
+                                                </select>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="text-center py-3">
+                                        <button type="submit" class="btn btn-subtle-success"><i class="fal fa-check mr-1"></i> Cập nhật thông tin</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-12">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var gt = '@Model.GioiTinhId';
+        $("#GioiTinhId option[value='" + gt + "']").attr("selected", "selected");
+
+        $.ajax({
+            type: "GET",
+            url: '/Setting/GetPhongBan',
+            /*            data: {},*/
+            dataType: 'html',
+            beforeSend: function () {
+                $("#PhongBanId").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                $("#PhongBanId").select2({
+                    data: data
+                });
+                var id = $("#PhongBanId").val();
+                $.ajax({
+                    type: "GET",
+                    url: '/Setting/GetChucVuByPhongBan',
+                    data: { id: id },
+                    dataType: 'html',
+                    beforeSend: function () {
+                        $("#ChucVuId").attr("disabled", "disabled");
+                    },
+                    success: function (response) {
+                        var data = JSON.parse(response);
+                        $("#ChucVuId").select2({
+                            data: data
+                        });
+
+                    },
+                    complete: function () {
+                        $("#ChucVuId").removeAttr("disabled");
+
+                    }
+                });
+            },
+            complete: function () {
+                $("#PhongBanId").removeAttr("disabled");
+
+            }
+        });
+
+        var userId = $("#NguoiDungId").val();
+        $.ajax({
+            type: "GET",
+            url: '/Setting/GetQuyenByUser',
+            data: { userId: userId },
+            dataType: 'html',
+            beforeSend: function () {
+
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                console.log(data)
+                var $treeview = $("#permission_list");
+                $treeview
+                    .jstree({
+                        'core': {
+                            'data': data,
+                            'icon': false
+                        },
+                        "checkbox": {
+                            "keep_selected_style": true
+                        },
+                        /*"plugins": ["checkbox"]*/
+                    })
+                    .on('loaded.jstree', function () {
+                        $treeview.jstree('open_all');
+                    });
+                //$('#permission_list').jstree({
+                //    'core': {
+                //        'data': data
+                //    }
+                //});
+            },
+            complete: function () {
+
+            }
+        });
+    });
+    $("#PhongBanId").change(function () {
+        var id = $("#PhongBanId").val();
+        $('#ChucVuId').html('');
+        $.ajax({
+            type: "GET",
+            url: '/Setting/GetChucVuByPhongBan',
+            data: { id: id },
+            dataType: 'html',
+            beforeSend: function () {
+                $("#ChucVuId").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                $("#ChucVuId").select2({
+                    data: data
+                });
+            },
+            complete: function () {
+                $("#ChucVuId").removeAttr("disabled");
+
+            }
+        });
+    });
+</script>

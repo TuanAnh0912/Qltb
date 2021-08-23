@@ -1,0 +1,322 @@
+﻿@using qltb.Data.ResVMs
+@model ListWithPaginationResVM
+@{
+    ViewBag.Title = "Chương trình học";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var SuccessNotification = TempData["SUCCESS"];
+    var WarningNotification = TempData["WARNING"];
+
+    // get ten tinh param
+    string TenChuongTrinhHocQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("TenChuongTrinhHoc", out TenChuongTrinhHocQueryParam);
+}
+<div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm mới chương trình học</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-chuong-trinh-hoc-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Mã chương trình học</label>
+                                <input type="text" class="form-control" name="MaChuongTrinhHoc" />
+                            </div>
+                            <div class="form-group">
+                                <label>Tên chương trình học</label>
+                                <input type="text" class="form-control" name="TenChuongTrinhHoc" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="add-chuong-trinh-hoc-btn">Thêm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-chuong-trinh-hoc-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Mã chương trình học</label>
+                                <input type="text" class="form-control" name="MaChuongTrinhHoc" />
+                            </div>
+                            <div class="form-group">
+                                <label>Tên chương trình học</label>
+                                <input type="text" class="form-control" name="TenChuongTrinhHoc" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="update-chuong-trinh-hoc-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bạn có chắc chắn muốn xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="delete-chuong-trinh-hoc-btn">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto"> Danh sách chương trình học</h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="#" type="button" onclick="Add()" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới</span></a>
+    </div><!-- /.btn-toolbar -->
+</div>
+<div class="page-section">
+    @*<header class="page-title-bar">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active">
+                        <a href="#"><i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Danh sách chương trình học</a>
+                    </li>
+                </ol>
+            </nav>
+        </header>*@
+    <div class="row">
+        @*<div class="col-12">
+                <div class="card card-fluid">
+                    <div class="card-header">
+                        <button onclick="Search()" class="btn btn-sm btn-outline-info">Tìm kiếm</button>
+                        <div class="float-right">
+                            <button class="btn btn-sm btn-primary" onclick="Add()">Thêm mới</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form id="search-chuong-trinh-hoc-form">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                    <div class="form-group">
+                                        <label>Tên chương trình học</label>
+                                        <input class="form-control" type="text" name="TenChuongTrinhHoc" placeholder="Tên chương trình học..." value="@TenChuongTrinhHocQueryParam" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>*@
+
+        <div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <form id="search-chuong-trinh-hoc-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="TenChuongTrinhHoc" placeholder="Tên chương trình học..." value="@TenChuongTrinhHocQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <button onclick="Search()" class="btn btn-primary">Tìm kiếm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body" style="overflow-x: auto">
+                    <div class="table-responsive" style="min-width: 1000px">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã chương trình học</th>
+                                    <th>Tên chương trình học</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var chuongTrinhHocResVM in (List<ChuongTrinhHocResVM>)Model.Objects)
+                                    {
+                                        <tr>
+                                            <td>@chuongTrinhHocResVM.STT</td>
+                                            <td><code>@chuongTrinhHocResVM.MaChuongTrinhHoc</code></td>
+                                            <td>@chuongTrinhHocResVM.TenChuongTrinhHoc</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-info" onclick="Edit('@(chuongTrinhHocResVM.ChuongTrinhHocId)')"><i class="fas fa-pencil"></i></button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="Delete('@(chuongTrinhHocResVM.ChuongTrinhHocId)')"><i class="fas fa-trash-alt"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <ul class="pagination justify-content-center mt-4">
+                            @{
+                                foreach (var paginationResVM in (List<PaginationResVM>)Model.Paginations)
+                                {
+                                    <li class="page-item @(paginationResVM.IsActived.Value ? "active":  "") @(paginationResVM.IsDisabled.Value ? "disabled":  "")">
+                                        <a class="page-link" href="/tu-dien/chuong-trinh-hoc@(paginationResVM.Url)" tabindex="-1">@Html.Raw(paginationResVM.Text)</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/assets/javascript/hanhnd_1.js"></script>
+    <script>
+        function Add() {
+            $('#add-modal').modal('show');
+            $('#add-chuong-trinh-hoc-form input[name=MaChuongTrinhHoc]').val('');
+            $('#add-chuong-trinh-hoc-form input[name=TenChuongTrinhHoc]').val('');
+            $("#add-chuong-trinh-hoc-btn").click(function () {
+                AddLoaiThietBi();
+            });
+        }
+
+        function Edit(chuongTrinhHocId) {
+            $.ajax({
+                url: "/tu-dien/thong-tin-chuong-trinh-hoc",
+                data: {
+                    chuongTrinhHocId: chuongTrinhHocId
+                },
+                type: "get",
+                success: function (response) {
+                    if (response) {
+                        setTimeout(function () {
+                            $('#edit-modal').modal('show');
+                            $('#editModalLabel').html(response.TenChuongTrinhHoc)
+                            $('#edit-chuong-trinh-hoc-form input[name=MaChuongTrinhHoc]').val(response.MaChuongTrinhHoc);
+                            $('#edit-chuong-trinh-hoc-form input[name=TenChuongTrinhHoc]').val(response.TenChuongTrinhHoc);
+                            $("#update-chuong-trinh-hoc-btn").unbind();
+                            $("#update-chuong-trinh-hoc-btn").click(function () {
+                                UpdateLoaiThietBi(response.ChuongTrinhHocId);
+                            });
+                        }, 500);
+                    }
+                    else {
+                        setTimeout(function () { toastr["warning"]('Không tìm thấy dữ liệu') }, 500)
+                    }
+
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Delete(chuongTrinhHocId) {
+            $('#delete-modal').modal('show');
+            $("#delete-chuong-trinh-hoc-btn").unbind();
+            $("#delete-chuong-trinh-hoc-btn").click(function () {
+                DeleteLoaiThietBi(chuongTrinhHocId);
+            });
+        }
+
+        function DeleteLoaiThietBi(chuongTrinhHocId) {
+            console.log(chuongTrinhHocId)
+            $.ajax({
+                url: "/tu-dien/xoa-thong-tin-chuong-trinh-hoc",
+                data: {
+                    ChuongTrinhHocId: chuongTrinhHocId
+                },
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function UpdateLoaiThietBi(chuongTrinhHocId) {
+            let data = {
+                ChuongTrinhHocId: chuongTrinhHocId
+            }
+            $('#edit-chuong-trinh-hoc-form').serializeArray().forEach(ele => {
+                data[ele.name] = ele.value
+            })
+
+            $.ajax({
+                url: "/tu-dien/cap-nhat-thong-tin-chuong-trinh-hoc",
+                data: data,
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function AddLoaiThietBi() {
+            let data = {}
+            $('#add-chuong-trinh-hoc-form').serializeArray().forEach(ele => {
+                data[ele.name] = ele.value
+            })
+
+            $.ajax({
+                url: "/tu-dien/them-thong-tin-chuong-trinh-hoc",
+                data: data,
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Search() {
+            let queryParams = $('#search-chuong-trinh-hoc-form').serialize();
+            console.log(queryParams);
+            location.replace("/tu-dien/chuong-trinh-hoc?" + queryParams);
+        }
+
+        $(document).ready(function () {
+            if ('@(SuccessNotification)') {
+                toastr["success"]('@(SuccessNotification)')
+            }
+            else if ('@(WarningNotification)') {
+                toastr["warning"]('@(WarningNotification)')
+            }
+
+            $("#search-chuong-trinh-hoc-form").submit(function (e) {
+                e.preventDefault();
+            })
+        })
+    </script>
+}

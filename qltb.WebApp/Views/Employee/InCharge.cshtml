@@ -1,0 +1,383 @@
+﻿
+@using qltb.Data
+@using qltb.Data.ResVMs
+@model IEnumerable<qltb.Data.ResVMs.CanBoThietBiResVM>
+@{
+    ViewBag.Title = "Cán bộ phụ trách thiết bị";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto">Cán bộ phụ trách</h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="#" type="button" data-toggle="modal" data-target="#incharger_insert_modal" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới</span></a>
+    </div>
+</div>
+<div class="page-section">
+    <!-- .card -->
+    <div class="card card-fluid">
+        <!-- .card-header -->
+        @*<div class="card-header d-flex">
+            <div class="btn-group ml-auto">
+                <button type="button" class="btn btn-success">Xuất excel</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#incharger_insert_modal">Thêm mới</button>
+            </div>
+        </div>*@<!-- /.card-header -->
+        <!-- .card-body -->
+        <div class="card-body incharger-table table-responsive">
+            <table id="incharger-table" class="table table-hover table-bordered">
+                <!-- thead -->
+                <thead class="bg-light">
+                    <tr>
+                        <th class=""> # </th>
+                        <th class=""> Mã giáo viên </th>
+                        <th class=""> Họ và tên </th>
+                        <th class=""> Vai trò </th>
+                        <th class=""> Trình độ văn hóa </th>
+                        <th class=""> Có trình độ nghiệp vụ </th>
+                        <th class="text-center"> Thời gian quản lý </th>
+                        <th class="text-center"> Ghi chú </th>
+                        <th class="text-center"> &nbsp; </th>
+                    </tr>
+                </thead><!-- /thead -->
+                <!-- tbody -->
+                <tbody>
+                    <!-- create empty row to passing html validator -->
+                    @foreach (var incharger in Model)
+                    {
+                        //var gender_display = (incharger.GioiTinhId == 1) ? "blue" : "danger";
+                        <tr>
+                            <td class="">@incharger.STT</td>
+                            <td class=""><code>@incharger.MaGiaoVien</code></td>
+                            <td class=""><b>@incharger.TenGiaoVien</td>
+                            <td class="">@incharger.TenVaiTro</td>
+                            <td class="text-center">@incharger.TrinhDoVanHoa</td>
+                            <td class="text-center">
+                                @if (incharger.CoTrinhDoNghiepVu == true)
+                                {
+                                    <i class="fad fa-check-double text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="fad fa-align-slash text-indigo"></i>
+                                }
+                            </td>
+                            <td class="text-center">@incharger.ThoiGianBatDauQuanLy - @incharger.ThoiGianHetHanQuanLy</td>
+                            <td class="text-center">@incharger.GhiChu</td>
+                            <td class="align-middle text-center">
+                                <a href="#" class="btn btn-sm btn-icon btn-subtle-primary incharger_update" data-id="@incharger.CanBoThietBiId" data-toggle="modal" data-target="#incharger_update_modal"><i class="fa fa-pencil-alt"></i> <span class="sr-only">Edit</span></a>
+                                <a href="#" class="btn btn-sm btn-icon btn-subtle-danger incharger_delete" data-id="@incharger.CanBoThietBiId" data-name="@incharger.TenGiaoVien" data-toggle="modal" data-target="#incharger_delete_modal"><i class="far fa-trash-alt"></i> <span class="sr-only">Remove</span></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody><!-- /tbody -->
+            </table><!-- /.table -->
+        </div><!-- /.card-body -->
+    </div><!-- /.card -->
+</div><!-- /.page-section -->
+
+<form id="incharger_insert_form" action="/Employee/Insert" method="post">
+    <div id="incharger_insert_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <!-- .modal-dialog -->
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <!-- .modal-content -->
+            <div class="modal-content">
+                <!-- .modal-header -->
+                <div class="modal-header">
+                    <h5 class="modal-title"> Thêm mới nhân viên phụ trách</h5>
+                </div><!-- /.modal-header -->
+                <!-- .modal-body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label>Tên Giáo  viên <span class="text-danger">*</span></label>
+                                    <select id="teacher_select" name="GiaoVienId" class="teacher_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn Giáo  viên --</option>
+                                        @foreach (var teacher in ViewBag.GiangVien as List<GiaoVienResVM>)
+                                        {
+                                            <option value="@teacher.GiaoVienId"> @teacher.TenGiaoVien </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Trình độ văn hóa <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="incharger_level" name="TrinhDoVanHoa" aria-describedby="" placeholder="Trình độ văn hóa.." required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Ghi chú<span class="text-danger"></span></label>
+                                    <input type="text" class="form-control" id="description" name="GhiChu" aria-describedby="" placeholder="Ghi chú..">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label>Vai trò <span class="text-danger">*</span></label>
+                                    <select id="role_select" name="VaiTroCanBoId" class="role_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn vai trò --</option>
+                                        @foreach (var role in ViewBag.VaiTro as List<VaiTroCanBo>)
+                                        {
+                                            <option value="@role.VaiTroCanBoId"> @role.TenVaiTro </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="thoigianquanly">Thời gian quản lý</label>
+                                    <input id="thoigianquanly" name="ThoiGianQuanLy" type="text" data-mode="range" placeholder="Thời gian quản lý.." data-date-format="d/m/Y" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="d-block">Có trình độ nghiệp vụ</label>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="true" name="CoTrinhDoNghiepVu" id="rd1"> <label class="custom-control-label" for="rd1">Có</label>
+                                    </div>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="false" name="CoTrinhDoNghiepVu" id="rd2"> <label class="custom-control-label" for="rd2">Không</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.modal-body -->
+                <!-- .modal-footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                    <button type="submit" class="btn btn-subtle-success" id="incharger_insert_btn"><i class="fal fa-check mr-2"></i>Thêm mới</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>
+<form id="incharger_update_form" action="/Employee/Update" method="post">
+    <div id="incharger_update_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <!-- .modal-dialog -->
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <!-- .modal-content -->
+            <div class="modal-content">
+                <!-- .modal-header -->
+                <div class="modal-header">
+                    <h5 class="modal-title"> Cập nhật thông tin nhân viên phụ trách</h5>
+                    <input type="text" name="CanBoThietBiId" hidden id="incharger_id_update" />
+                </div><!-- /.modal-header -->
+                <!-- .modal-body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label>Tên Giáo  viên <span class="text-danger">*</span></label>
+                                    <select id="teacher_select_update" name="GiaoVienId" class="teacher_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn Giáo  viên --</option>
+                                        @foreach (var teacher in ViewBag.GiangVien as List<GiaoVienResVM>)
+                                        {
+                                            <option value="@teacher.GiaoVienId"> @teacher.TenGiaoVien </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Trình độ văn hóa <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="incharger_level_update" name="TrinhDoVanHoa" aria-describedby="" placeholder="Trình độ văn hóa.." required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Ghi chú </label>
+                                    <input type="text" class="form-control" id="description_update" name="GhiChu" aria-describedby="" placeholder="Ghi chú..">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label>Vai trò <span class="text-danger">*</span></label>
+                                    <select id="role_select_update" name="VaiTroCanBoId" class="role_select form-control selectize-select selectize-growth" required>
+                                        <option value="0" disabled selected>-- Chọn vai trò --</option>
+                                        @foreach (var role in ViewBag.VaiTro as List<VaiTroCanBo>)
+                                        {
+                                            <option value="@role.VaiTroCanBoId"> @role.TenVaiTro </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="thoigianquanly">Thời gian quản lý <span class="text-danger">*</span></label>
+                                    <input id="thoigianquanly_update" name="ThoiGianQuanLy" type="text" data-mode="range" placeholder="Thời gian quản lý.." data-date-format="d/m/Y" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="d-block">Có trình độ nghiệp vụ</label>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="true" name="CoTrinhDoNghiepVu" id="rd1_update"> <label class="custom-control-label" for="rd1_update">Có</label>
+                                    </div>
+                                    <div class="custom-control custom-control-inline custom-radio">
+                                        <input type="radio" class="custom-control-input" value="false" name="CoTrinhDoNghiepVu" id="rd2_update"> <label class="custom-control-label" for="rd2_update">Không</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.modal-body -->
+                <!-- .modal-footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="incharger_update_btn">Cập nhật</button>
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+                </div><!-- /.modal-footer -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>
+<form id="incharger_delete_form" action="/Employee/Delete" method="post">
+    <div id="incharger_delete_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <!-- .modal-dialog -->
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <!-- .modal-content -->
+            <div class="modal-content">
+                <!-- .modal-header -->
+                <div class="modal-header">
+                    <h5 class="modal-title"> Hủy bỏ nhân viên phụ trách</h5>
+                </div><!-- /.modal-header -->
+                <!-- .modal-body -->
+                <div class="modal-body">
+                    <input id="incharger_id_delete" hidden />
+                    <p>Xóa thông tin cán bộ <b id="incharger_to_delete"></b> khỏi hệ thống</p>
+                </div><!-- /.modal-body -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                    <button type="submit" class="btn btn-subtle-success" id="incharger_delete_btn"><i class="fal fa-check mr-2"></i>Xác nhận</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>
+<script>
+    $(function () {
+        $("#thoigianquanly").flatpickr({
+            dateFormat: "d/m/Y",
+            altFormat: "d/m/Y"
+        });
+        $("#thoigianquanly_update").flatpickr({
+            dateFormat: "d/m/Y",
+            altFormat: "d/m/Y"
+        });
+        $("#incharger-table").DataTable();
+        $(".dataTables_length select").css("width", "55");
+        $(".role_select").selectize({
+            create: 0,
+            placeholder: "Chọn vai trò",
+            dropdownParent: "body"
+        })
+        $(".teacher_select").selectize({
+            create: 0,
+            placeholder: "Chọn Giáo  viên",
+            dropdownParent: "body"
+        })
+    })
+    $("#incharger_insert_form").submit(function (event) {
+        var form = $(this);
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: form.serialize(),
+            dataType: 'html',
+            beforeSend: function () {
+                $("#incharger_insert_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công!');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công.');
+                }
+            },
+            complete: function () {
+                $("#incharger_insert_btn").removeAttr("disabled");
+                $("#incharger_insert_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+    $(".incharger_update").click(function () {
+        var incharger_id = $(this).data('id');
+        $.get("/Employee/GetCanBoThietBi", { incharger_id: incharger_id }, function (data) {
+            console.log(data);
+            $("#incharger_id_update").val(data.CanBoThietBiId);
+            $("#description_update").val(data.GhiChu);
+            $("#incharger_level_update").val(data.TrinhDoVanHoa);
+            $("#role_select_update").selectize()[0].selectize.setValue(data.VaiTroCanBoId);
+            $("#teacher_select_update").selectize()[0].selectize.setValue(data.GiaoVienId);
+            $("#thoigianquanly_update").val(data.ThoiGianBatDauQuanLy + " to " + data.ThoiGianHetHanQuanLy);
+            if (data.CoTrinhDoNghiepVu == true) {
+                $("#rd1_update").prop("checked", true);
+            }
+            if (data.CoTrinhDoNghiepVu == false) {
+                $("#rd2_update").prop("checked", true);
+            }
+        });
+    })
+    $("#incharger_update_form").submit(function (event) {
+        var form = $(this);
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: form.serialize(),
+            dataType: 'html',
+            beforeSend: function () {
+                $("#incharger_update_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công!');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công.');
+                }
+            },
+            complete: function () {
+                $("#incharger_update_btn").removeAttr("disabled");
+                $("#incharger_update_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+
+    $(".incharger_delete").click(function () {
+        var incharger_id = $(this).data('id');
+        var incharger_name = $(this).data('name');
+        $("#incharger_id_delete").val(incharger_id);
+        $("#incharger_to_delete").text(incharger_name);
+    })
+    $("#incharger_delete_form").submit(function (event) {
+        var form = $(this);
+        var incharger_id = $("#incharger_id_delete").val();
+        if (incharger_id == null) {
+            return false;
+        }
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: { incharger_id: incharger_id },
+            dataType: 'html',
+            beforeSend: function () {
+                $("#incharger_delete_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công! ');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công. ');
+                }
+            },
+            complete: function () {
+                $("#incharger_delete_btn").removeAttr("disabled");
+                $("#incharger_delete_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+
+</script>

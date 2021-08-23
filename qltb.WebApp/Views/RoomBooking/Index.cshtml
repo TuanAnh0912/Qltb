@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "Danh sách";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<header class="page-title-bar">
+    <!-- .breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active">
+                <a href="#"><i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Danh mục</a>
+            </li>
+        </ol>
+    </nav><!-- /.breadcrumb -->
+    <!-- title and toolbar -->
+    <div class="d-md-flex align-items-md-start">
+        <h1 class="page-title mr-sm-auto"> Mượn kho phòng </h1><!-- .btn-toolbar -->
+        <div id="dt-buttons" class="btn-toolbar"></div><!-- /.btn-toolbar -->
+    </div><!-- /title and toolbar -->
+</header><!-- /.page-title-bar -->
+<div class="page-section">
+    <div class="card card-fluid sticky-top">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 col-12">
+
+                </div>
+                <div class="col-md-9 col-12 py-4">
+                    <div id='calendar'></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            height: "45rem",
+            buttonText: {
+                today: "Hôm nay",
+                month: "Tháng",
+                week: "Tuần",
+                day: "Ngày",
+                list: "Danh sách",
+            },
+            headerToolbar: {
+                left: 'prev,next,today',
+                center: 'title',
+                right: 'dayGridMonth,dayGridWeek'
+            },
+            initialDate: '2021-06-11',
+            navLinks: true, // can click day/week names to navigate views
+            editable: false,
+            dayMaxEvents: true, // allow "more" link when too many events
+            events: [
+                {
+                    title: 'Mượn thiết bị',
+                    start: '2021-06-11T08:00:00',
+                    end: '2021-06-12T16:00:00'
+                },
+            ],
+            eventTimeFormat: { // like '14:30:00'
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+            },
+            weekNumbers: true,
+            weekNumberCalculation: 'ISO',
+            weekText: "Tuần ",
+            
+        });
+        calendar.setOption('locale', 'vi');
+        calendar.render();
+    });
+    setTimeout(function () { $(".fc-dayGridMonth-button").click(); }, 199);
+</script>

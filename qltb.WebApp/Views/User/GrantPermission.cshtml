@@ -1,0 +1,225 @@
+﻿@model qltb.Data.ViewModels.NguoiDungViewModel
+@{
+    ViewBag.Title = "GrantPermission";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<header class="page-title-bar">
+    <h1 class="page-title"> Phân chức vụ cho <span class="text-info">@Model.HoTen</span></h1>
+</header>
+@if (TempData["Alert"] != null)
+{
+    @Html.Raw(TempData["Alert"])
+}
+<div class="row">
+    <div class="col-md-8 col-12">
+        <div class="card">
+            <div class="card-body">
+                <fieldset>
+                    <legend>Thông tin người dùng</legend>
+                </fieldset>
+                <!-- team avatar -->
+                <div class="media align-items-center mb-3">
+                    <a href="page-team.html" class="tile tile-lg bg-primary mr-3">US</a>
+                    <div class="media-body">
+                        <h3 class="card-title">
+                            <a href="page-team.html">@Model.HoTen</a>
+                        </h3>
+                        <h6 class="card-subtitle text-muted"> @@@Model.TenDangNhap </h6>
+                    </div>
+                </div><!-- /.media -->
+                <hr>
+                @if (Model.IsActive.Value)
+                {
+                    <span class="badge badge-success">Kích hoạt</span>
+                }
+                else
+                { <span class="badge badge-danger">Không kích hoạt</span>
+                }
+                <!-- team details -->
+                <ul class="list-icons mb-3 mt-3">
+                    <li>
+                        <span class="list-icon"><span class="fad fa-map-marked-alt text-muted"></span></span> -
+                    </li>
+                    <li>
+                        <span class="list-icon"><span class="fad fa-envelope-open-text text-muted"></span></span> @Model.Email
+                    </li>
+                    <li>
+                        <span class="list-icon"><span class="fad fa-phone-square-alt text-muted"></span></span> @Model.DienThoai
+                    </li>
+                </ul><!-- /team details -->
+                <!-- team members -->
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <fieldset>
+                    <legend>Thông tin phòng ban / chức vụ</legend>
+                </fieldset>
+                <form method="post" action="/User/InsertNguoiDungChucVu">
+                    <div class="row mb-4 px-3">
+                        <input type="hidden" value="GrantPermission" name="Action"/>
+                        <input type="hidden" value="@Model.NguoiDungId" id="NguoiDungId" name="NguoiDungId" />
+                        <div class="col-md-4 col-6">
+                            <select id="PhongBanId" class="form-control" name="PhongBanId">
+                            </select>
+                        </div>
+                        <div class="col-md-4 col-6">
+                            <select id="ChucVuId" class="form-control" name="ChucVuId">
+                            </select>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <button type="submit" class="btn btn-subtle-primary">Thêm chức vụ</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="list-group list-group-flush list-group-divider">
+                    <!-- .list-group-item -->
+                    @foreach (var item in Model.ChucVus)
+                    {
+                        <div class="list-group-item">
+                            <div class="list-group-item-figure">
+                                <a href="#" class="tile tile-circle bg-success"><span class="fad fa-shield-check"></span></a>
+                            </div>
+                            <div class="list-group-item-body">
+                                <h4 class="list-group-item-title">
+                                    <a href="#">@item.TenChucVu</a>
+                                </h4>
+                                <p class="list-group-item-text"> @item.TenPhongBan </p>
+                            </div>
+                            <div class="list-group-item-figure">
+                                <a href="/User/DeleteNguoiDungChucVu?NguoiDungId=@Model.NguoiDungId&ChucVuId=@item.ChucVuId&ReturnAction=GrantPermission" class="btn btn-sm btn-subtle-danger"><i class="far fa-times mr-1"></i>Xóa</a>
+                            </div>
+                        </div><!-- /.list-group-item -->
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-12">
+        <div class="card">
+            <div class="card-body">
+                <fieldset>
+                    <legend>
+                        Danh sách quyền truy cập đã được cấp<br />
+                    </legend>
+                </fieldset>
+                <code>*Chú ý: Bạn có thể phân lại quyền truy cập cho chức vụ bằng cách vào <b>Hệ thống</b> > <b>Quyền truy cập</b></code>
+                <hr />
+                <div id="permission_list"></div>
+                <a href="#" class="btn btn-success" onclick="test()">Check</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: '/Setting/GetPhongBan',
+            /*            data: {},*/
+            dataType: 'html',
+            beforeSend: function () {
+                $("#PhongBanId").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                $("#PhongBanId").select2({
+                    data: data
+                });
+                var id = $("#PhongBanId").val();
+                $.ajax({
+                    type: "GET",
+                    url: '/Setting/GetChucVuByPhongBan',
+                    data: { id: id },
+                    dataType: 'html',
+                    beforeSend: function () {
+                        $("#ChucVuId").attr("disabled", "disabled");
+                    },
+                    success: function (response) {
+                        var data = JSON.parse(response);
+                        $("#ChucVuId").select2({
+                            data: data
+                        });
+                        
+                    },
+                    complete: function () {
+                        $("#ChucVuId").removeAttr("disabled");
+
+                    }
+                });
+            },
+            complete: function () {
+                $("#PhongBanId").removeAttr("disabled");
+
+            }
+        });
+
+        var userId = $("#NguoiDungId").val();
+        $.ajax({
+            type: "GET",
+            url: '/Setting/GetQuyenByUser',
+            data: { userId: userId },
+            dataType: 'html',
+            beforeSend: function () {
+
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                console.log(data)
+                var $treeview = $("#permission_list");
+                $treeview
+                    .jstree({
+                        'core': {
+                            'data': data,
+                            'icon': false
+                        },
+                        "checkbox": {   
+                            "keep_selected_style": true
+                        },
+                        /*"plugins": ["checkbox"]*/
+                    })
+                    .on('loaded.jstree', function () {
+                        $treeview.jstree('open_all');
+                    });
+                //$('#permission_list').jstree({
+                //    'core': {
+                //        'data': data
+                //    }
+                //});
+            },
+            complete: function () {
+
+            }
+        });
+    });
+    $("#PhongBanId").change(function () {
+        var id = $("#PhongBanId").val();
+        $('#ChucVuId').html('');
+        $.ajax({
+            type: "GET",
+            url: '/Setting/GetChucVuByPhongBan',
+            data: { id: id },
+            dataType: 'html',
+            beforeSend: function () {
+                $("#ChucVuId").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                $("#ChucVuId").select2({
+                    data: data
+                });
+            },
+            complete: function () {
+                $("#ChucVuId").removeAttr("disabled");
+
+            }
+        });
+    });
+
+    function test() {
+        var result = $('#permission_list').jstree('get_undetermined'); 
+        var r = $('#permission_list').jstree('get_selected');
+        console.log(result, r);
+    }
+</script>

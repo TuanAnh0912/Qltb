@@ -1,0 +1,2020 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="qltb_tieuhocModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="qltbEntities" annotation:LazyLoadingEnabled="true">
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(qltb_tieuhocModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(qltb_tieuhocModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+    <EntitySet Name="BaiHocSuDungThietBis" EntityType="qltb_tieuhocModel.BaiHocSuDungThietBi" />
+    <EntitySet Name="CanBoThietBis" EntityType="qltb_tieuhocModel.CanBoThietBi" />
+    <EntitySet Name="ChiTietBaiHocSuDungThietBis" EntityType="qltb_tieuhocModel.ChiTietBaiHocSuDungThietBi" />
+    <EntitySet Name="ChiTietPhieuDeNghiMuaSams" EntityType="qltb_tieuhocModel.ChiTietPhieuDeNghiMuaSam" />
+    <EntitySet Name="ChiTietPhieuGhiGiamThietBis" EntityType="qltb_tieuhocModel.ChiTietPhieuGhiGiamThietBi" />
+    <EntitySet Name="ChiTietPhieuGhiHongThietBis" EntityType="qltb_tieuhocModel.ChiTietPhieuGhiHongThietBi" />
+    <EntitySet Name="ChiTietPhieuGhiMatThietBis" EntityType="qltb_tieuhocModel.ChiTietPhieuGhiMatThietBi" />
+    <EntitySet Name="ChiTietPhieuKiemKes" EntityType="qltb_tieuhocModel.ChiTietPhieuKiemKe" />
+    <EntitySet Name="ChiTietPhieuSuaChuas" EntityType="qltb_tieuhocModel.ChiTietPhieuSuaChua" />
+    <EntitySet Name="ChiTietThietBis" EntityType="qltb_tieuhocModel.ChiTietThietBi" />
+    <EntitySet Name="ChucNangs" EntityType="qltb_tieuhocModel.ChucNang" />
+    <EntitySet Name="ChucVus" EntityType="qltb_tieuhocModel.ChucVu" />
+    <EntitySet Name="ChuongTrinhHocs" EntityType="qltb_tieuhocModel.ChuongTrinhHoc" />
+    <EntitySet Name="DonVis" EntityType="qltb_tieuhocModel.DonVi" />
+    <EntitySet Name="DonViTinhs" EntityType="qltb_tieuhocModel.DonViTinh" />
+    <EntitySet Name="FileTrongPhieuDeNghiMuaSams" EntityType="qltb_tieuhocModel.FileTrongPhieuDeNghiMuaSam" />
+    <EntitySet Name="FileTrongPhieuGhiGiams" EntityType="qltb_tieuhocModel.FileTrongPhieuGhiGiam" />
+    <EntitySet Name="FileTrongPhieuGhiHongs" EntityType="qltb_tieuhocModel.FileTrongPhieuGhiHong" />
+    <EntitySet Name="FileTrongPhieuGhiMats" EntityType="qltb_tieuhocModel.FileTrongPhieuGhiMat" />
+    <EntitySet Name="FileTrongPhieuGhiTangs" EntityType="qltb_tieuhocModel.FileTrongPhieuGhiTang" />
+    <EntitySet Name="FileTrongPhieuKiemKes" EntityType="qltb_tieuhocModel.FileTrongPhieuKiemKe" />
+    <EntitySet Name="FileTrongPhieuSuaChuas" EntityType="qltb_tieuhocModel.FileTrongPhieuSuaChua" />
+    <EntitySet Name="GiaoViens" EntityType="qltb_tieuhocModel.GiaoVien" />
+    <EntitySet Name="GioiTinhs" EntityType="qltb_tieuhocModel.GioiTinh" />
+    <EntitySet Name="HocKies" EntityType="qltb_tieuhocModel.HocKy" />
+    <EntitySet Name="Huyens" EntityType="qltb_tieuhocModel.Huyen" />
+    <EntitySet Name="KhoiLops" EntityType="qltb_tieuhocModel.KhoiLop" />
+    <EntitySet Name="KhoiLopTieuChuans" EntityType="qltb_tieuhocModel.KhoiLopTieuChuan" />
+    <EntitySet Name="KhoiPhongTieuChuans" EntityType="qltb_tieuhocModel.KhoiPhongTieuChuan" />
+    <EntitySet Name="KhoiTruongs" EntityType="qltb_tieuhocModel.KhoiTruong" />
+    <EntitySet Name="KhoPhongs" EntityType="qltb_tieuhocModel.KhoPhong" />
+    <EntitySet Name="KhoThietBis" EntityType="qltb_tieuhocModel.KhoThietBi" />
+    <EntitySet Name="KieuSuDungKhoPhongs" EntityType="qltb_tieuhocModel.KieuSuDungKhoPhong" />
+    <EntitySet Name="LienKetKhoiLopThietBis" EntityType="qltb_tieuhocModel.LienKetKhoiLopThietBi" />
+    <EntitySet Name="LienKetNguoiDungChucVus" EntityType="qltb_tieuhocModel.LienKetNguoiDungChucVu" />
+    <EntitySet Name="LienKetNguoiNguoiDungPhongBans" EntityType="qltb_tieuhocModel.LienKetNguoiNguoiDungPhongBan" />
+    <EntitySet Name="LienKetThietBiPhieuMuons" EntityType="qltb_tieuhocModel.LienKetThietBiPhieuMuon" />
+    <EntitySet Name="LienKetTietHocPhieuMuons" EntityType="qltb_tieuhocModel.LienKetTietHocPhieuMuon" />
+    <EntitySet Name="LoaiBaiHocs" EntityType="qltb_tieuhocModel.LoaiBaiHoc" />
+    <EntitySet Name="LoaiKhoPhongs" EntityType="qltb_tieuhocModel.LoaiKhoPhong" />
+    <EntitySet Name="LoaiPhieuMuons" EntityType="qltb_tieuhocModel.LoaiPhieuMuon" />
+    <EntitySet Name="LoaiPhuTraches" EntityType="qltb_tieuhocModel.LoaiPhuTrach" />
+    <EntitySet Name="LoaiThayDois" EntityType="qltb_tieuhocModel.LoaiThayDoi" />
+    <EntitySet Name="LoaiThietBis" EntityType="qltb_tieuhocModel.LoaiThietBi" />
+    <EntitySet Name="LoaiThietBiTieuChuans" EntityType="qltb_tieuhocModel.LoaiThietBiTieuChuan" />
+    <EntitySet Name="LogPhieuMuons" EntityType="qltb_tieuhocModel.LogPhieuMuon" />
+    <EntitySet Name="LogThietBis" EntityType="qltb_tieuhocModel.LogThietBi" />
+    <EntitySet Name="Lops" EntityType="qltb_tieuhocModel.Lop" />
+    <EntitySet Name="MonHocs" EntityType="qltb_tieuhocModel.MonHoc" />
+    <EntitySet Name="MonHocTieuChuans" EntityType="qltb_tieuhocModel.MonHocTieuChuan" />
+    <EntitySet Name="MucDichSuDungs" EntityType="qltb_tieuhocModel.MucDichSuDung" />
+    <EntitySet Name="NguoiDungs" EntityType="qltb_tieuhocModel.NguoiDung" />
+    <EntitySet Name="NguonCaps" EntityType="qltb_tieuhocModel.NguonCap" />
+    <EntitySet Name="NguonKinhPhiCapTrens" EntityType="qltb_tieuhocModel.NguonKinhPhiCapTren" />
+    <EntitySet Name="NguonNganSaches" EntityType="qltb_tieuhocModel.NguonNganSach" />
+    <EntitySet Name="NhomChucNangs" EntityType="qltb_tieuhocModel.NhomChucNang" />
+    <EntitySet Name="NhomNguoiDungs" EntityType="qltb_tieuhocModel.NhomNguoiDung" />
+    <EntitySet Name="PhieuDeNghiMuaSams" EntityType="qltb_tieuhocModel.PhieuDeNghiMuaSam" />
+    <EntitySet Name="PhieuGhiGiamThietBis" EntityType="qltb_tieuhocModel.PhieuGhiGiamThietBi" />
+    <EntitySet Name="PhieuGhiHongThietBis" EntityType="qltb_tieuhocModel.PhieuGhiHongThietBi" />
+    <EntitySet Name="PhieuGhiMatThietBis" EntityType="qltb_tieuhocModel.PhieuGhiMatThietBi" />
+    <EntitySet Name="PhieuGhiTangThietBis" EntityType="qltb_tieuhocModel.PhieuGhiTangThietBi" />
+    <EntitySet Name="PhieuGhiTangThietBi_ChiTietThietBi" EntityType="qltb_tieuhocModel.PhieuGhiTangThietBi_ChiTietThietBi" />
+    <EntitySet Name="PhieuKiemKes" EntityType="qltb_tieuhocModel.PhieuKiemKe" />
+    <EntitySet Name="PhieuMuons" EntityType="qltb_tieuhocModel.PhieuMuon" />
+    <EntitySet Name="PhieuSuaChuas" EntityType="qltb_tieuhocModel.PhieuSuaChua" />
+    <EntitySet Name="Phongs" EntityType="qltb_tieuhocModel.Phong" />
+    <EntitySet Name="PhongBans" EntityType="qltb_tieuhocModel.PhongBan" />
+    <EntitySet Name="QuyDinhSoTietSuDungThietBis" EntityType="qltb_tieuhocModel.QuyDinhSoTietSuDungThietBi" />
+    <EntitySet Name="QuyDinhSuDungSoTiets" EntityType="qltb_tieuhocModel.QuyDinhSuDungSoTiet" />
+    <EntitySet Name="QuyenTruyCaps" EntityType="qltb_tieuhocModel.QuyenTruyCap" />
+    <EntitySet Name="SuDungPhongs" EntityType="qltb_tieuhocModel.SuDungPhong" />
+    <EntitySet Name="sysdiagrams" EntityType="qltb_tieuhocModel.sysdiagram" />
+    <EntitySet Name="ThietBis" EntityType="qltb_tieuhocModel.ThietBi" />
+    <EntitySet Name="ThietBiTieuChuans" EntityType="qltb_tieuhocModel.ThietBiTieuChuan" />
+    <EntitySet Name="ThoiKhoaBieuPhongs" EntityType="qltb_tieuhocModel.ThoiKhoaBieuPhong" />
+    <EntitySet Name="TietHocs" EntityType="qltb_tieuhocModel.TietHoc" />
+    <EntitySet Name="TieuChuanCoSoVatChats" EntityType="qltb_tieuhocModel.TieuChuanCoSoVatChat" />
+    <EntitySet Name="TieuChuanPhongs" EntityType="qltb_tieuhocModel.TieuChuanPhong" />
+    <EntitySet Name="Tinhs" EntityType="qltb_tieuhocModel.Tinh" />
+    <EntitySet Name="ToBoMons" EntityType="qltb_tieuhocModel.ToBoMon" />
+    <EntitySet Name="TrangThaiHongMats" EntityType="qltb_tieuhocModel.TrangThaiHongMat" />
+    <EntitySet Name="TrangThaiPhieuMuons" EntityType="qltb_tieuhocModel.TrangThaiPhieuMuon" />
+    <EntitySet Name="TrangTraiPhongs" EntityType="qltb_tieuhocModel.TrangTraiPhong" />
+    <EntitySet Name="VaiTroCanBoes" EntityType="qltb_tieuhocModel.VaiTroCanBo" />
+    <EntitySet Name="Xas" EntityType="qltb_tieuhocModel.Xa" />
+    <EntitySet Name="XepHangKhoPhongs" EntityType="qltb_tieuhocModel.XepHangKhoPhong" />
+    <AssociationSet Name="FK_BaiHocSuDungThietBi_MonHoc" Association="qltb_tieuhocModel.FK_BaiHocSuDungThietBi_MonHoc">
+      <End Role="MonHoc" EntitySet="MonHocs" />
+      <End Role="BaiHocSuDungThietBi" EntitySet="BaiHocSuDungThietBis" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PhieuMuon_BaiHocSuDungThietBi" Association="qltb_tieuhocModel.FK_PhieuMuon_BaiHocSuDungThietBi">
+      <End Role="BaiHocSuDungThietBi" EntitySet="BaiHocSuDungThietBis" />
+      <End Role="PhieuMuon" EntitySet="PhieuMuons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ChiTietPhieuGhiHongThietBi_PhieuGhiHongThietBi" Association="qltb_tieuhocModel.FK_ChiTietPhieuGhiHongThietBi_PhieuGhiHongThietBi">
+      <End Role="PhieuGhiHongThietBi" EntitySet="PhieuGhiHongThietBis" />
+      <End Role="ChiTietPhieuGhiHongThietBi" EntitySet="ChiTietPhieuGhiHongThietBis" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ChiTietPhieuGhiHongThietBi_ThietBi" Association="qltb_tieuhocModel.FK_ChiTietPhieuGhiHongThietBi_ThietBi">
+      <End Role="ThietBi" EntitySet="ThietBis" />
+      <End Role="ChiTietPhieuGhiHongThietBi" EntitySet="ChiTietPhieuGhiHongThietBis" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ChiTietPhieuGhiMatThietBi_PhieuGhiMatThietBi" Association="qltb_tieuhocModel.FK_ChiTietPhieuGhiMatThietBi_PhieuGhiMatThietBi">
+      <End Role="PhieuGhiMatThietBi" EntitySet="PhieuGhiMatThietBis" />
+      <End Role="ChiTietPhieuGhiMatThietBi" EntitySet="ChiTietPhieuGhiMatThietBis" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ChiTietPhieuGhiMatThietBi_ThietBi" Association="qltb_tieuhocModel.FK_ChiTietPhieuGhiMatThietBi_ThietBi">
+      <End Role="ThietBi" EntitySet="ThietBis" />
+      <End Role="ChiTietPhieuGhiMatThietBi" EntitySet="ChiTietPhieuGhiMatThietBis" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ChucNang_NhomChucNang" Association="qltb_tieuhocModel.FK_ChucNang_NhomChucNang">
+      <End Role="NhomChucNang" EntitySet="NhomChucNangs" />
+      <End Role="ChucNang" EntitySet="ChucNangs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_QuyenTruyCap_ChucNang" Association="qltb_tieuhocModel.FK_QuyenTruyCap_ChucNang">
+      <End Role="ChucNang" EntitySet="ChucNangs" />
+      <End Role="QuyenTruyCap" EntitySet="QuyenTruyCaps" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ChucVu_PhongBan" Association="qltb_tieuhocModel.FK_ChucVu_PhongBan">
+      <End Role="PhongBan" EntitySet="PhongBans" />
+      <End Role="ChucVu" EntitySet="ChucVus" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LienKetNguoiDungChucVu_ChucVu" Association="qltb_tieuhocModel.FK_LienKetNguoiDungChucVu_ChucVu">
+      <End Role="ChucVu" EntitySet="ChucVus" />
+      <End Role="LienKetNguoiDungChucVu" EntitySet="LienKetNguoiDungChucVus" />
+    </AssociationSet>
+    <AssociationSet Name="FK_QuyenTruyCap_ChucVu" Association="qltb_tieuhocModel.FK_QuyenTruyCap_ChucVu">
+      <End Role="ChucVu" EntitySet="ChucVus" />
+      <End Role="QuyenTruyCap" EntitySet="QuyenTruyCaps" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PhieuMuon_ChuongTrinhHoc" Association="qltb_tieuhocModel.FK_PhieuMuon_ChuongTrinhHoc">
+      <End Role="ChuongTrinhHoc" EntitySet="ChuongTrinhHocs" />
+      <End Role="PhieuMuon" EntitySet="PhieuMuons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DonVi_KhoiTruong" Association="qltb_tieuhocModel.FK_DonVi_KhoiTruong">
+      <End Role="KhoiTruong" EntitySet="KhoiTruongs" />
+      <End Role="DonVi" EntitySet="DonVis" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DonVi_TieuChuanCoSoVatChat" Association="qltb_tieuhocModel.FK_DonVi_TieuChuanCoSoVatChat">
+      <End Role="TieuChuanPhong" EntitySet="TieuChuanPhongs" />
+      <End Role="DonVi" EntitySet="DonVis" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DonVi_TieuChuanCoSoVatChat1" Association="qltb_tieuhocModel.FK_DonVi_TieuChuanCoSoVatChat1">
+      <End Role="TieuChuanCoSoVatChat" EntitySet="TieuChuanCoSoVatChats" />
+      <End Role="DonVi" EntitySet="DonVis" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PhieuMuon_GiaoVien" Association="qltb_tieuhocModel.FK_PhieuMuon_GiaoVien">
+      <End Role="GiaoVien" EntitySet="GiaoViens" />
+      <End Role="PhieuMuon" EntitySet="PhieuMuons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NguoiDung_GioiTinh" Association="qltb_tieuhocModel.FK_NguoiDung_GioiTinh">
+      <End Role="GioiTinh" EntitySet="GioiTinhs" />
+      <End Role="NguoiDung" EntitySet="NguoiDungs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Lop_KhoiLop" Association="qltb_tieuhocModel.FK_Lop_KhoiLop">
+      <End Role="KhoiLop" EntitySet="KhoiLops" />
+      <End Role="Lop" EntitySet="Lops" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PhieuMuon_KhoiLop" Association="qltb_tieuhocModel.FK_PhieuMuon_KhoiLop">
+      <End Role="KhoiLop" EntitySet="KhoiLops" />
+      <End Role="PhieuMuon" EntitySet="PhieuMuons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_KhoiLopTieuChuan_KhoiTruong" Association="qltb_tieuhocModel.FK_KhoiLopTieuChuan_KhoiTruong">
+      <End Role="KhoiTruong" EntitySet="KhoiTruongs" />
+      <End Role="KhoiLopTieuChuan" EntitySet="KhoiLopTieuChuans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_KhoiPhongTieuChuan_KhoiTruong" Association="qltb_tieuhocModel.FK_KhoiPhongTieuChuan_KhoiTruong">
+      <End Role="KhoiTruong" EntitySet="KhoiTruongs" />
+      <End Role="KhoiPhongTieuChuan" EntitySet="KhoiPhongTieuChuans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_KhoiPhongTieuChuan_TieuChuanCoSoVatChat" Association="qltb_tieuhocModel.FK_KhoiPhongTieuChuan_TieuChuanCoSoVatChat">
+      <End Role="TieuChuanPhong" EntitySet="TieuChuanPhongs" />
+      <End Role="KhoiPhongTieuChuan" EntitySet="KhoiPhongTieuChuans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Phong_KhoiPhongTieuChuan" Association="qltb_tieuhocModel.FK_Phong_KhoiPhongTieuChuan">
+      <End Role="KhoiPhongTieuChuan" EntitySet="KhoiPhongTieuChuans" />
+      <End Role="Phong" EntitySet="Phongs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ThietBiTieuChuan_KhoiTruong" Association="qltb_tieuhocModel.FK_ThietBiTieuChuan_KhoiTruong">
+      <End Role="KhoiTruong" EntitySet="KhoiTruongs" />
+      <End Role="ThietBiTieuChuan" EntitySet="ThietBiTieuChuans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_KhoPhong_KieuSuDungKhoPhong" Association="qltb_tieuhocModel.FK_KhoPhong_KieuSuDungKhoPhong">
+      <End Role="KieuSuDungKhoPhong" EntitySet="KieuSuDungKhoPhongs" />
+      <End Role="KhoPhong" EntitySet="KhoPhongs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_KhoPhong_LoaiKhoPhong" Association="qltb_tieuhocModel.FK_KhoPhong_LoaiKhoPhong">
+      <End Role="LoaiKhoPhong" EntitySet="LoaiKhoPhongs" />
+      <End Role="KhoPhong" EntitySet="KhoPhongs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_KhoPhong_TrangTraiPhong" Association="qltb_tieuhocModel.FK_KhoPhong_TrangTraiPhong">
+      <End Role="TrangTraiPhong" EntitySet="TrangTraiPhongs" />
+      <End Role="KhoPhong" EntitySet="KhoPhongs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PhieuMuon_KhoPhong" Association="qltb_tieuhocModel.FK_PhieuMuon_KhoPhong">
+      <End Role="KhoPhong" EntitySet="KhoPhongs" />
+      <End Role="PhieuMuon" EntitySet="PhieuMuons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SuDungPhong_KhoPhong" Association="qltb_tieuhocModel.FK_SuDungPhong_KhoPhong">
+      <End Role="KhoPhong" EntitySet="KhoPhongs" />
+      <End Role="SuDungPhong" EntitySet="SuDungPhongs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ThoiKhoaBieuPhong_KhoPhong" Association="qltb_tieuhocModel.FK_ThoiKhoaBieuPhong_KhoPhong">
+      <End Role="KhoPhong" EntitySet="KhoPhongs" />
+      <End Role="ThoiKhoaBieuPhong" EntitySet="ThoiKhoaBieuPhongs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_KhoThietBi_ThietBi" Association="qltb_tieuhocModel.FK_KhoThietBi_ThietBi">
+      <End Role="ThietBi" EntitySet="ThietBis" />
+      <End Role="KhoThietBi" EntitySet="KhoThietBis" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LienKetNguoiDungChucVu_NguoiDung" Association="qltb_tieuhocModel.FK_LienKetNguoiDungChucVu_NguoiDung">
+      <End Role="NguoiDung" EntitySet="NguoiDungs" />
+      <End Role="LienKetNguoiDungChucVu" EntitySet="LienKetNguoiDungChucVus" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LienKetNguoiNguoiDungPhongBan_NguoiDung" Association="qltb_tieuhocModel.FK_LienKetNguoiNguoiDungPhongBan_NguoiDung">
+      <End Role="NguoiDung" EntitySet="NguoiDungs" />
+      <End Role="LienKetNguoiNguoiDungPhongBan" EntitySet="LienKetNguoiNguoiDungPhongBans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LienKetNguoiNguoiDungPhongBan_PhongBan" Association="qltb_tieuhocModel.FK_LienKetNguoiNguoiDungPhongBan_PhongBan">
+      <End Role="PhongBan" EntitySet="PhongBans" />
+      <End Role="LienKetNguoiNguoiDungPhongBan" EntitySet="LienKetNguoiNguoiDungPhongBans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LienKetThietBiPhieuMuon_PhieuMuon1" Association="qltb_tieuhocModel.FK_LienKetThietBiPhieuMuon_PhieuMuon1">
+      <End Role="PhieuMuon" EntitySet="PhieuMuons" />
+      <End Role="LienKetThietBiPhieuMuon" EntitySet="LienKetThietBiPhieuMuons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LienKetThietBiPhieuMuon_ThietBi" Association="qltb_tieuhocModel.FK_LienKetThietBiPhieuMuon_ThietBi">
+      <End Role="ThietBi" EntitySet="ThietBis" />
+      <End Role="LienKetThietBiPhieuMuon" EntitySet="LienKetThietBiPhieuMuons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LienKetTietHocPhieuMuon_PhieuMuon1" Association="qltb_tieuhocModel.FK_LienKetTietHocPhieuMuon_PhieuMuon1">
+      <End Role="PhieuMuon" EntitySet="PhieuMuons" />
+      <End Role="LienKetTietHocPhieuMuon" EntitySet="LienKetTietHocPhieuMuons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LienKetTietHocPhieuMuon_TietHoc" Association="qltb_tieuhocModel.FK_LienKetTietHocPhieuMuon_TietHoc">
+      <End Role="TietHoc" EntitySet="TietHocs" />
+      <End Role="LienKetTietHocPhieuMuon" EntitySet="LienKetTietHocPhieuMuons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PhieuMuon_LoaiPhieuMuon" Association="qltb_tieuhocModel.FK_PhieuMuon_LoaiPhieuMuon">
+      <End Role="LoaiPhieuMuon" EntitySet="LoaiPhieuMuons" />
+      <End Role="PhieuMuon" EntitySet="PhieuMuons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ThietBi_LoaiThietBi" Association="qltb_tieuhocModel.FK_ThietBi_LoaiThietBi">
+      <End Role="LoaiThietBi" EntitySet="LoaiThietBis" />
+      <End Role="ThietBi" EntitySet="ThietBis" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ThietBiTieuChuan_LoaiThietBiTieuChuan" Association="qltb_tieuhocModel.FK_ThietBiTieuChuan_LoaiThietBiTieuChuan">
+      <End Role="LoaiThietBiTieuChuan" EntitySet="LoaiThietBiTieuChuans" />
+      <End Role="ThietBiTieuChuan" EntitySet="ThietBiTieuChuans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LogPhieuMuon_PhieuMuon" Association="qltb_tieuhocModel.FK_LogPhieuMuon_PhieuMuon">
+      <End Role="PhieuMuon" EntitySet="PhieuMuons" />
+      <End Role="LogPhieuMuon" EntitySet="LogPhieuMuons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PhieuMuon_Lop" Association="qltb_tieuhocModel.FK_PhieuMuon_Lop">
+      <End Role="Lop" EntitySet="Lops" />
+      <End Role="PhieuMuon" EntitySet="PhieuMuons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PhieuMuon_MonHoc" Association="qltb_tieuhocModel.FK_PhieuMuon_MonHoc">
+      <End Role="MonHoc" EntitySet="MonHocs" />
+      <End Role="PhieuMuon" EntitySet="PhieuMuons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ThietBiTieuChuan_MonHocTieuChuan" Association="qltb_tieuhocModel.FK_ThietBiTieuChuan_MonHocTieuChuan">
+      <End Role="MonHocTieuChuan" EntitySet="MonHocTieuChuans" />
+      <End Role="ThietBiTieuChuan" EntitySet="ThietBiTieuChuans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PhieuMuon_MucDichSuDung" Association="qltb_tieuhocModel.FK_PhieuMuon_MucDichSuDung">
+      <End Role="MucDichSuDung" EntitySet="MucDichSuDungs" />
+      <End Role="PhieuMuon" EntitySet="PhieuMuons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PhieuMuon_NguoiDung" Association="qltb_tieuhocModel.FK_PhieuMuon_NguoiDung">
+      <End Role="NguoiDung" EntitySet="NguoiDungs" />
+      <End Role="PhieuMuon" EntitySet="PhieuMuons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_QuyenTruyCap_NguoiDung" Association="qltb_tieuhocModel.FK_QuyenTruyCap_NguoiDung">
+      <End Role="NguoiDung" EntitySet="NguoiDungs" />
+      <End Role="QuyenTruyCap" EntitySet="QuyenTruyCaps" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PhieuGhiHongThietBi_TrangThaiHongMat" Association="qltb_tieuhocModel.FK_PhieuGhiHongThietBi_TrangThaiHongMat">
+      <End Role="TrangThaiHongMat" EntitySet="TrangThaiHongMats" />
+      <End Role="PhieuGhiHongThietBi" EntitySet="PhieuGhiHongThietBis" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PhieuGhiMatThietBi_TrangThaiHongMat" Association="qltb_tieuhocModel.FK_PhieuGhiMatThietBi_TrangThaiHongMat">
+      <End Role="TrangThaiHongMat" EntitySet="TrangThaiHongMats" />
+      <End Role="PhieuGhiMatThietBi" EntitySet="PhieuGhiMatThietBis" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PhieuMuon_TrangThaiPhieuMuon" Association="qltb_tieuhocModel.FK_PhieuMuon_TrangThaiPhieuMuon">
+      <End Role="TrangThaiPhieuMuon" EntitySet="TrangThaiPhieuMuons" />
+      <End Role="PhieuMuon" EntitySet="PhieuMuons" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ThietBiTieuChuan_TieuChuanCoSoVatChat" Association="qltb_tieuhocModel.FK_ThietBiTieuChuan_TieuChuanCoSoVatChat">
+      <End Role="TieuChuanCoSoVatChat" EntitySet="TieuChuanCoSoVatChats" />
+      <End Role="ThietBiTieuChuan" EntitySet="ThietBiTieuChuans" />
+    </AssociationSet>
+  </EntityContainer>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="BaiHocSuDungThietBi">
+    <Key>
+      <PropertyRef Name="BaiHocSuDungThietBiId" />
+    </Key>
+    <Property Name="BaiHocSuDungThietBiId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenBaiHoc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="MonHocId" Type="Int32" />
+    <Property Name="ChuongTrinhHocId" Type="Int32" />
+    <Property Name="ThoiGian" Type="DateTime" Precision="3" />
+    <Property Name="HocKyId" Type="Int32" />
+    <Property Name="SoTiet" Type="Int32" />
+    <Property Name="TietTheoPPTC" Type="Int32" />
+    <Property Name="LoaiBaiHocId" Type="Int32" />
+    <Property Name="LopId" Type="Int32" />
+    <NavigationProperty Name="MonHoc" Relationship="qltb_tieuhocModel.FK_BaiHocSuDungThietBi_MonHoc" FromRole="BaiHocSuDungThietBi" ToRole="MonHoc" />
+    <NavigationProperty Name="PhieuMuons" Relationship="qltb_tieuhocModel.FK_PhieuMuon_BaiHocSuDungThietBi" FromRole="BaiHocSuDungThietBi" ToRole="PhieuMuon" />
+  </EntityType>
+  <EntityType Name="CanBoThietBi">
+    <Key>
+      <PropertyRef Name="CanBoThietBiId" />
+    </Key>
+    <Property Name="CanBoThietBiId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="VaiTroCanBoId" Type="Int32" />
+    <Property Name="GiaoVienId" Type="Int32" />
+    <Property Name="TrinhDoVanHoa" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ThoiGianBatDauQuanLy" Type="DateTime" Precision="3" />
+    <Property Name="ThoiGianHetHanQuanLy" Type="DateTime" Precision="3" />
+    <Property Name="CoTrinhDoNghiepVu" Type="Boolean" />
+    <Property Name="GhiChu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="NgayTao" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="ChiTietBaiHocSuDungThietBi">
+    <Key>
+      <PropertyRef Name="ChiTietId" />
+    </Key>
+    <Property Name="ChiTietId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="BaiHocSuDungThietBiId" Type="Int32" />
+    <Property Name="ThietBiId" Type="Int32" />
+    <Property Name="SoLuong" Type="Int32" />
+    <Property Name="IsDelete" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="ChiTietPhieuDeNghiMuaSam">
+    <Key>
+      <PropertyRef Name="ChiTietPhieuDeNghiMuaSamId" />
+    </Key>
+    <Property Name="ChiTietPhieuDeNghiMuaSamId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="ThietBiId" Type="Int32" />
+    <Property Name="KinhPhiId" Type="Int32" />
+    <Property Name="SoLuongDeNghi" Type="Int32" />
+    <Property Name="DonGia" Type="Int64" />
+    <Property Name="PhieuDeNghiMuaSamId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="ChiTietPhieuGhiGiamThietBi">
+    <Key>
+      <PropertyRef Name="ChiTietPhieuGhiGiamThietBiId" />
+    </Key>
+    <Property Name="ChiTietPhieuGhiGiamThietBiId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="PhieuGhiGiamThietBiId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="PhieuGhiHongThietBiId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="SoLuongGiam" Type="Int32" />
+    <Property Name="ThietBiId" Type="Int32" />
+    <Property Name="KhoPhongId" Type="Int32" />
+    <Property Name="LyDo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhieuGhiMatThietBiId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="ChiTietPhieuGhiHongThietBi">
+    <Key>
+      <PropertyRef Name="ChiTietPhieuGhiHongThietBiId" />
+    </Key>
+    <Property Name="ChiTietPhieuGhiHongThietBiId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="PhieuGhiHongThietBiId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="ThietBiId" Type="Int32" />
+    <Property Name="SoLuongHong" Type="Int32" />
+    <Property Name="LyDo" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="KhoPhongId" Type="Int32" />
+    <NavigationProperty Name="PhieuGhiHongThietBi" Relationship="qltb_tieuhocModel.FK_ChiTietPhieuGhiHongThietBi_PhieuGhiHongThietBi" FromRole="ChiTietPhieuGhiHongThietBi" ToRole="PhieuGhiHongThietBi" />
+    <NavigationProperty Name="ThietBi" Relationship="qltb_tieuhocModel.FK_ChiTietPhieuGhiHongThietBi_ThietBi" FromRole="ChiTietPhieuGhiHongThietBi" ToRole="ThietBi" />
+  </EntityType>
+  <EntityType Name="ChiTietPhieuGhiMatThietBi">
+    <Key>
+      <PropertyRef Name="ChiTietPhieuGhiMatThietBiId" />
+    </Key>
+    <Property Name="ChiTietPhieuGhiMatThietBiId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="PhieuGhiMatThietBiId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="ThietBiId" Type="Int32" />
+    <Property Name="LyDo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SoLuongMat" Type="Int32" />
+    <Property Name="KhoPhongId" Type="Int32" />
+    <NavigationProperty Name="PhieuGhiMatThietBi" Relationship="qltb_tieuhocModel.FK_ChiTietPhieuGhiMatThietBi_PhieuGhiMatThietBi" FromRole="ChiTietPhieuGhiMatThietBi" ToRole="PhieuGhiMatThietBi" />
+    <NavigationProperty Name="ThietBi" Relationship="qltb_tieuhocModel.FK_ChiTietPhieuGhiMatThietBi_ThietBi" FromRole="ChiTietPhieuGhiMatThietBi" ToRole="ThietBi" />
+  </EntityType>
+  <EntityType Name="ChiTietPhieuKiemKe">
+    <Key>
+      <PropertyRef Name="ChiTietPhieuKiemKeId" />
+    </Key>
+    <Property Name="ChiTietPhieuKiemKeId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="ThietBiId" Type="Int32" />
+    <Property Name="KhoPhongId" Type="Int32" />
+    <Property Name="SoLuongMat" Type="Int32" />
+    <Property Name="SoLuongHong" Type="Int32" />
+    <Property Name="SoLuongConDungDuoc" Type="Int32" />
+    <Property Name="GhiChu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhieuKiemKeId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="SoLuongConDungDuocOld" Type="Int32" />
+  </EntityType>
+  <EntityType Name="ChiTietPhieuSuaChua">
+    <Key>
+      <PropertyRef Name="ChiTietPhieuSuaChuaId" />
+    </Key>
+    <Property Name="ChiTietPhieuSuaChuaId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="PhieuSuaChuaId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="ThietBiId" Type="Int32" />
+    <Property Name="KhoPhongId" Type="Int32" />
+    <Property Name="SoLuongSuaChua" Type="Int32" />
+    <Property Name="DonGia" Type="Int64" />
+    <Property Name="PhieuGhiHongThietBiId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="ChiTietThietBi">
+    <Key>
+      <PropertyRef Name="ChiTietThietBiId" />
+    </Key>
+    <Property Name="ChiTietThietBiId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="ThietBiId" Type="Int32" />
+    <Property Name="KhoPhongId" Type="Int32" />
+    <Property Name="NgaySuDung" Type="DateTime" Precision="3" />
+    <Property Name="NamTheoDoi" Type="Int32" />
+    <Property Name="SoLuong" Type="Int32" />
+    <Property Name="DonGia" Type="Int64" />
+    <Property Name="NuocSanXuat" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LaThietBiTuLam" Type="Boolean" />
+    <Property Name="NgaySanXuat" Type="DateTime" Precision="3" />
+    <Property Name="HanDung" Type="DateTime" Precision="3" />
+    <Property Name="NguonCapId" Type="Int32" />
+    <Property Name="NguonKinhPhiCapTrenId" Type="Int32" />
+    <Property Name="MucDichSuDungId" Type="Int32" />
+    <Property Name="SoHieu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="NgayCapNhat" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="ChucNang">
+    <Key>
+      <PropertyRef Name="ChucNangId" />
+    </Key>
+    <Property Name="ChucNangId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MaChucNang" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="TenChucNang" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="KhoaChaId" Type="Int32" />
+    <Property Name="DuongDan" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Icon" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NhomChucNangId" Type="Int32" />
+    <Property Name="HienTrenMenu" Type="Boolean" />
+    <NavigationProperty Name="NhomChucNang" Relationship="qltb_tieuhocModel.FK_ChucNang_NhomChucNang" FromRole="ChucNang" ToRole="NhomChucNang" />
+    <NavigationProperty Name="QuyenTruyCaps" Relationship="qltb_tieuhocModel.FK_QuyenTruyCap_ChucNang" FromRole="ChucNang" ToRole="QuyenTruyCap" />
+  </EntityType>
+  <EntityType Name="ChucVu">
+    <Key>
+      <PropertyRef Name="ChucVuId" />
+    </Key>
+    <Property Name="ChucVuId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MaChucVu" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="TenChucVu" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="PhongBanId" Type="Guid" />
+    <Property Name="Mota" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PhongBan" Relationship="qltb_tieuhocModel.FK_ChucVu_PhongBan" FromRole="ChucVu" ToRole="PhongBan" />
+    <NavigationProperty Name="LienKetNguoiDungChucVus" Relationship="qltb_tieuhocModel.FK_LienKetNguoiDungChucVu_ChucVu" FromRole="ChucVu" ToRole="LienKetNguoiDungChucVu" />
+    <NavigationProperty Name="QuyenTruyCaps" Relationship="qltb_tieuhocModel.FK_QuyenTruyCap_ChucVu" FromRole="ChucVu" ToRole="QuyenTruyCap" />
+  </EntityType>
+  <EntityType Name="ChuongTrinhHoc">
+    <Key>
+      <PropertyRef Name="ChuongTrinhHocId" />
+    </Key>
+    <Property Name="ChuongTrinhHocId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenChuongTrinhHoc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="MaChuongTrinhHoc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PhieuMuons" Relationship="qltb_tieuhocModel.FK_PhieuMuon_ChuongTrinhHoc" FromRole="ChuongTrinhHoc" ToRole="PhieuMuon" />
+  </EntityType>
+  <EntityType Name="DonVi">
+    <Key>
+      <PropertyRef Name="DonViId" />
+    </Key>
+    <Property Name="DonViId" Type="Guid" Nullable="false" />
+    <Property Name="MaDonVi" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="TenDonVi" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="TieuChuanPhongId" Type="Int32" />
+    <Property Name="TieuChuanCoSoVatChatId" Type="Int32" />
+    <Property Name="TinhId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="HuyenId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="XaId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DiaChi" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="LoaiHinhTruong" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DienThoai" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="FAX" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Website" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="KhoiTruongId" Type="Int32" />
+    <Property Name="HieuTruong" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="CanBoQuanLyThietBi" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="KhoiTruong" Relationship="qltb_tieuhocModel.FK_DonVi_KhoiTruong" FromRole="DonVi" ToRole="KhoiTruong" />
+    <NavigationProperty Name="TieuChuanPhong" Relationship="qltb_tieuhocModel.FK_DonVi_TieuChuanCoSoVatChat" FromRole="DonVi" ToRole="TieuChuanPhong" />
+    <NavigationProperty Name="TieuChuanCoSoVatChat" Relationship="qltb_tieuhocModel.FK_DonVi_TieuChuanCoSoVatChat1" FromRole="DonVi" ToRole="TieuChuanCoSoVatChat" />
+  </EntityType>
+  <EntityType Name="DonViTinh">
+    <Key>
+      <PropertyRef Name="DonViTinhId" />
+    </Key>
+    <Property Name="DonViTinhId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenDonViTinh" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaDonViTinh" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="FileTrongPhieuDeNghiMuaSam">
+    <Key>
+      <PropertyRef Name="FileTrongPhieuDeNghiMuaSamId" />
+    </Key>
+    <Property Name="FileTrongPhieuDeNghiMuaSamId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="TenFile" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Ext" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Url" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Icon" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="PhieuDeNghiMuaSamId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="FileTrongPhieuGhiGiam">
+    <Key>
+      <PropertyRef Name="FileTrongPhieuGhiGiamId" />
+    </Key>
+    <Property Name="FileTrongPhieuGhiGiamId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="TenFile" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Ext" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Url" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Icon" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="PhieuGhiGiamThietBiId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="FileTrongPhieuGhiHong">
+    <Key>
+      <PropertyRef Name="FileTrongPhieuGhiHongId" />
+    </Key>
+    <Property Name="FileTrongPhieuGhiHongId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="TenFile" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Ext" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Url" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Icon" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="PhieuGhiHongThietBiId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="FileTrongPhieuGhiMat">
+    <Key>
+      <PropertyRef Name="FileTrongPhieuGhiMatId" />
+    </Key>
+    <Property Name="FileTrongPhieuGhiMatId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="TenFile" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Ext" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Url" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Icon" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="PhieuGhiMatThietBiId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="FileTrongPhieuGhiTang">
+    <Key>
+      <PropertyRef Name="FileTrongPhieuGhiTangId" />
+    </Key>
+    <Property Name="FileTrongPhieuGhiTangId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="TenFile" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Ext" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Url" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Icon" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="PhieuGhiTangThietBiId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="FileTrongPhieuKiemKe">
+    <Key>
+      <PropertyRef Name="FileTrongPhieuKiemKeId" />
+    </Key>
+    <Property Name="FileTrongPhieuKiemKeId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="TenFile" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Ext" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Url" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Icon" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="PhieuKiemKeId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="FileTrongPhieuSuaChua">
+    <Key>
+      <PropertyRef Name="FileTrongPhieuSuaChuaId" />
+    </Key>
+    <Property Name="FileTrongPhieuSuaChuaId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="TenFile" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Ext" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Url" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Icon" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="PhieuSuaChuaId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="GiaoVien">
+    <Key>
+      <PropertyRef Name="GiaoVienId" />
+    </Key>
+    <Property Name="GiaoVienId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenGiaoVien" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SoCMND" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NgayVaoNganh" Type="DateTime" Precision="3" />
+    <Property Name="DangLamViec" Type="Boolean" />
+    <Property Name="GioiTinhId" Type="Int32" />
+    <Property Name="ToBoMonId" Type="Int32" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="MaGiaoVien" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NgayNghiViec" Type="DateTime" Precision="3" />
+    <Property Name="NgaySinh" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="PhieuMuons" Relationship="qltb_tieuhocModel.FK_PhieuMuon_GiaoVien" FromRole="GiaoVien" ToRole="PhieuMuon" />
+  </EntityType>
+  <EntityType Name="GioiTinh">
+    <Key>
+      <PropertyRef Name="GioiTinhId" />
+    </Key>
+    <Property Name="GioiTinhId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenGioiTinh" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Icon" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Color" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="NguoiDungs" Relationship="qltb_tieuhocModel.FK_NguoiDung_GioiTinh" FromRole="GioiTinh" ToRole="NguoiDung" />
+  </EntityType>
+  <EntityType Name="HocKy">
+    <Key>
+      <PropertyRef Name="HocKyId" />
+    </Key>
+    <Property Name="HocKyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenHocKy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaHocKy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Huyen">
+    <Key>
+      <PropertyRef Name="HuyenId" />
+    </Key>
+    <Property Name="HuyenId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TenHuyen" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="KhoiLop">
+    <Key>
+      <PropertyRef Name="KhoiLopId" />
+    </Key>
+    <Property Name="KhoiLopId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenKhoiLop" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaKhoiLop" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NgayTao" Type="DateTime" Precision="3" />
+    <Property Name="NgayCapNhat" Type="DateTime" Precision="3" />
+    <Property Name="KhoiTruongId" Type="Int32" />
+    <NavigationProperty Name="Lops" Relationship="qltb_tieuhocModel.FK_Lop_KhoiLop" FromRole="KhoiLop" ToRole="Lop" />
+    <NavigationProperty Name="PhieuMuons" Relationship="qltb_tieuhocModel.FK_PhieuMuon_KhoiLop" FromRole="KhoiLop" ToRole="PhieuMuon" />
+  </EntityType>
+  <EntityType Name="KhoiLopTieuChuan">
+    <Key>
+      <PropertyRef Name="KhoiLopTieuChuanId" />
+    </Key>
+    <Property Name="KhoiLopTieuChuanId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenKhoiLop" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaKhoiLop" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NgayTao" Type="DateTime" Precision="3" />
+    <Property Name="NgayCapNhat" Type="DateTime" Precision="3" />
+    <Property Name="KhoiTruongId" Type="Int32" />
+    <NavigationProperty Name="KhoiTruong" Relationship="qltb_tieuhocModel.FK_KhoiLopTieuChuan_KhoiTruong" FromRole="KhoiLopTieuChuan" ToRole="KhoiTruong" />
+  </EntityType>
+  <EntityType Name="KhoiPhongTieuChuan">
+    <Key>
+      <PropertyRef Name="KhoiPhongTieuChuanId" />
+    </Key>
+    <Property Name="KhoiPhongTieuChuanId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenKhoiPhong" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="TieuChuanId" Type="Int32" />
+    <Property Name="MaKhoiPhongTieuChuan" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="KhoiTruongId" Type="Int32" />
+    <NavigationProperty Name="KhoiTruong" Relationship="qltb_tieuhocModel.FK_KhoiPhongTieuChuan_KhoiTruong" FromRole="KhoiPhongTieuChuan" ToRole="KhoiTruong" />
+    <NavigationProperty Name="TieuChuanPhong" Relationship="qltb_tieuhocModel.FK_KhoiPhongTieuChuan_TieuChuanCoSoVatChat" FromRole="KhoiPhongTieuChuan" ToRole="TieuChuanPhong" />
+    <NavigationProperty Name="Phongs" Relationship="qltb_tieuhocModel.FK_Phong_KhoiPhongTieuChuan" FromRole="KhoiPhongTieuChuan" ToRole="Phong" />
+  </EntityType>
+  <EntityType Name="KhoiTruong">
+    <Key>
+      <PropertyRef Name="KhoiTruongId" />
+    </Key>
+    <Property Name="KhoiTruongId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenKhoiTruong" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="DonVis" Relationship="qltb_tieuhocModel.FK_DonVi_KhoiTruong" FromRole="KhoiTruong" ToRole="DonVi" />
+    <NavigationProperty Name="KhoiLopTieuChuans" Relationship="qltb_tieuhocModel.FK_KhoiLopTieuChuan_KhoiTruong" FromRole="KhoiTruong" ToRole="KhoiLopTieuChuan" />
+    <NavigationProperty Name="KhoiPhongTieuChuans" Relationship="qltb_tieuhocModel.FK_KhoiPhongTieuChuan_KhoiTruong" FromRole="KhoiTruong" ToRole="KhoiPhongTieuChuan" />
+    <NavigationProperty Name="ThietBiTieuChuans" Relationship="qltb_tieuhocModel.FK_ThietBiTieuChuan_KhoiTruong" FromRole="KhoiTruong" ToRole="ThietBiTieuChuan" />
+  </EntityType>
+  <EntityType Name="KhoPhong">
+    <Key>
+      <PropertyRef Name="KhoPhongId" />
+    </Key>
+    <Property Name="KhoPhongId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MaKhoPhong" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TenKhoPhong" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DienTich" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NamSuDung" Type="Int32" />
+    <Property Name="LoaiKhoPhongId" Type="Int32" />
+    <Property Name="KieuSuDungKhoPhongId" Type="Int32" />
+    <Property Name="XepHangKhoPhongId" Type="Int32" />
+    <Property Name="SoNguoiQuanLy" Type="Int32" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="NgayTao" Type="DateTime" Precision="3" />
+    <Property Name="NgayCapNhat" Type="DateTime" Precision="3" />
+    <Property Name="LaPhongHocChucNang" Type="Boolean" />
+    <Property Name="DonViId" Type="Guid" />
+    <Property Name="TrangThaiPhongId" Type="Int32" />
+    <NavigationProperty Name="KieuSuDungKhoPhong" Relationship="qltb_tieuhocModel.FK_KhoPhong_KieuSuDungKhoPhong" FromRole="KhoPhong" ToRole="KieuSuDungKhoPhong" />
+    <NavigationProperty Name="LoaiKhoPhong" Relationship="qltb_tieuhocModel.FK_KhoPhong_LoaiKhoPhong" FromRole="KhoPhong" ToRole="LoaiKhoPhong" />
+    <NavigationProperty Name="TrangTraiPhong" Relationship="qltb_tieuhocModel.FK_KhoPhong_TrangTraiPhong" FromRole="KhoPhong" ToRole="TrangTraiPhong" />
+    <NavigationProperty Name="PhieuMuons" Relationship="qltb_tieuhocModel.FK_PhieuMuon_KhoPhong" FromRole="KhoPhong" ToRole="PhieuMuon" />
+    <NavigationProperty Name="SuDungPhongs" Relationship="qltb_tieuhocModel.FK_SuDungPhong_KhoPhong" FromRole="KhoPhong" ToRole="SuDungPhong" />
+    <NavigationProperty Name="ThoiKhoaBieuPhongs" Relationship="qltb_tieuhocModel.FK_ThoiKhoaBieuPhong_KhoPhong" FromRole="KhoPhong" ToRole="ThoiKhoaBieuPhong" />
+  </EntityType>
+  <EntityType Name="KhoThietBi">
+    <Key>
+      <PropertyRef Name="KhoThietBiId" />
+    </Key>
+    <Property Name="KhoThietBiId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="KhoPhongId" Type="Int32" />
+    <Property Name="ThietBiId" Type="Int32" />
+    <Property Name="SoLuong" Type="Int32" />
+    <Property Name="SoLuongConLai" Type="Int32" />
+    <Property Name="SoHieu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SoLuongHong" Type="Int32" />
+    <Property Name="SoLuongMat" Type="Int32" />
+    <NavigationProperty Name="ThietBi" Relationship="qltb_tieuhocModel.FK_KhoThietBi_ThietBi" FromRole="KhoThietBi" ToRole="ThietBi" />
+  </EntityType>
+  <EntityType Name="KieuSuDungKhoPhong">
+    <Key>
+      <PropertyRef Name="KieuSuDungKhoPhongId" />
+    </Key>
+    <Property Name="KieuSuDungKhoPhongId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenKieuSuDung" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaKieuSuDung" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="KhoPhongs" Relationship="qltb_tieuhocModel.FK_KhoPhong_KieuSuDungKhoPhong" FromRole="KieuSuDungKhoPhong" ToRole="KhoPhong" />
+  </EntityType>
+  <EntityType Name="LienKetKhoiLopThietBi">
+    <Key>
+      <PropertyRef Name="LienKetId" />
+    </Key>
+    <Property Name="LienKetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ThietBiId" Type="Int32" />
+    <Property Name="KhoiLopId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="LienKetNguoiDungChucVu">
+    <Key>
+      <PropertyRef Name="LienKetId" />
+    </Key>
+    <Property Name="LienKetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ChucVuId" Type="Int32" />
+    <Property Name="NguoiDungId" Type="Guid" />
+    <NavigationProperty Name="ChucVu" Relationship="qltb_tieuhocModel.FK_LienKetNguoiDungChucVu_ChucVu" FromRole="LienKetNguoiDungChucVu" ToRole="ChucVu" />
+    <NavigationProperty Name="NguoiDung" Relationship="qltb_tieuhocModel.FK_LienKetNguoiDungChucVu_NguoiDung" FromRole="LienKetNguoiDungChucVu" ToRole="NguoiDung" />
+  </EntityType>
+  <EntityType Name="LienKetNguoiNguoiDungPhongBan">
+    <Key>
+      <PropertyRef Name="LienKetId" />
+    </Key>
+    <Property Name="LienKetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PhongBanId" Type="Guid" />
+    <Property Name="NguoiDungId" Type="Guid" />
+    <NavigationProperty Name="NguoiDung" Relationship="qltb_tieuhocModel.FK_LienKetNguoiNguoiDungPhongBan_NguoiDung" FromRole="LienKetNguoiNguoiDungPhongBan" ToRole="NguoiDung" />
+    <NavigationProperty Name="PhongBan" Relationship="qltb_tieuhocModel.FK_LienKetNguoiNguoiDungPhongBan_PhongBan" FromRole="LienKetNguoiNguoiDungPhongBan" ToRole="PhongBan" />
+  </EntityType>
+  <EntityType Name="LienKetThietBiPhieuMuon">
+    <Key>
+      <PropertyRef Name="LienKetId" />
+    </Key>
+    <Property Name="LienKetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MaPhieuMuon" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="ThietBiId" Type="Int32" />
+    <Property Name="KhoPhongId" Type="Int32" />
+    <Property Name="SoLuong" Type="Int32" />
+    <Property Name="SoLuongHong" Type="Int32" />
+    <Property Name="SoLuongMat" Type="Int32" />
+    <NavigationProperty Name="PhieuMuon" Relationship="qltb_tieuhocModel.FK_LienKetThietBiPhieuMuon_PhieuMuon1" FromRole="LienKetThietBiPhieuMuon" ToRole="PhieuMuon" />
+    <NavigationProperty Name="ThietBi" Relationship="qltb_tieuhocModel.FK_LienKetThietBiPhieuMuon_ThietBi" FromRole="LienKetThietBiPhieuMuon" ToRole="ThietBi" />
+  </EntityType>
+  <EntityType Name="LienKetTietHocPhieuMuon">
+    <Key>
+      <PropertyRef Name="LienKetId" />
+    </Key>
+    <Property Name="LienKetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MaPhieuMuon" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="TietHocId" Type="Int32" />
+    <NavigationProperty Name="PhieuMuon" Relationship="qltb_tieuhocModel.FK_LienKetTietHocPhieuMuon_PhieuMuon1" FromRole="LienKetTietHocPhieuMuon" ToRole="PhieuMuon" />
+    <NavigationProperty Name="TietHoc" Relationship="qltb_tieuhocModel.FK_LienKetTietHocPhieuMuon_TietHoc" FromRole="LienKetTietHocPhieuMuon" ToRole="TietHoc" />
+  </EntityType>
+  <EntityType Name="LoaiBaiHoc">
+    <Key>
+      <PropertyRef Name="LoaiBaiHocId" />
+    </Key>
+    <Property Name="LoaiBaiHocId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MaLoaiBaiHoc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="TenLoaiBaiHoc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="LoaiKhoPhong">
+    <Key>
+      <PropertyRef Name="LoaiKhoPhongId" />
+    </Key>
+    <Property Name="LoaiKhoPhongId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenLoaiKhoPhong" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaLoaiKhoPhong" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="KhoPhongs" Relationship="qltb_tieuhocModel.FK_KhoPhong_LoaiKhoPhong" FromRole="LoaiKhoPhong" ToRole="KhoPhong" />
+  </EntityType>
+  <EntityType Name="LoaiPhieuMuon">
+    <Key>
+      <PropertyRef Name="LoaiPhieuMuonId" />
+    </Key>
+    <Property Name="LoaiPhieuMuonId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenLoaiPhieuMuon" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PhieuMuons" Relationship="qltb_tieuhocModel.FK_PhieuMuon_LoaiPhieuMuon" FromRole="LoaiPhieuMuon" ToRole="PhieuMuon" />
+  </EntityType>
+  <EntityType Name="LoaiPhuTrach">
+    <Key>
+      <PropertyRef Name="LoaiPhuTrachId" />
+    </Key>
+    <Property Name="LoaiPhuTrachId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenLoaiPhuTrach" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="MaLoaiPhuTrach" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="LoaiThayDoi">
+    <Key>
+      <PropertyRef Name="LoaiThayDoiId" />
+    </Key>
+    <Property Name="LoaiThayDoiId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenLoaiThayDoi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaLoaiThayDoi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="LoaiThietBi">
+    <Key>
+      <PropertyRef Name="LoaiThietBiId" />
+    </Key>
+    <Property Name="LoaiThietBiId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenLoaiThietBi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaLoaiThietBi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="KhoiLopId" Type="Int32" />
+    <NavigationProperty Name="ThietBis" Relationship="qltb_tieuhocModel.FK_ThietBi_LoaiThietBi" FromRole="LoaiThietBi" ToRole="ThietBi" />
+  </EntityType>
+  <EntityType Name="LoaiThietBiTieuChuan">
+    <Key>
+      <PropertyRef Name="LoaiThietBiTieuChuanId" />
+    </Key>
+    <Property Name="LoaiThietBiTieuChuanId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenLoaiThietBi" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="MaLoaiThietBiTieuChuan" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ThietBiTieuChuans" Relationship="qltb_tieuhocModel.FK_ThietBiTieuChuan_LoaiThietBiTieuChuan" FromRole="LoaiThietBiTieuChuan" ToRole="ThietBiTieuChuan" />
+  </EntityType>
+  <EntityType Name="LogPhieuMuon">
+    <Key>
+      <PropertyRef Name="LogId" />
+    </Key>
+    <Property Name="LogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MaPhieuMuon" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="NguoiDung" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="HanhDong" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="ThoiGian" Type="DateTime" Precision="3" />
+    <Property Name="TieuDe" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PhieuMuon" Relationship="qltb_tieuhocModel.FK_LogPhieuMuon_PhieuMuon" FromRole="LogPhieuMuon" ToRole="PhieuMuon" />
+  </EntityType>
+  <EntityType Name="LogThietBi">
+    <Key>
+      <PropertyRef Name="LogId" />
+    </Key>
+    <Property Name="LogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ThoiGian" Type="DateTime" Precision="3" />
+    <Property Name="ThietBiId" Type="Int32" />
+    <Property Name="SoLuong" Type="Int32" />
+    <Property Name="MaLoaiThayDoi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SoPhieuId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="NguoiDungId" Type="Guid" />
+    <Property Name="KhoPhongId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Lop">
+    <Key>
+      <PropertyRef Name="LopId" />
+    </Key>
+    <Property Name="LopId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenLop" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaLop" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="KhoiLopId" Type="Int32" />
+    <Property Name="NgayTao" Type="DateTime" Precision="3" />
+    <Property Name="NgayCapNhat" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <NavigationProperty Name="KhoiLop" Relationship="qltb_tieuhocModel.FK_Lop_KhoiLop" FromRole="Lop" ToRole="KhoiLop" />
+    <NavigationProperty Name="PhieuMuons" Relationship="qltb_tieuhocModel.FK_PhieuMuon_Lop" FromRole="Lop" ToRole="PhieuMuon" />
+  </EntityType>
+  <EntityType Name="MonHoc">
+    <Key>
+      <PropertyRef Name="MonHocId" />
+    </Key>
+    <Property Name="MonHocId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenMonHoc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaMonHoc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NgayTao" Type="DateTime" Precision="3" />
+    <Property Name="NgayCapNhat" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <NavigationProperty Name="BaiHocSuDungThietBis" Relationship="qltb_tieuhocModel.FK_BaiHocSuDungThietBi_MonHoc" FromRole="MonHoc" ToRole="BaiHocSuDungThietBi" />
+    <NavigationProperty Name="PhieuMuons" Relationship="qltb_tieuhocModel.FK_PhieuMuon_MonHoc" FromRole="MonHoc" ToRole="PhieuMuon" />
+  </EntityType>
+  <EntityType Name="MonHocTieuChuan">
+    <Key>
+      <PropertyRef Name="MonHocTieuChuanId" />
+    </Key>
+    <Property Name="MonHocTieuChuanId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenMonHoc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaMonHoc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NgayTao" Type="DateTime" Precision="3" />
+    <Property Name="NgayCapNhat" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="KhoiLopTieuChuanId" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="KhoiTruongId" Type="Int32" />
+    <NavigationProperty Name="ThietBiTieuChuans" Relationship="qltb_tieuhocModel.FK_ThietBiTieuChuan_MonHocTieuChuan" FromRole="MonHocTieuChuan" ToRole="ThietBiTieuChuan" />
+  </EntityType>
+  <EntityType Name="MucDichSuDung">
+    <Key>
+      <PropertyRef Name="MucDichSuDungId" />
+    </Key>
+    <Property Name="MucDichSuDungId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenMucDichSuDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="MaMucDichSuDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PhieuMuons" Relationship="qltb_tieuhocModel.FK_PhieuMuon_MucDichSuDung" FromRole="MucDichSuDung" ToRole="PhieuMuon" />
+  </EntityType>
+  <EntityType Name="NguoiDung">
+    <Key>
+      <PropertyRef Name="NguoiDungId" />
+    </Key>
+    <Property Name="NguoiDungId" Type="Guid" Nullable="false" />
+    <Property Name="TenDangNhap" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MatKhau" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="Salt" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="HoTen" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="DienThoai" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="DonViId" Type="Guid" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="NgayTao" Type="DateTime" Precision="3" />
+    <Property Name="GioiTinhId" Type="Int32" />
+    <Property Name="NhomNguoiDungId" Type="Int32" />
+    <Property Name="GiaoVienId" Type="Int32" />
+    <NavigationProperty Name="GioiTinh" Relationship="qltb_tieuhocModel.FK_NguoiDung_GioiTinh" FromRole="NguoiDung" ToRole="GioiTinh" />
+    <NavigationProperty Name="LienKetNguoiDungChucVus" Relationship="qltb_tieuhocModel.FK_LienKetNguoiDungChucVu_NguoiDung" FromRole="NguoiDung" ToRole="LienKetNguoiDungChucVu" />
+    <NavigationProperty Name="LienKetNguoiNguoiDungPhongBans" Relationship="qltb_tieuhocModel.FK_LienKetNguoiNguoiDungPhongBan_NguoiDung" FromRole="NguoiDung" ToRole="LienKetNguoiNguoiDungPhongBan" />
+    <NavigationProperty Name="PhieuMuons" Relationship="qltb_tieuhocModel.FK_PhieuMuon_NguoiDung" FromRole="NguoiDung" ToRole="PhieuMuon" />
+    <NavigationProperty Name="QuyenTruyCaps" Relationship="qltb_tieuhocModel.FK_QuyenTruyCap_NguoiDung" FromRole="NguoiDung" ToRole="QuyenTruyCap" />
+  </EntityType>
+  <EntityType Name="NguonCap">
+    <Key>
+      <PropertyRef Name="NguonCapId" />
+    </Key>
+    <Property Name="NguonCapId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenNguonCap" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="MaNguonCap" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="NguonKinhPhiCapTren">
+    <Key>
+      <PropertyRef Name="NguonKinhPhiCapTrenId" />
+    </Key>
+    <Property Name="NguonKinhPhiCapTrenId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenNguonKinhPhiCapTren" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="MaNguonKinhPhiCapTren" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="NguonNganSach">
+    <Key>
+      <PropertyRef Name="NguonNganSachId" />
+    </Key>
+    <Property Name="NguonNganSachId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenNguonNganSach" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="MaNguonNganSach" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="NhomChucNang">
+    <Key>
+      <PropertyRef Name="NhomChucNangId" />
+    </Key>
+    <Property Name="NhomChucNangId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenNhomChucNang" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ChucNangs" Relationship="qltb_tieuhocModel.FK_ChucNang_NhomChucNang" FromRole="NhomChucNang" ToRole="ChucNang" />
+  </EntityType>
+  <EntityType Name="NhomNguoiDung">
+    <Key>
+      <PropertyRef Name="NhomNguoiDungId" />
+    </Key>
+    <Property Name="NhomNguoiDungId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenNhomNguoiDung" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaNhomNguoiDung" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="PhieuDeNghiMuaSam">
+    <Key>
+      <PropertyRef Name="PhieuDeNghiMuaSamId" />
+    </Key>
+    <Property Name="PhieuDeNghiMuaSamId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="NgayLap" Type="DateTime" Precision="3" />
+    <Property Name="NoiDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SoPhieu" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="DaXuLy" Type="Boolean" />
+    <Property Name="ChotPhieu" Type="Boolean" />
+    <Property Name="NguoiCapNhat" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="PhieuGhiGiamThietBi">
+    <Key>
+      <PropertyRef Name="PhieuGhiGiamThietBiId" />
+    </Key>
+    <Property Name="PhieuGhiGiamThietBiId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="SoPhieu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="NgayLap" Type="DateTime" Precision="3" />
+    <Property Name="NoiDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="NguoiCapNhat" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="PhieuGhiHongThietBi">
+    <Key>
+      <PropertyRef Name="PhieuGhiHongThietBiId" />
+    </Key>
+    <Property Name="PhieuGhiHongThietBiId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="NgayLap" Type="DateTime" Precision="0" />
+    <Property Name="NoiDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SoPhieu" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="NguoiCapNhat" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="TrangThaiHongMatId" Type="Int32" />
+    <Property Name="KhoPhongId" Type="Int32" />
+    <NavigationProperty Name="ChiTietPhieuGhiHongThietBis" Relationship="qltb_tieuhocModel.FK_ChiTietPhieuGhiHongThietBi_PhieuGhiHongThietBi" FromRole="PhieuGhiHongThietBi" ToRole="ChiTietPhieuGhiHongThietBi" />
+    <NavigationProperty Name="TrangThaiHongMat" Relationship="qltb_tieuhocModel.FK_PhieuGhiHongThietBi_TrangThaiHongMat" FromRole="PhieuGhiHongThietBi" ToRole="TrangThaiHongMat" />
+  </EntityType>
+  <EntityType Name="PhieuGhiMatThietBi">
+    <Key>
+      <PropertyRef Name="PhieuGhiMatThietBiId" />
+    </Key>
+    <Property Name="PhieuGhiMatThietBiId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="NgayLap" Type="DateTime" Precision="3" />
+    <Property Name="NoiDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SoPhieu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="NguoiCapNhat" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="TrangThaiHongMatId" Type="Int32" />
+    <Property Name="KhoPhongId" Type="Int32" />
+    <NavigationProperty Name="ChiTietPhieuGhiMatThietBis" Relationship="qltb_tieuhocModel.FK_ChiTietPhieuGhiMatThietBi_PhieuGhiMatThietBi" FromRole="PhieuGhiMatThietBi" ToRole="ChiTietPhieuGhiMatThietBi" />
+    <NavigationProperty Name="TrangThaiHongMat" Relationship="qltb_tieuhocModel.FK_PhieuGhiMatThietBi_TrangThaiHongMat" FromRole="PhieuGhiMatThietBi" ToRole="TrangThaiHongMat" />
+  </EntityType>
+  <EntityType Name="PhieuGhiTangThietBi">
+    <Key>
+      <PropertyRef Name="PhieuGhiTangThietBiId" />
+    </Key>
+    <Property Name="PhieuGhiTangThietBiId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="SoPhieu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="NgayNhap" Type="DateTime" Precision="3" />
+    <Property Name="ChungTuLienQuan" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="NoiDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="NgayTao" Type="DateTime" Precision="3" />
+    <Property Name="NguoiCapNhat" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="PhieuGhiTangThietBi_ChiTietThietBi">
+    <Key>
+      <PropertyRef Name="PhieuGhiTangThietBi_ChiTietThietBi_Id" />
+    </Key>
+    <Property Name="PhieuGhiTangThietBi_ChiTietThietBi_Id" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="PhieuGhiTangThietBiId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="ChiTietThietBiId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="PhieuKiemKe">
+    <Key>
+      <PropertyRef Name="PhieuKiemKeId" />
+    </Key>
+    <Property Name="PhieuKiemKeId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="NgayLap" Type="DateTime" Precision="3" />
+    <Property Name="NgayKiemKe" Type="DateTime" Precision="3" />
+    <Property Name="GhiChu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="KhoPhongId" Type="Int32" />
+    <Property Name="SoPhieu" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="NguoiCapNhat" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="PhieuMuon">
+    <Key>
+      <PropertyRef Name="MaPhieuMuon" />
+    </Key>
+    <Property Name="MaPhieuMuon" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="ChuongTrinhHocId" Type="Int32" />
+    <Property Name="KhoiLopId" Type="Int32" />
+    <Property Name="GiaoVienId" Type="Int32" />
+    <Property Name="MucDichSuDungId" Type="Int32" />
+    <Property Name="MonHocId" Type="Int32" />
+    <Property Name="LopHocId" Type="Int32" />
+    <Property Name="SoTietHoc" Type="Int32" />
+    <Property Name="NgayMuon" Type="DateTime" Precision="3" />
+    <Property Name="NgayTra" Type="DateTime" Precision="3" />
+    <Property Name="NgayTao" Type="DateTime" Precision="3" />
+    <Property Name="NguoiTao" Type="Guid" />
+    <Property Name="GhiChu" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
+    <Property Name="BaiHocId" Type="Int32" />
+    <Property Name="TrangThaiPhieuMuonId" Type="Int32" />
+    <Property Name="LoaiPhieuMuonId" Type="Int32" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="KhoPhongId" Type="Int32" />
+    <Property Name="NguoiMuonNhan" Type="Boolean" />
+    <Property Name="NguoiMuonTra" Type="Boolean" />
+    <Property Name="NguoiChoMuonGiao" Type="Boolean" />
+    <Property Name="NguoiChoMuonNhan" Type="Boolean" />
+    <NavigationProperty Name="BaiHocSuDungThietBi" Relationship="qltb_tieuhocModel.FK_PhieuMuon_BaiHocSuDungThietBi" FromRole="PhieuMuon" ToRole="BaiHocSuDungThietBi" />
+    <NavigationProperty Name="ChuongTrinhHoc" Relationship="qltb_tieuhocModel.FK_PhieuMuon_ChuongTrinhHoc" FromRole="PhieuMuon" ToRole="ChuongTrinhHoc" />
+    <NavigationProperty Name="GiaoVien" Relationship="qltb_tieuhocModel.FK_PhieuMuon_GiaoVien" FromRole="PhieuMuon" ToRole="GiaoVien" />
+    <NavigationProperty Name="KhoiLop" Relationship="qltb_tieuhocModel.FK_PhieuMuon_KhoiLop" FromRole="PhieuMuon" ToRole="KhoiLop" />
+    <NavigationProperty Name="KhoPhong" Relationship="qltb_tieuhocModel.FK_PhieuMuon_KhoPhong" FromRole="PhieuMuon" ToRole="KhoPhong" />
+    <NavigationProperty Name="LienKetThietBiPhieuMuons" Relationship="qltb_tieuhocModel.FK_LienKetThietBiPhieuMuon_PhieuMuon1" FromRole="PhieuMuon" ToRole="LienKetThietBiPhieuMuon" />
+    <NavigationProperty Name="LienKetTietHocPhieuMuons" Relationship="qltb_tieuhocModel.FK_LienKetTietHocPhieuMuon_PhieuMuon1" FromRole="PhieuMuon" ToRole="LienKetTietHocPhieuMuon" />
+    <NavigationProperty Name="LoaiPhieuMuon" Relationship="qltb_tieuhocModel.FK_PhieuMuon_LoaiPhieuMuon" FromRole="PhieuMuon" ToRole="LoaiPhieuMuon" />
+    <NavigationProperty Name="LogPhieuMuons" Relationship="qltb_tieuhocModel.FK_LogPhieuMuon_PhieuMuon" FromRole="PhieuMuon" ToRole="LogPhieuMuon" />
+    <NavigationProperty Name="Lop" Relationship="qltb_tieuhocModel.FK_PhieuMuon_Lop" FromRole="PhieuMuon" ToRole="Lop" />
+    <NavigationProperty Name="MonHoc" Relationship="qltb_tieuhocModel.FK_PhieuMuon_MonHoc" FromRole="PhieuMuon" ToRole="MonHoc" />
+    <NavigationProperty Name="MucDichSuDung" Relationship="qltb_tieuhocModel.FK_PhieuMuon_MucDichSuDung" FromRole="PhieuMuon" ToRole="MucDichSuDung" />
+    <NavigationProperty Name="NguoiDung" Relationship="qltb_tieuhocModel.FK_PhieuMuon_NguoiDung" FromRole="PhieuMuon" ToRole="NguoiDung" />
+    <NavigationProperty Name="TrangThaiPhieuMuon" Relationship="qltb_tieuhocModel.FK_PhieuMuon_TrangThaiPhieuMuon" FromRole="PhieuMuon" ToRole="TrangThaiPhieuMuon" />
+  </EntityType>
+  <EntityType Name="PhieuSuaChua">
+    <Key>
+      <PropertyRef Name="PhieuSuaChuaId" />
+    </Key>
+    <Property Name="PhieuSuaChuaId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="SoPhieu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="NgayLap" Type="DateTime" Precision="3" />
+    <Property Name="GhiChu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="NguoiCapNhat" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Phong">
+    <Key>
+      <PropertyRef Name="PhongId" />
+    </Key>
+    <Property Name="PhongId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="KhoiPhongTieuChuanId" Type="Int32" />
+    <Property Name="TenPhong" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="DienTich" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaPhong" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="KhoiPhongTieuChuan" Relationship="qltb_tieuhocModel.FK_Phong_KhoiPhongTieuChuan" FromRole="Phong" ToRole="KhoiPhongTieuChuan" />
+  </EntityType>
+  <EntityType Name="PhongBan">
+    <Key>
+      <PropertyRef Name="PhongBanId" />
+    </Key>
+    <Property Name="PhongBanId" Type="Guid" Nullable="false" />
+    <Property Name="MaPhongBan" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="TenPhongBan" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="DienThoai" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="MoTa" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ChucVus" Relationship="qltb_tieuhocModel.FK_ChucVu_PhongBan" FromRole="PhongBan" ToRole="ChucVu" />
+    <NavigationProperty Name="LienKetNguoiNguoiDungPhongBans" Relationship="qltb_tieuhocModel.FK_LienKetNguoiNguoiDungPhongBan_PhongBan" FromRole="PhongBan" ToRole="LienKetNguoiNguoiDungPhongBan" />
+  </EntityType>
+  <EntityType Name="QuyDinhSoTietSuDungThietBi">
+    <Key>
+      <PropertyRef Name="QuyDinhSoTietSuDungThietBiId" />
+    </Key>
+    <Property Name="QuyDinhSoTietSuDungThietBiId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LopId" Type="Int32" />
+    <Property Name="ChuongTrinhHocId" Type="Int32" />
+    <Property Name="MonHocId" Type="Int32" />
+    <Property Name="TietTNHKI" Type="Int32" />
+    <Property Name="TietTNHKII" Type="Int32" />
+    <Property Name="TietTHHKI" Type="Int32" />
+    <Property Name="TietTHHKII" Type="Int32" />
+    <Property Name="NamHocBatDau" Type="Int32" />
+    <Property Name="NamHocKetThuc" Type="Int32" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="QuyDinhSuDungSoTietId" Type="Int32" />
+  </EntityType>
+  <EntityType Name="QuyDinhSuDungSoTiet">
+    <Key>
+      <PropertyRef Name="QuyDinhSuDungSoTietId" />
+    </Key>
+    <Property Name="QuyDinhSuDungSoTietId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NgayCapNhat" Type="DateTime" Precision="3" />
+    <Property Name="NgayTao" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="QuyenTruyCap">
+    <Key>
+      <PropertyRef Name="QuyenTruyCapId" />
+    </Key>
+    <Property Name="QuyenTruyCapId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ChucVuId" Type="Int32" />
+    <Property Name="ChucNangId" Type="Int32" />
+    <Property Name="NgayTao" Type="DateTime" Precision="3" />
+    <Property Name="NguoiTao" Type="Guid" />
+    <NavigationProperty Name="ChucNang" Relationship="qltb_tieuhocModel.FK_QuyenTruyCap_ChucNang" FromRole="QuyenTruyCap" ToRole="ChucNang" />
+    <NavigationProperty Name="ChucVu" Relationship="qltb_tieuhocModel.FK_QuyenTruyCap_ChucVu" FromRole="QuyenTruyCap" ToRole="ChucVu" />
+    <NavigationProperty Name="NguoiDung" Relationship="qltb_tieuhocModel.FK_QuyenTruyCap_NguoiDung" FromRole="QuyenTruyCap" ToRole="NguoiDung" />
+  </EntityType>
+  <EntityType Name="SuDungPhong">
+    <Key>
+      <PropertyRef Name="SuDungPhongId" />
+    </Key>
+    <Property Name="SuDungPhongId" Type="Int32" Nullable="false" />
+    <Property Name="LopId" Type="Int32" />
+    <Property Name="KhoPhongId" Type="Int32" />
+    <Property Name="NgayTrongTuan" Type="Int32" />
+    <Property Name="TietHoc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ThoiKhoaBieuPhongId" Type="Int32" />
+    <Property Name="NgayTao" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="KhoPhong" Relationship="qltb_tieuhocModel.FK_SuDungPhong_KhoPhong" FromRole="SuDungPhong" ToRole="KhoPhong" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="ThietBi">
+    <Key>
+      <PropertyRef Name="ThietBiId" />
+    </Key>
+    <Property Name="ThietBiId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MaThietBi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TenThietBi" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="NgayTao" Type="DateTime" Precision="3" />
+    <Property Name="NgayCapNhat" Type="DateTime" Precision="3" />
+    <Property Name="LoaiThietBiId" Type="Int32" />
+    <Property Name="DonViTinhId" Type="Int32" />
+    <Property Name="QuanLyTieuHao" Type="Boolean" />
+    <Property Name="MoTa" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="MonHocId" Type="Int32" />
+    <Property Name="SoLuongToiThieu" Type="Int32" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="DonViId" Type="Guid" />
+    <Property Name="KhoiLopId" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ChiTietPhieuGhiHongThietBis" Relationship="qltb_tieuhocModel.FK_ChiTietPhieuGhiHongThietBi_ThietBi" FromRole="ThietBi" ToRole="ChiTietPhieuGhiHongThietBi" />
+    <NavigationProperty Name="ChiTietPhieuGhiMatThietBis" Relationship="qltb_tieuhocModel.FK_ChiTietPhieuGhiMatThietBi_ThietBi" FromRole="ThietBi" ToRole="ChiTietPhieuGhiMatThietBi" />
+    <NavigationProperty Name="KhoThietBis" Relationship="qltb_tieuhocModel.FK_KhoThietBi_ThietBi" FromRole="ThietBi" ToRole="KhoThietBi" />
+    <NavigationProperty Name="LienKetThietBiPhieuMuons" Relationship="qltb_tieuhocModel.FK_LienKetThietBiPhieuMuon_ThietBi" FromRole="ThietBi" ToRole="LienKetThietBiPhieuMuon" />
+    <NavigationProperty Name="LoaiThietBi" Relationship="qltb_tieuhocModel.FK_ThietBi_LoaiThietBi" FromRole="ThietBi" ToRole="LoaiThietBi" />
+  </EntityType>
+  <EntityType Name="ThietBiTieuChuan">
+    <Key>
+      <PropertyRef Name="ThietBiId" />
+    </Key>
+    <Property Name="ThietBiId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LoaiThietBiTieuChuanId" Type="Int32" />
+    <Property Name="TenThietBi" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="SoLuongToiThieu" Type="Int32" />
+    <Property Name="DonViId" Type="Guid" />
+    <Property Name="DonViTinhId" Type="Int32" />
+    <Property Name="MaThietBi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MonHocTieuChuanId" Type="Int32" />
+    <Property Name="Mota" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="KhoiLopTieuChuanId" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="KhoiTruongId" Type="Int32" />
+    <Property Name="TieuChuanCoSoVatChatId" Type="Int32" />
+    <NavigationProperty Name="KhoiTruong" Relationship="qltb_tieuhocModel.FK_ThietBiTieuChuan_KhoiTruong" FromRole="ThietBiTieuChuan" ToRole="KhoiTruong" />
+    <NavigationProperty Name="LoaiThietBiTieuChuan" Relationship="qltb_tieuhocModel.FK_ThietBiTieuChuan_LoaiThietBiTieuChuan" FromRole="ThietBiTieuChuan" ToRole="LoaiThietBiTieuChuan" />
+    <NavigationProperty Name="MonHocTieuChuan" Relationship="qltb_tieuhocModel.FK_ThietBiTieuChuan_MonHocTieuChuan" FromRole="ThietBiTieuChuan" ToRole="MonHocTieuChuan" />
+    <NavigationProperty Name="TieuChuanCoSoVatChat" Relationship="qltb_tieuhocModel.FK_ThietBiTieuChuan_TieuChuanCoSoVatChat" FromRole="ThietBiTieuChuan" ToRole="TieuChuanCoSoVatChat" />
+  </EntityType>
+  <EntityType Name="ThoiKhoaBieuPhong">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TietHocSuDung" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="KhoPhongId" Type="Int32" />
+    <Property Name="LopHocId" Type="Int32" />
+    <Property Name="IsDelete" Type="Boolean" />
+    <Property Name="NgayTrongTuan" Type="Int32" />
+    <Property Name="NgayTao" Type="DateTime" Precision="3" />
+    <Property Name="NgayApDung" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="KhoPhong" Relationship="qltb_tieuhocModel.FK_ThoiKhoaBieuPhong_KhoPhong" FromRole="ThoiKhoaBieuPhong" ToRole="KhoPhong" />
+  </EntityType>
+  <EntityType Name="TietHoc">
+    <Key>
+      <PropertyRef Name="TietHocId" />
+    </Key>
+    <Property Name="TietHocId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenTietHoc" Type="Int32" />
+    <Property Name="BuoiTrongNgay" Type="Int32" />
+    <NavigationProperty Name="LienKetTietHocPhieuMuons" Relationship="qltb_tieuhocModel.FK_LienKetTietHocPhieuMuon_TietHoc" FromRole="TietHoc" ToRole="LienKetTietHocPhieuMuon" />
+  </EntityType>
+  <EntityType Name="TieuChuanCoSoVatChat">
+    <Key>
+      <PropertyRef Name="TieuChuanCoSoVatChatId" />
+    </Key>
+    <Property Name="TieuChuanCoSoVatChatId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenTieuChuan" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MoTa" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
+    <Property Name="KhoiTruongId" Type="Int32" />
+    <NavigationProperty Name="DonVis" Relationship="qltb_tieuhocModel.FK_DonVi_TieuChuanCoSoVatChat1" FromRole="TieuChuanCoSoVatChat" ToRole="DonVi" />
+    <NavigationProperty Name="ThietBiTieuChuans" Relationship="qltb_tieuhocModel.FK_ThietBiTieuChuan_TieuChuanCoSoVatChat" FromRole="TieuChuanCoSoVatChat" ToRole="ThietBiTieuChuan" />
+  </EntityType>
+  <EntityType Name="TieuChuanPhong">
+    <Key>
+      <PropertyRef Name="TieuChuanId" />
+    </Key>
+    <Property Name="TieuChuanId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenTieuChuan" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MoTa" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
+    <Property Name="NgayCapNhatCuoi" Type="DateTime" Precision="3" />
+    <Property Name="KhoiLopId" Type="Int32" />
+    <Property Name="KhoiTruongId" Type="Int32" />
+    <NavigationProperty Name="DonVis" Relationship="qltb_tieuhocModel.FK_DonVi_TieuChuanCoSoVatChat" FromRole="TieuChuanPhong" ToRole="DonVi" />
+    <NavigationProperty Name="KhoiPhongTieuChuans" Relationship="qltb_tieuhocModel.FK_KhoiPhongTieuChuan_TieuChuanCoSoVatChat" FromRole="TieuChuanPhong" ToRole="KhoiPhongTieuChuan" />
+  </EntityType>
+  <EntityType Name="Tinh">
+    <Key>
+      <PropertyRef Name="TinhId" />
+    </Key>
+    <Property Name="TinhId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TenTinh" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="ToBoMon">
+    <Key>
+      <PropertyRef Name="ToBoMonId" />
+    </Key>
+    <Property Name="ToBoMonId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MaBoMon" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TenToBoMon" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="GhiChu" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="PhongBanId" Type="Guid" />
+    <Property Name="IsDelete" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="TrangThaiHongMat">
+    <Key>
+      <PropertyRef Name="TrangThaiHongMatId" />
+    </Key>
+    <Property Name="TrangThaiHongMatId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenTrangThaiHongMat" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaMau" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PhieuGhiHongThietBis" Relationship="qltb_tieuhocModel.FK_PhieuGhiHongThietBi_TrangThaiHongMat" FromRole="TrangThaiHongMat" ToRole="PhieuGhiHongThietBi" />
+    <NavigationProperty Name="PhieuGhiMatThietBis" Relationship="qltb_tieuhocModel.FK_PhieuGhiMatThietBi_TrangThaiHongMat" FromRole="TrangThaiHongMat" ToRole="PhieuGhiMatThietBi" />
+  </EntityType>
+  <EntityType Name="TrangThaiPhieuMuon">
+    <Key>
+      <PropertyRef Name="TrangThaiId" />
+    </Key>
+    <Property Name="TrangThaiId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenTrangThai" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaMau" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PhieuMuons" Relationship="qltb_tieuhocModel.FK_PhieuMuon_TrangThaiPhieuMuon" FromRole="TrangThaiPhieuMuon" ToRole="PhieuMuon" />
+  </EntityType>
+  <EntityType Name="TrangTraiPhong">
+    <Key>
+      <PropertyRef Name="TrangThaiPhongId" />
+    </Key>
+    <Property Name="TrangThaiPhongId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenTrangThai" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaMau" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="KhoPhongs" Relationship="qltb_tieuhocModel.FK_KhoPhong_TrangTraiPhong" FromRole="TrangTraiPhong" ToRole="KhoPhong" />
+  </EntityType>
+  <EntityType Name="VaiTroCanBo">
+    <Key>
+      <PropertyRef Name="VaiTroCanBoId" />
+    </Key>
+    <Property Name="VaiTroCanBoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenVaiTro" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaVaiTro" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Xa">
+    <Key>
+      <PropertyRef Name="XaId" />
+    </Key>
+    <Property Name="XaId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TenXa" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="XepHangKhoPhong">
+    <Key>
+      <PropertyRef Name="XepHangKhoPhongId" />
+    </Key>
+    <Property Name="XepHangKhoPhongId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenXepHang" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="MaXepHang" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_BaiHocSuDungThietBi_MonHoc">
+    <End Type="qltb_tieuhocModel.MonHoc" Role="MonHoc" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.BaiHocSuDungThietBi" Role="BaiHocSuDungThietBi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MonHoc">
+        <PropertyRef Name="MonHocId" />
+      </Principal>
+      <Dependent Role="BaiHocSuDungThietBi">
+        <PropertyRef Name="MonHocId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PhieuMuon_BaiHocSuDungThietBi">
+    <End Type="qltb_tieuhocModel.BaiHocSuDungThietBi" Role="BaiHocSuDungThietBi" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.PhieuMuon" Role="PhieuMuon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BaiHocSuDungThietBi">
+        <PropertyRef Name="BaiHocSuDungThietBiId" />
+      </Principal>
+      <Dependent Role="PhieuMuon">
+        <PropertyRef Name="BaiHocId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ChiTietPhieuGhiHongThietBi_PhieuGhiHongThietBi">
+    <End Type="qltb_tieuhocModel.PhieuGhiHongThietBi" Role="PhieuGhiHongThietBi" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.ChiTietPhieuGhiHongThietBi" Role="ChiTietPhieuGhiHongThietBi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PhieuGhiHongThietBi">
+        <PropertyRef Name="PhieuGhiHongThietBiId" />
+      </Principal>
+      <Dependent Role="ChiTietPhieuGhiHongThietBi">
+        <PropertyRef Name="PhieuGhiHongThietBiId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ChiTietPhieuGhiHongThietBi_ThietBi">
+    <End Type="qltb_tieuhocModel.ThietBi" Role="ThietBi" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.ChiTietPhieuGhiHongThietBi" Role="ChiTietPhieuGhiHongThietBi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ThietBi">
+        <PropertyRef Name="ThietBiId" />
+      </Principal>
+      <Dependent Role="ChiTietPhieuGhiHongThietBi">
+        <PropertyRef Name="ThietBiId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ChiTietPhieuGhiMatThietBi_PhieuGhiMatThietBi">
+    <End Type="qltb_tieuhocModel.PhieuGhiMatThietBi" Role="PhieuGhiMatThietBi" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.ChiTietPhieuGhiMatThietBi" Role="ChiTietPhieuGhiMatThietBi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PhieuGhiMatThietBi">
+        <PropertyRef Name="PhieuGhiMatThietBiId" />
+      </Principal>
+      <Dependent Role="ChiTietPhieuGhiMatThietBi">
+        <PropertyRef Name="PhieuGhiMatThietBiId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ChiTietPhieuGhiMatThietBi_ThietBi">
+    <End Type="qltb_tieuhocModel.ThietBi" Role="ThietBi" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.ChiTietPhieuGhiMatThietBi" Role="ChiTietPhieuGhiMatThietBi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ThietBi">
+        <PropertyRef Name="ThietBiId" />
+      </Principal>
+      <Dependent Role="ChiTietPhieuGhiMatThietBi">
+        <PropertyRef Name="ThietBiId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ChucNang_NhomChucNang">
+    <End Type="qltb_tieuhocModel.NhomChucNang" Role="NhomChucNang" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.ChucNang" Role="ChucNang" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NhomChucNang">
+        <PropertyRef Name="NhomChucNangId" />
+      </Principal>
+      <Dependent Role="ChucNang">
+        <PropertyRef Name="NhomChucNangId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_QuyenTruyCap_ChucNang">
+    <End Type="qltb_tieuhocModel.ChucNang" Role="ChucNang" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.QuyenTruyCap" Role="QuyenTruyCap" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ChucNang">
+        <PropertyRef Name="ChucNangId" />
+      </Principal>
+      <Dependent Role="QuyenTruyCap">
+        <PropertyRef Name="ChucNangId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ChucVu_PhongBan">
+    <End Type="qltb_tieuhocModel.PhongBan" Role="PhongBan" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.ChucVu" Role="ChucVu" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PhongBan">
+        <PropertyRef Name="PhongBanId" />
+      </Principal>
+      <Dependent Role="ChucVu">
+        <PropertyRef Name="PhongBanId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LienKetNguoiDungChucVu_ChucVu">
+    <End Type="qltb_tieuhocModel.ChucVu" Role="ChucVu" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.LienKetNguoiDungChucVu" Role="LienKetNguoiDungChucVu" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ChucVu">
+        <PropertyRef Name="ChucVuId" />
+      </Principal>
+      <Dependent Role="LienKetNguoiDungChucVu">
+        <PropertyRef Name="ChucVuId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_QuyenTruyCap_ChucVu">
+    <End Type="qltb_tieuhocModel.ChucVu" Role="ChucVu" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.QuyenTruyCap" Role="QuyenTruyCap" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ChucVu">
+        <PropertyRef Name="ChucVuId" />
+      </Principal>
+      <Dependent Role="QuyenTruyCap">
+        <PropertyRef Name="ChucVuId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PhieuMuon_ChuongTrinhHoc">
+    <End Type="qltb_tieuhocModel.ChuongTrinhHoc" Role="ChuongTrinhHoc" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.PhieuMuon" Role="PhieuMuon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ChuongTrinhHoc">
+        <PropertyRef Name="ChuongTrinhHocId" />
+      </Principal>
+      <Dependent Role="PhieuMuon">
+        <PropertyRef Name="ChuongTrinhHocId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DonVi_KhoiTruong">
+    <End Type="qltb_tieuhocModel.KhoiTruong" Role="KhoiTruong" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.DonVi" Role="DonVi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="KhoiTruong">
+        <PropertyRef Name="KhoiTruongId" />
+      </Principal>
+      <Dependent Role="DonVi">
+        <PropertyRef Name="KhoiTruongId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DonVi_TieuChuanCoSoVatChat">
+    <End Type="qltb_tieuhocModel.TieuChuanPhong" Role="TieuChuanPhong" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.DonVi" Role="DonVi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TieuChuanPhong">
+        <PropertyRef Name="TieuChuanId" />
+      </Principal>
+      <Dependent Role="DonVi">
+        <PropertyRef Name="TieuChuanPhongId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DonVi_TieuChuanCoSoVatChat1">
+    <End Type="qltb_tieuhocModel.TieuChuanCoSoVatChat" Role="TieuChuanCoSoVatChat" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.DonVi" Role="DonVi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TieuChuanCoSoVatChat">
+        <PropertyRef Name="TieuChuanCoSoVatChatId" />
+      </Principal>
+      <Dependent Role="DonVi">
+        <PropertyRef Name="TieuChuanCoSoVatChatId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PhieuMuon_GiaoVien">
+    <End Type="qltb_tieuhocModel.GiaoVien" Role="GiaoVien" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.PhieuMuon" Role="PhieuMuon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GiaoVien">
+        <PropertyRef Name="GiaoVienId" />
+      </Principal>
+      <Dependent Role="PhieuMuon">
+        <PropertyRef Name="GiaoVienId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NguoiDung_GioiTinh">
+    <End Type="qltb_tieuhocModel.GioiTinh" Role="GioiTinh" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.NguoiDung" Role="NguoiDung" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GioiTinh">
+        <PropertyRef Name="GioiTinhId" />
+      </Principal>
+      <Dependent Role="NguoiDung">
+        <PropertyRef Name="GioiTinhId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Lop_KhoiLop">
+    <End Type="qltb_tieuhocModel.KhoiLop" Role="KhoiLop" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.Lop" Role="Lop" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="KhoiLop">
+        <PropertyRef Name="KhoiLopId" />
+      </Principal>
+      <Dependent Role="Lop">
+        <PropertyRef Name="KhoiLopId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PhieuMuon_KhoiLop">
+    <End Type="qltb_tieuhocModel.KhoiLop" Role="KhoiLop" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.PhieuMuon" Role="PhieuMuon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="KhoiLop">
+        <PropertyRef Name="KhoiLopId" />
+      </Principal>
+      <Dependent Role="PhieuMuon">
+        <PropertyRef Name="KhoiLopId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_KhoiLopTieuChuan_KhoiTruong">
+    <End Type="qltb_tieuhocModel.KhoiTruong" Role="KhoiTruong" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.KhoiLopTieuChuan" Role="KhoiLopTieuChuan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="KhoiTruong">
+        <PropertyRef Name="KhoiTruongId" />
+      </Principal>
+      <Dependent Role="KhoiLopTieuChuan">
+        <PropertyRef Name="KhoiTruongId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_KhoiPhongTieuChuan_KhoiTruong">
+    <End Type="qltb_tieuhocModel.KhoiTruong" Role="KhoiTruong" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.KhoiPhongTieuChuan" Role="KhoiPhongTieuChuan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="KhoiTruong">
+        <PropertyRef Name="KhoiTruongId" />
+      </Principal>
+      <Dependent Role="KhoiPhongTieuChuan">
+        <PropertyRef Name="KhoiTruongId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_KhoiPhongTieuChuan_TieuChuanCoSoVatChat">
+    <End Type="qltb_tieuhocModel.TieuChuanPhong" Role="TieuChuanPhong" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.KhoiPhongTieuChuan" Role="KhoiPhongTieuChuan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TieuChuanPhong">
+        <PropertyRef Name="TieuChuanId" />
+      </Principal>
+      <Dependent Role="KhoiPhongTieuChuan">
+        <PropertyRef Name="TieuChuanId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Phong_KhoiPhongTieuChuan">
+    <End Type="qltb_tieuhocModel.KhoiPhongTieuChuan" Role="KhoiPhongTieuChuan" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.Phong" Role="Phong" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="KhoiPhongTieuChuan">
+        <PropertyRef Name="KhoiPhongTieuChuanId" />
+      </Principal>
+      <Dependent Role="Phong">
+        <PropertyRef Name="KhoiPhongTieuChuanId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ThietBiTieuChuan_KhoiTruong">
+    <End Type="qltb_tieuhocModel.KhoiTruong" Role="KhoiTruong" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.ThietBiTieuChuan" Role="ThietBiTieuChuan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="KhoiTruong">
+        <PropertyRef Name="KhoiTruongId" />
+      </Principal>
+      <Dependent Role="ThietBiTieuChuan">
+        <PropertyRef Name="KhoiTruongId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_KhoPhong_KieuSuDungKhoPhong">
+    <End Type="qltb_tieuhocModel.KieuSuDungKhoPhong" Role="KieuSuDungKhoPhong" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.KhoPhong" Role="KhoPhong" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="KieuSuDungKhoPhong">
+        <PropertyRef Name="KieuSuDungKhoPhongId" />
+      </Principal>
+      <Dependent Role="KhoPhong">
+        <PropertyRef Name="KieuSuDungKhoPhongId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_KhoPhong_LoaiKhoPhong">
+    <End Type="qltb_tieuhocModel.LoaiKhoPhong" Role="LoaiKhoPhong" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.KhoPhong" Role="KhoPhong" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LoaiKhoPhong">
+        <PropertyRef Name="LoaiKhoPhongId" />
+      </Principal>
+      <Dependent Role="KhoPhong">
+        <PropertyRef Name="LoaiKhoPhongId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_KhoPhong_TrangTraiPhong">
+    <End Type="qltb_tieuhocModel.TrangTraiPhong" Role="TrangTraiPhong" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.KhoPhong" Role="KhoPhong" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TrangTraiPhong">
+        <PropertyRef Name="TrangThaiPhongId" />
+      </Principal>
+      <Dependent Role="KhoPhong">
+        <PropertyRef Name="TrangThaiPhongId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PhieuMuon_KhoPhong">
+    <End Type="qltb_tieuhocModel.KhoPhong" Role="KhoPhong" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.PhieuMuon" Role="PhieuMuon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="KhoPhong">
+        <PropertyRef Name="KhoPhongId" />
+      </Principal>
+      <Dependent Role="PhieuMuon">
+        <PropertyRef Name="KhoPhongId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SuDungPhong_KhoPhong">
+    <End Type="qltb_tieuhocModel.KhoPhong" Role="KhoPhong" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.SuDungPhong" Role="SuDungPhong" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="KhoPhong">
+        <PropertyRef Name="KhoPhongId" />
+      </Principal>
+      <Dependent Role="SuDungPhong">
+        <PropertyRef Name="KhoPhongId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ThoiKhoaBieuPhong_KhoPhong">
+    <End Type="qltb_tieuhocModel.KhoPhong" Role="KhoPhong" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.ThoiKhoaBieuPhong" Role="ThoiKhoaBieuPhong" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="KhoPhong">
+        <PropertyRef Name="KhoPhongId" />
+      </Principal>
+      <Dependent Role="ThoiKhoaBieuPhong">
+        <PropertyRef Name="KhoPhongId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_KhoThietBi_ThietBi">
+    <End Type="qltb_tieuhocModel.ThietBi" Role="ThietBi" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.KhoThietBi" Role="KhoThietBi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ThietBi">
+        <PropertyRef Name="ThietBiId" />
+      </Principal>
+      <Dependent Role="KhoThietBi">
+        <PropertyRef Name="ThietBiId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LienKetNguoiDungChucVu_NguoiDung">
+    <End Type="qltb_tieuhocModel.NguoiDung" Role="NguoiDung" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.LienKetNguoiDungChucVu" Role="LienKetNguoiDungChucVu" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NguoiDung">
+        <PropertyRef Name="NguoiDungId" />
+      </Principal>
+      <Dependent Role="LienKetNguoiDungChucVu">
+        <PropertyRef Name="NguoiDungId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LienKetNguoiNguoiDungPhongBan_NguoiDung">
+    <End Type="qltb_tieuhocModel.NguoiDung" Role="NguoiDung" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.LienKetNguoiNguoiDungPhongBan" Role="LienKetNguoiNguoiDungPhongBan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NguoiDung">
+        <PropertyRef Name="NguoiDungId" />
+      </Principal>
+      <Dependent Role="LienKetNguoiNguoiDungPhongBan">
+        <PropertyRef Name="NguoiDungId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LienKetNguoiNguoiDungPhongBan_PhongBan">
+    <End Type="qltb_tieuhocModel.PhongBan" Role="PhongBan" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.LienKetNguoiNguoiDungPhongBan" Role="LienKetNguoiNguoiDungPhongBan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PhongBan">
+        <PropertyRef Name="PhongBanId" />
+      </Principal>
+      <Dependent Role="LienKetNguoiNguoiDungPhongBan">
+        <PropertyRef Name="PhongBanId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LienKetThietBiPhieuMuon_PhieuMuon1">
+    <End Type="qltb_tieuhocModel.PhieuMuon" Role="PhieuMuon" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.LienKetThietBiPhieuMuon" Role="LienKetThietBiPhieuMuon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PhieuMuon">
+        <PropertyRef Name="MaPhieuMuon" />
+      </Principal>
+      <Dependent Role="LienKetThietBiPhieuMuon">
+        <PropertyRef Name="MaPhieuMuon" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LienKetThietBiPhieuMuon_ThietBi">
+    <End Type="qltb_tieuhocModel.ThietBi" Role="ThietBi" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.LienKetThietBiPhieuMuon" Role="LienKetThietBiPhieuMuon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ThietBi">
+        <PropertyRef Name="ThietBiId" />
+      </Principal>
+      <Dependent Role="LienKetThietBiPhieuMuon">
+        <PropertyRef Name="ThietBiId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LienKetTietHocPhieuMuon_PhieuMuon1">
+    <End Type="qltb_tieuhocModel.PhieuMuon" Role="PhieuMuon" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.LienKetTietHocPhieuMuon" Role="LienKetTietHocPhieuMuon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PhieuMuon">
+        <PropertyRef Name="MaPhieuMuon" />
+      </Principal>
+      <Dependent Role="LienKetTietHocPhieuMuon">
+        <PropertyRef Name="MaPhieuMuon" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LienKetTietHocPhieuMuon_TietHoc">
+    <End Type="qltb_tieuhocModel.TietHoc" Role="TietHoc" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.LienKetTietHocPhieuMuon" Role="LienKetTietHocPhieuMuon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TietHoc">
+        <PropertyRef Name="TietHocId" />
+      </Principal>
+      <Dependent Role="LienKetTietHocPhieuMuon">
+        <PropertyRef Name="TietHocId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PhieuMuon_LoaiPhieuMuon">
+    <End Type="qltb_tieuhocModel.LoaiPhieuMuon" Role="LoaiPhieuMuon" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.PhieuMuon" Role="PhieuMuon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LoaiPhieuMuon">
+        <PropertyRef Name="LoaiPhieuMuonId" />
+      </Principal>
+      <Dependent Role="PhieuMuon">
+        <PropertyRef Name="LoaiPhieuMuonId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ThietBi_LoaiThietBi">
+    <End Type="qltb_tieuhocModel.LoaiThietBi" Role="LoaiThietBi" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.ThietBi" Role="ThietBi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LoaiThietBi">
+        <PropertyRef Name="LoaiThietBiId" />
+      </Principal>
+      <Dependent Role="ThietBi">
+        <PropertyRef Name="LoaiThietBiId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ThietBiTieuChuan_LoaiThietBiTieuChuan">
+    <End Type="qltb_tieuhocModel.LoaiThietBiTieuChuan" Role="LoaiThietBiTieuChuan" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.ThietBiTieuChuan" Role="ThietBiTieuChuan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LoaiThietBiTieuChuan">
+        <PropertyRef Name="LoaiThietBiTieuChuanId" />
+      </Principal>
+      <Dependent Role="ThietBiTieuChuan">
+        <PropertyRef Name="LoaiThietBiTieuChuanId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LogPhieuMuon_PhieuMuon">
+    <End Type="qltb_tieuhocModel.PhieuMuon" Role="PhieuMuon" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.LogPhieuMuon" Role="LogPhieuMuon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PhieuMuon">
+        <PropertyRef Name="MaPhieuMuon" />
+      </Principal>
+      <Dependent Role="LogPhieuMuon">
+        <PropertyRef Name="MaPhieuMuon" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PhieuMuon_Lop">
+    <End Type="qltb_tieuhocModel.Lop" Role="Lop" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.PhieuMuon" Role="PhieuMuon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Lop">
+        <PropertyRef Name="LopId" />
+      </Principal>
+      <Dependent Role="PhieuMuon">
+        <PropertyRef Name="LopHocId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PhieuMuon_MonHoc">
+    <End Type="qltb_tieuhocModel.MonHoc" Role="MonHoc" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.PhieuMuon" Role="PhieuMuon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MonHoc">
+        <PropertyRef Name="MonHocId" />
+      </Principal>
+      <Dependent Role="PhieuMuon">
+        <PropertyRef Name="MonHocId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ThietBiTieuChuan_MonHocTieuChuan">
+    <End Type="qltb_tieuhocModel.MonHocTieuChuan" Role="MonHocTieuChuan" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.ThietBiTieuChuan" Role="ThietBiTieuChuan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MonHocTieuChuan">
+        <PropertyRef Name="MonHocTieuChuanId" />
+      </Principal>
+      <Dependent Role="ThietBiTieuChuan">
+        <PropertyRef Name="MonHocTieuChuanId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PhieuMuon_MucDichSuDung">
+    <End Type="qltb_tieuhocModel.MucDichSuDung" Role="MucDichSuDung" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.PhieuMuon" Role="PhieuMuon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MucDichSuDung">
+        <PropertyRef Name="MucDichSuDungId" />
+      </Principal>
+      <Dependent Role="PhieuMuon">
+        <PropertyRef Name="MucDichSuDungId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PhieuMuon_NguoiDung">
+    <End Type="qltb_tieuhocModel.NguoiDung" Role="NguoiDung" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.PhieuMuon" Role="PhieuMuon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NguoiDung">
+        <PropertyRef Name="NguoiDungId" />
+      </Principal>
+      <Dependent Role="PhieuMuon">
+        <PropertyRef Name="NguoiTao" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_QuyenTruyCap_NguoiDung">
+    <End Type="qltb_tieuhocModel.NguoiDung" Role="NguoiDung" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.QuyenTruyCap" Role="QuyenTruyCap" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NguoiDung">
+        <PropertyRef Name="NguoiDungId" />
+      </Principal>
+      <Dependent Role="QuyenTruyCap">
+        <PropertyRef Name="NguoiTao" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PhieuGhiHongThietBi_TrangThaiHongMat">
+    <End Type="qltb_tieuhocModel.TrangThaiHongMat" Role="TrangThaiHongMat" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.PhieuGhiHongThietBi" Role="PhieuGhiHongThietBi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TrangThaiHongMat">
+        <PropertyRef Name="TrangThaiHongMatId" />
+      </Principal>
+      <Dependent Role="PhieuGhiHongThietBi">
+        <PropertyRef Name="TrangThaiHongMatId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PhieuGhiMatThietBi_TrangThaiHongMat">
+    <End Type="qltb_tieuhocModel.TrangThaiHongMat" Role="TrangThaiHongMat" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.PhieuGhiMatThietBi" Role="PhieuGhiMatThietBi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TrangThaiHongMat">
+        <PropertyRef Name="TrangThaiHongMatId" />
+      </Principal>
+      <Dependent Role="PhieuGhiMatThietBi">
+        <PropertyRef Name="TrangThaiHongMatId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PhieuMuon_TrangThaiPhieuMuon">
+    <End Type="qltb_tieuhocModel.TrangThaiPhieuMuon" Role="TrangThaiPhieuMuon" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.PhieuMuon" Role="PhieuMuon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TrangThaiPhieuMuon">
+        <PropertyRef Name="TrangThaiId" />
+      </Principal>
+      <Dependent Role="PhieuMuon">
+        <PropertyRef Name="TrangThaiPhieuMuonId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ThietBiTieuChuan_TieuChuanCoSoVatChat">
+    <End Type="qltb_tieuhocModel.TieuChuanCoSoVatChat" Role="TieuChuanCoSoVatChat" Multiplicity="0..1" />
+    <End Type="qltb_tieuhocModel.ThietBiTieuChuan" Role="ThietBiTieuChuan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TieuChuanCoSoVatChat">
+        <PropertyRef Name="TieuChuanCoSoVatChatId" />
+      </Principal>
+      <Dependent Role="ThietBiTieuChuan">
+        <PropertyRef Name="TieuChuanCoSoVatChatId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

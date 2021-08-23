@@ -1,0 +1,314 @@
+﻿@using qltb.Data.ResVMs
+@model ListWithPaginationResVM
+@{
+    ViewBag.Title = "Loại phụ trách";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var SuccessNotification = TempData["SUCCESS"];
+    var WarningNotification = TempData["WARNING"];
+
+    // get ten tinh param
+    string TenLoaiPhuTrachQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("TenLoaiPhuTrach", out TenLoaiPhuTrachQueryParam);
+}
+<div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm mới loại phụ trách</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-loai-phu-trach-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Mã loại phụ trách</label>
+                                <input type="text" class="form-control" name="MaLoaiPhuTrach" />
+                            </div>
+                            <div class="form-group">
+                                <label>Tên loại phụ trách</label>
+                                <input type="text" class="form-control" name="TenLoaiPhuTrach" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="add-loai-phu-trach-btn">Thêm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-loai-phu-trach-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Mã loại phụ trách</label>
+                                <input type="text" class="form-control" name="MaLoaiPhuTrach" />
+                            </div>
+                            <div class="form-group">
+                                <label>Tên loại phụ trách</label>
+                                <input type="text" class="form-control" name="TenLoaiPhuTrach" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="update-loai-phu-trach-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bạn có chắc chắn muốn xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="delete-loai-phu-trach-btn">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto"> Danh sách loại phụ trách</h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="#" type="button" onclick="Add()" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới</span></a>
+    </div><!-- /.btn-toolbar -->
+</div>
+<div class="page-section">
+    <div class="row">
+        @*<div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <button onclick="Search()" class="btn btn-sm btn-outline-info">Tìm kiếm</button>
+                    <div class="float-right">
+                        <button class="btn btn-sm btn-primary" onclick="Add()">Thêm mới</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="search-loai-phu-trach-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Tên loại phụ trách</label>
+                                    <input class="form-control" type="text" name="TenLoaiPhuTrach" placeholder="Tên loại phụ trách..." value="@TenLoaiPhuTrachQueryParam" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>*@
+
+        <div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <form id="search-loai-phu-trach-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="TenLoaiPhuTrach" placeholder="Tên loại phụ trách..." value="@TenLoaiPhuTrachQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <button onclick="Search()" class="btn btn-primary">Tìm kiếm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body" style="overflow-x: auto">
+                    <div class="table-responsive" style="min-width: 1000px">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã loại phụ trách</th>
+                                    <th>Tên loại phụ trách</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var loaiPhuTrachResVM in (List<LoaiPhuTrachResVM>)Model.Objects)
+                                    {
+                                        <tr>
+                                            <td>@loaiPhuTrachResVM.STT</td>
+                                            <td><code>@loaiPhuTrachResVM.MaLoaiPhuTrach</code></td>
+                                            <td>@loaiPhuTrachResVM.TenLoaiPhuTrach</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-info" onclick="Edit('@(loaiPhuTrachResVM.LoaiPhuTrachId)')"><i class="fas fa-pencil"></i></button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="Delete('@(loaiPhuTrachResVM.LoaiPhuTrachId)')"><i class="fas fa-trash-alt"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <ul class="pagination justify-content-center mt-4">
+                            @{
+                                foreach (var paginationResVM in (List<PaginationResVM>)Model.Paginations)
+                                {
+                                    <li class="page-item @(paginationResVM.IsActived.Value ? "active":  "") @(paginationResVM.IsDisabled.Value ? "disabled":  "")">
+                                        <a class="page-link" href="/tu-dien/loai-phu-trach@(paginationResVM.Url)" tabindex="-1">@Html.Raw(paginationResVM.Text)</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/assets/javascript/hanhnd_1.js"></script>
+    <script>
+        function Add() {
+            $('#add-modal').modal('show');
+            $('#add-loai-phu-trach-form input[name=MaLoaiPhuTrach]').val('');
+            $('#add-loai-phu-trach-form input[name=TenLoaiPhuTrach]').val('');
+            $("#add-loai-phu-trach-btn").unbind();
+            $("#add-loai-phu-trach-btn").click(function () {
+                AddLoaiPhuTrach();
+            });
+        }
+
+        function Edit(loaiPhuTrachId) {
+            $.ajax({
+                url: "/tu-dien/thong-tin-loai-phu-trach",
+                data: {
+                    loaiPhuTrachId: loaiPhuTrachId
+                },
+                type: "get",
+                success: function (response) {
+                    if (response) {
+                        setTimeout(function () {
+                            $('#edit-modal').modal('show');
+                            $('#editModalLabel').html(response.TenLoaiPhuTrach)
+                            $('#edit-loai-phu-trach-form input[name=MaLoaiPhuTrach]').val(response.MaLoaiPhuTrach);
+                            $('#edit-loai-phu-trach-form input[name=TenLoaiPhuTrach]').val(response.TenLoaiPhuTrach);
+                            $("#update-loai-phu-trach-btn").unbind();
+                            $("#update-loai-phu-trach-btn").click(function () {
+                                UpdateLoaiPhuTrach(response.LoaiPhuTrachId);
+                            });
+                        }, 500);
+                    }
+                    else {
+                        setTimeout(function () { toastr["warning"]('Không tìm thấy dữ liệu') }, 500)
+                    }
+
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Delete(loaiPhuTrachId) {
+            $('#delete-modal').modal('show');
+            $("#delete-loai-phu-trach-btn").unbind();
+            $("#delete-loai-phu-trach-btn").click(function () {
+                DeleteLoaiPhuTrach(loaiPhuTrachId);
+            });
+        }
+
+        function DeleteLoaiPhuTrach(loaiPhuTrachId) {
+            console.log(loaiPhuTrachId)
+            $.ajax({
+                url: "/tu-dien/xoa-thong-tin-loai-phu-trach",
+                data: {
+                    LoaiPhuTrachId: loaiPhuTrachId
+                },
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function UpdateLoaiPhuTrach(loaiPhuTrachId) {
+            let data = {
+                LoaiPhuTrachId: loaiPhuTrachId
+            }
+            $('#edit-loai-phu-trach-form').serializeArray().forEach(ele => {
+                data[ele.name] = ele.value
+            })
+
+            $.ajax({
+                url: "/tu-dien/cap-nhat-thong-tin-loai-phu-trach",
+                data: data,
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function AddLoaiPhuTrach() {
+            let data = {}
+            $('#add-loai-phu-trach-form').serializeArray().forEach(ele => {
+                data[ele.name] = ele.value
+            })
+
+            $.ajax({
+                url: "/tu-dien/them-thong-tin-loai-phu-trach",
+                data: data,
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Search() {
+            let queryParams = $('#search-loai-phu-trach-form').serialize();
+            console.log(queryParams);
+            location.replace("/tu-dien/loai-phu-trach?" + queryParams);
+        }
+
+        $(document).ready(function () {
+            if ('@(SuccessNotification)') {
+                toastr["success"]('@(SuccessNotification)')
+            }
+            else if ('@(WarningNotification)') {
+                toastr["warning"]('@(WarningNotification)')
+            }
+
+            $("#search-loai-phu-trach-form").submit(function (e) {
+                e.preventDefault();
+            })
+        })
+    </script>
+}

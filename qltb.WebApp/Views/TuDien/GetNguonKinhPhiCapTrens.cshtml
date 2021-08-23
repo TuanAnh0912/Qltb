@@ -1,0 +1,314 @@
+﻿@using qltb.Data.ResVMs
+@model ListWithPaginationResVM
+@{
+    ViewBag.Title = "Nguồn kinh phí cấp trên";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var SuccessNotification = TempData["SUCCESS"];
+    var WarningNotification = TempData["WARNING"];
+
+    // get ten tinh param
+    string TenNguonKinhPhiCapTrenQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("TenNguonKinhPhiCapTren", out TenNguonKinhPhiCapTrenQueryParam);
+}
+<div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm mới nguồn kinh phí cấp trên</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-nguon-kinh-phi-cap-tren-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Mã nguồn kinh phí cấp trên</label>
+                                <input type="text" class="form-control" name="MaNguonKinhPhiCapTren" />
+                            </div>
+                            <div class="form-group">
+                                <label>Tên nguồn kinh phí cấp trên</label>
+                                <input type="text" class="form-control" name="TenNguonKinhPhiCapTren" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="add-nguon-kinh-phi-cap-tren-btn">Thêm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-nguon-kinh-phi-cap-tren-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Mã nguồn kinh phí cấp trên</label>
+                                <input type="text" class="form-control" name="MaNguonKinhPhiCapTren" />
+                            </div>
+                            <div class="form-group">
+                                <label>Tên nguồn kinh phí cấp trên</label>
+                                <input type="text" class="form-control" name="TenNguonKinhPhiCapTren" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="update-nguon-kinh-phi-cap-tren-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bạn có chắc chắn muốn xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="delete-nguon-kinh-phi-cap-tren-btn">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto">Danh sách nguồn kinh phí cấp trên</h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="#" type="button" onclick="Add()" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới</span></a>
+    </div><!-- /.btn-toolbar -->
+</div>
+<div class="page-section">
+    <div class="row">
+        @*<div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <button onclick="Search()" class="btn btn-sm btn-outline-info">Tìm kiếm</button>
+                    <div class="float-right">
+                        <button class="btn btn-sm btn-primary" onclick="Add()">Thêm mới</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="search-nguon-kinh-phi-cap-tren-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Tên nguồn kinh phí cấp trên</label>
+                                    <input class="form-control" type="text" name="TenNguonKinhPhiCapTren" placeholder="Tên nguồn kinh phí cấp trên..." value="@TenNguonKinhPhiCapTrenQueryParam" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>*@
+
+        <div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <form id="search-nguon-kinh-phi-cap-tren-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="TenNguonKinhPhiCapTren" placeholder="Tên nguồn kinh phí cấp trên..." value="@TenNguonKinhPhiCapTrenQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <button onclick="Search()" class="btn btn-primary">Tìm kiếm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body" style="overflow-x: auto">
+                    <div class="table-responsive" style="min-width: 1000px">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã nguồn kinh phí cấp trên</th>
+                                    <th>Tên nguồn kinh phí cấp trên</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var nguonKinhPhiCapTrenResVM in (List<NguonKinhPhiCapTrenResVM>)Model.Objects)
+                                    {
+                                        <tr>
+                                            <td>@nguonKinhPhiCapTrenResVM.STT</td>
+                                            <td><code>@nguonKinhPhiCapTrenResVM.MaNguonKinhPhiCapTren</code></td>
+                                            <td>@nguonKinhPhiCapTrenResVM.TenNguonKinhPhiCapTren</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-info" onclick="Edit('@(nguonKinhPhiCapTrenResVM.NguonKinhPhiCapTrenId)')"><i class="fas fa-pencil"></i></button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="Delete('@(nguonKinhPhiCapTrenResVM.NguonKinhPhiCapTrenId)')"><i class="fas fa-trash-alt"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <ul class="pagination justify-content-center mt-4">
+                            @{
+                                foreach (var paginationResVM in (List<PaginationResVM>)Model.Paginations)
+                                {
+                                    <li class="page-item @(paginationResVM.IsActived.Value ? "active":  "") @(paginationResVM.IsDisabled.Value ? "disabled":  "")">
+                                        <a class="page-link" href="/tu-dien/nguon-kinh-phi-cap-tren@(paginationResVM.Url)" tabindex="-1">@Html.Raw(paginationResVM.Text)</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/assets/javascript/hanhnd_1.js"></script>
+    <script>
+        function Add() {
+            $('#add-modal').modal('show');
+            $('#add-nguon-kinh-phi-cap-tren-form input[name=MaNguonKinhPhiCapTren]').val('');
+            $('#add-nguon-kinh-phi-cap-tren-form input[name=TenNguonKinhPhiCapTren]').val('');
+            $("#add-nguon-kinh-phi-cap-tren-btn").unbind();
+            $("#add-nguon-kinh-phi-cap-tren-btn").click(function () {
+                AddNguonKinhPhiCapTren();
+            });
+        }
+
+        function Edit(nguonKinhPhiCapTrenId) {
+            $.ajax({
+                url: "/tu-dien/thong-tin-nguon-kinh-phi-cap-tren",
+                data: {
+                    nguonKinhPhiCapTrenId: nguonKinhPhiCapTrenId
+                },
+                type: "get",
+                success: function (response) {
+                    if (response) {
+                        setTimeout(function () {
+                            $('#edit-modal').modal('show');
+                            $('#editModalLabel').html(response.TenNguonKinhPhiCapTren)
+                            $('#edit-nguon-kinh-phi-cap-tren-form input[name=MaNguonKinhPhiCapTren]').val(response.MaNguonKinhPhiCapTren);
+                            $('#edit-nguon-kinh-phi-cap-tren-form input[name=TenNguonKinhPhiCapTren]').val(response.TenNguonKinhPhiCapTren);
+                            $("#update-nguon-kinh-phi-cap-tren-btn").unbind();
+                            $("#update-nguon-kinh-phi-cap-tren-btn").click(function () {
+                                UpdateNguonKinhPhiCapTren(response.NguonKinhPhiCapTrenId);
+                            });
+                        }, 500);
+                    }
+                    else {
+                        setTimeout(function () { toastr["warning"]('Không tìm thấy dữ liệu') }, 500)
+                    }
+
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Delete(nguonKinhPhiCapTrenId) {
+            $('#delete-modal').modal('show');
+            $("#delete-nguon-kinh-phi-cap-tren-btn").unbind();
+            $("#delete-nguon-kinh-phi-cap-tren-btn").click(function () {
+                DeleteNguonKinhPhiCapTren(nguonKinhPhiCapTrenId);
+            });
+        }
+
+        function DeleteNguonKinhPhiCapTren(nguonKinhPhiCapTrenId) {
+            console.log(nguonKinhPhiCapTrenId)
+            $.ajax({
+                url: "/tu-dien/xoa-thong-tin-nguon-kinh-phi-cap-tren",
+                data: {
+                    NguonKinhPhiCapTrenId: nguonKinhPhiCapTrenId
+                },
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function UpdateNguonKinhPhiCapTren(nguonKinhPhiCapTrenId) {
+            let data = {
+                NguonKinhPhiCapTrenId: nguonKinhPhiCapTrenId
+            }
+            $('#edit-nguon-kinh-phi-cap-tren-form').serializeArray().forEach(ele => {
+                data[ele.name] = ele.value
+            })
+
+            $.ajax({
+                url: "/tu-dien/cap-nhat-thong-tin-nguon-kinh-phi-cap-tren",
+                data: data,
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function AddNguonKinhPhiCapTren() {
+            let data = {}
+            $('#add-nguon-kinh-phi-cap-tren-form').serializeArray().forEach(ele => {
+                data[ele.name] = ele.value
+            })
+
+            $.ajax({
+                url: "/tu-dien/them-thong-tin-nguon-kinh-phi-cap-tren",
+                data: data,
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Search() {
+            let queryParams = $('#search-nguon-kinh-phi-cap-tren-form').serialize();
+            console.log(queryParams);
+            location.replace("/tu-dien/nguon-kinh-phi-cap-tren?" + queryParams);
+        }
+
+        $(document).ready(function () {
+            if ('@(SuccessNotification)') {
+                toastr["success"]('@(SuccessNotification)')
+            }
+            else if ('@(WarningNotification)') {
+                toastr["warning"]('@(WarningNotification)')
+            }
+
+            $("#search-nguon-kinh-phi-cap-tren-form").submit(function (e) {
+                e.preventDefault();
+            })
+        })
+    </script>
+}

@@ -1,0 +1,65 @@
+﻿@model IEnumerable<qltb.Data.KhoPhong>
+@{
+    ViewBag.Title = "Danh sách phòng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<header class="page-title-bar">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/quan-ly-phong/tat-ca-loai-phong"><i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Quản lý phòng</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <a href="#">Khối phòng học tập</a>
+            </li>
+        </ol>
+    </nav>
+    <h1 class="page-title"> Khối phòng học tập </h1>
+</header>
+<div class="page-section">
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>MÃ PHÒNG</th>
+                            <th>TÊN PHÒNG</th>
+                            <th>DIỆN TÍCH</th>
+                            <th>NĂM ĐƯA VÀO SỬ DỤNG</th>
+                            <th width="12%">TRẠNG THÁI</th>
+                            <th width="10%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <h5 class="mb-0">
+                                        <code>
+                                            <b>@item.MaKhoPhong</b>
+                                        </code>
+                                    </h5>
+                                </td>
+                                <td>
+                                    <b>@item.TenKhoPhong</b>
+                                </td>
+                                <td>100m2</td>
+                                <td>2021</td>
+                                <td>
+                                    <span class="badge badge-subtle badge-@item.TrangTraiPhong.MaMau"><span class="oi oi-media-record mr-1"></span>@item.TrangTraiPhong.TenTrangThai</span>
+                                </td>
+                                <td class="text-right">
+                                    <a href="/StorageRoom/Equipment?storage_id=@item.KhoPhongId" class="btn btn-sm btn-subtle-info"><i class="far fa-info-circle mr-1"></i> Chi tiết</a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

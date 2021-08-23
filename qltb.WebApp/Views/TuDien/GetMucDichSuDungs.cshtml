@@ -1,0 +1,315 @@
+﻿@using qltb.Data.ResVMs
+@model ListWithPaginationResVM
+@{
+    ViewBag.Title = "Mục đích sử dụng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var SuccessNotification = TempData["SUCCESS"];
+    var WarningNotification = TempData["WARNING"];
+
+    // get ten tinh param
+    string TenMucDichSuDungQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("TenMucDichSuDung", out TenMucDichSuDungQueryParam);
+}
+<div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm mới mục đích sử dụng</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-muc-dich-su-dung-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Mã mục đích sử dụng</label>
+                                <input type="text" class="form-control" name="MaMucDichSuDung" />
+                            </div>
+                            <div class="form-group">
+                                <label>Tên mục đích sử dụng</label>
+                                <input type="text" class="form-control" name="TenMucDichSuDung" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="add-muc-dich-su-dung-btn">Thêm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-muc-dich-su-dung-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Mã mục đích sử dụng</label>
+                                <input type="text" class="form-control" name="MaMucDichSuDung" />
+                            </div>
+                            <div class="form-group">
+                                <label>Tên mục đích sử dụng</label>
+                                <input type="text" class="form-control" name="TenMucDichSuDung" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="update-muc-dich-su-dung-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bạn có chắc chắn muốn xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="delete-muc-dich-su-dung-btn">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto"> Danh sách mục đích sử dụng</h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="#" type="button" onclick="Add()" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới</span></a>
+    </div><!-- /.btn-toolbar -->
+</div>
+<div class="page-section">
+    
+    <div class="row">
+        @*<div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <button onclick="Search()" class="btn btn-sm btn-outline-info">Tìm kiếm</button>
+                    <div class="float-right">
+                        <button class="btn btn-sm btn-primary" onclick="Add()">Thêm mới</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="search-muc-dich-su-dung-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Tên mục đích sử dụng</label>
+                                    <input class="form-control" type="text" name="TenMucDichSuDung" placeholder="Tên mục đích sử dụng..." value="@TenMucDichSuDungQueryParam" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>*@
+
+        <div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <form id="search-muc-dich-su-dung-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="TenMucDichSuDung" placeholder="Tên mục đích sử dụng..." value="@TenMucDichSuDungQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <button onclick="Search()" class="btn btn-primary">Tìm kiếm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body" style="overflow-x: auto">
+                    <div class="table-responsive" style="min-width: 1000px">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã mục đích sử dụng</th>
+                                    <th>Tên mục đích sử dụng</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var mucDichSuDungResVM in (List<MucDichSuDungResVM>)Model.Objects)
+                                    {
+                                        <tr>
+                                            <td>@mucDichSuDungResVM.STT</td>
+                                            <td><code>@mucDichSuDungResVM.MaMucDichSuDung</code></td>
+                                            <td>@mucDichSuDungResVM.TenMucDichSuDung</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-info" onclick="Edit('@(mucDichSuDungResVM.MucDichSuDungId)')"><i class="fas fa-pencil"></i></button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="Delete('@(mucDichSuDungResVM.MucDichSuDungId)')"><i class="fas fa-trash-alt"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <ul class="pagination justify-content-center mt-4">
+                            @{
+                                foreach (var paginationResVM in (List<PaginationResVM>)Model.Paginations)
+                                {
+                                    <li class="page-item @(paginationResVM.IsActived.Value ? "active":  "") @(paginationResVM.IsDisabled.Value ? "disabled":  "")">
+                                        <a class="page-link" href="/tu-dien/muc-dich-su-dung@(paginationResVM.Url)" tabindex="-1">@Html.Raw(paginationResVM.Text)</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/assets/javascript/hanhnd_1.js"></script>
+    <script>
+        function Add() {
+            $('#add-modal').modal('show');
+            $('#add-muc-dich-su-dung-form input[name=MaMucDichSuDung]').val('');
+            $('#add-muc-dich-su-dung-form input[name=TenMucDichSuDung]').val('');
+            $("#add-muc-dich-su-dung-btn").unbind();
+            $("#add-muc-dich-su-dung-btn").click(function () {
+                AddMucDichSuDung();
+            });
+        }
+
+        function Edit(mucDichSuDungId) {
+            $.ajax({
+                url: "/tu-dien/thong-tin-muc-dich-su-dung",
+                data: {
+                    mucDichSuDungId: mucDichSuDungId
+                },
+                type: "get",
+                success: function (response) {
+                    if (response) {
+                        setTimeout(function () {
+                            $('#edit-modal').modal('show');
+                            $('#editModalLabel').html(response.TenMucDichSuDung)
+                            $('#edit-muc-dich-su-dung-form input[name=MaMucDichSuDung]').val(response.MaMucDichSuDung);
+                            $('#edit-muc-dich-su-dung-form input[name=TenMucDichSuDung]').val(response.TenMucDichSuDung);
+                            $("#update-muc-dich-su-dung-btn").unbind();
+                            $("#update-muc-dich-su-dung-btn").click(function () {
+                                UpdateMucDichSuDung(response.MucDichSuDungId);
+                            });
+                        }, 500);
+                    }
+                    else {
+                        setTimeout(function () { toastr["warning"]('Không tìm thấy dữ liệu') }, 500)
+                    }
+
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Delete(mucDichSuDungId) {
+            $('#delete-modal').modal('show');
+            $("#delete-muc-dich-su-dung-btn").unbind();
+            $("#delete-muc-dich-su-dung-btn").click(function () {
+                DeleteMucDichSuDung(mucDichSuDungId);
+            });
+        }
+
+        function DeleteMucDichSuDung(mucDichSuDungId) {
+            console.log(mucDichSuDungId)
+            $.ajax({
+                url: "/tu-dien/xoa-thong-tin-muc-dich-su-dung",
+                data: {
+                    MucDichSuDungId: mucDichSuDungId
+                },
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function UpdateMucDichSuDung(mucDichSuDungId) {
+            let data = {
+                MucDichSuDungId: mucDichSuDungId
+            }
+            $('#edit-muc-dich-su-dung-form').serializeArray().forEach(ele => {
+                data[ele.name] = ele.value
+            })
+
+            $.ajax({
+                url: "/tu-dien/cap-nhat-thong-tin-muc-dich-su-dung",
+                data: data,
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function AddMucDichSuDung() {
+            let data = {}
+            $('#add-muc-dich-su-dung-form').serializeArray().forEach(ele => {
+                data[ele.name] = ele.value
+            })
+
+            $.ajax({
+                url: "/tu-dien/them-thong-tin-muc-dich-su-dung",
+                data: data,
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Search() {
+            let queryParams = $('#search-muc-dich-su-dung-form').serialize();
+            console.log(queryParams);
+            location.replace("/tu-dien/muc-dich-su-dung?" + queryParams);
+        }
+
+        $(document).ready(function () {
+            if ('@(SuccessNotification)') {
+                toastr["success"]('@(SuccessNotification)')
+            }
+            else if ('@(WarningNotification)') {
+                toastr["warning"]('@(WarningNotification)')
+            }
+
+            $("#search-muc-dich-su-dung-form").submit(function (e) {
+                e.preventDefault();
+            })
+        })
+    </script>
+}

@@ -1,0 +1,235 @@
+﻿@using qltb.Data.ResVMs
+@model ListWithPaginationResVM
+@{
+    ViewBag.Title = "Danh sách phiếu đề nghị mua sắm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var SuccessNotification = TempData["SUCCESS"];
+    var WarningNotification = TempData["WARNING"];
+
+    string SoPhieuQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("SoPhieu", out SoPhieuQueryParam);
+
+    string TuNgayQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("TuNgay", out TuNgayQueryParam);
+
+    string DenNgayQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("DenNgay", out DenNgayQueryParam);
+
+    string DaXuLyQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("DaXuLy", out DaXuLyQueryParam);
+}
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bạn có chắc chắn muốn xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="delete-phieu-de-nghi-mua-sam-btn">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto"> Danh sách phiếu đề nghị mua sắm</h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="/quan-ly-thiet-bi/them-thong-tin-phieu-de-nghi-mua-sam" type="button" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới</span></a>
+    </div><!-- /.btn-toolbar -->
+</div>
+<div class="page-section">
+    
+    <div class="row">
+        @*<div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <button onclick="Search()" class="btn btn-sm btn-outline-info">Tìm kiếm</button>
+                    <div class="float-right">
+                        <a class="btn btn-sm btn-primary" href="/quan-ly-thiet-bi/them-thong-tin-phieu-de-nghi-mua-sam">Thêm mới</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="search-phieu-de-nghi-mua-sam-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Tên phiếu đề nghị mua sắm</label>
+                                    <input class="form-control" type="text" name="SoPhieu" placeholder="Số phiếu..." value="@SoPhieuQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Từ ngày</label>
+                                    <input class="form-control" type="date" name="TuNgay" placeholder="dd-mm-yyyy" value="@TuNgayQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Đến ngày</label>
+                                    <input class="form-control" type="date" name="DenNgay" value="@DenNgayQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label class="control-label">Trạng thái</label>
+                                    <select class="form-control" name="DaXuLy" data-toggle="select2" data-placeholder="Chọn trạng thái" data-allow-clear="true">
+                                        <option value="0">Chưa xử lý</option>
+                                        <option value="1">Đã xử lý</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>*@
+
+        <div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <form id="search-phieu-de-nghi-mua-sam-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Tên phiếu đề nghị mua sắm</label>
+                                    <input class="form-control" type="text" name="SoPhieu" placeholder="Số phiếu..." value="@SoPhieuQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Từ ngày</label>
+                                    <input class="form-control" type="date" name="TuNgay" placeholder="dd-mm-yyyy" value="@TuNgayQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Đến ngày</label>
+                                    <input class="form-control" type="date" name="DenNgay" value="@DenNgayQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label class="control-label">Trạng thái</label>
+                                    <select class="form-control" name="DaXuLy" data-toggle="select2" data-placeholder="Chọn trạng thái" data-allow-clear="true">
+                                        <option value="0">Chưa xử lý</option>
+                                        <option value="1">Đã xử lý</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <button onclick="Search()" class="btn btn-primary">Tìm kiếm</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" style="overflow-x: auto">
+                    <div class="table-responsive" style="min-width: 1000px">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Số phiếu</th>
+                                    <th>Ngày lập</th>
+                                    <th>Nội dung</th>
+                                    <th>Người tạo</th>
+                                    <th>Chốt phiếu</th>
+                                    <th>Trạng thái</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var phieuDeNghiMuaSamResVM in (List<PhieuDeNghiMuaSamResVM>)Model.Objects)
+                                    {
+                                        <tr>
+                                            <td>@phieuDeNghiMuaSamResVM.STT</td>
+                                            <td><code>@phieuDeNghiMuaSamResVM.SoPhieu</code></td>
+                                            <td>@(phieuDeNghiMuaSamResVM.NgayLap.HasValue ? phieuDeNghiMuaSamResVM.NgayLap.Value.ToString("dd/MM/yyyy") : "")</td>
+                                            <td>@phieuDeNghiMuaSamResVM.NoiDung</td>
+                                            <td>@phieuDeNghiMuaSamResVM.HoTen</td>
+                                            <td>@(phieuDeNghiMuaSamResVM.ChotPhieu.Value ? "Đã chốt" : "Chưa chốt")</td>
+                                            <td>@(phieuDeNghiMuaSamResVM.DaXuLy.Value ? "Đã xử lý" : "Chưa xử lý")</td>
+                                            
+                                            <td>
+                                                <a class="btn btn-sm btn-outline-info" href="/quan-ly-thiet-bi/thong-tin-phieu-de-nghi-mua-sam?phieuDeNghiMuaSamId=@(phieuDeNghiMuaSamResVM.PhieuDeNghiMuaSamId)"><i class="fas fa-pencil"></i></a>
+                                                @if (!phieuDeNghiMuaSamResVM.ChotPhieu.Value)
+                                                {
+                                                    <button class="btn btn-sm btn-outline-danger" onclick="Delete('@(phieuDeNghiMuaSamResVM.PhieuDeNghiMuaSamId)')"><i class="fas fa-trash-alt"></i></button>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <ul class="pagination justify-content-center mt-4">
+                            @{
+                                foreach (var paginationResVM in (List<PaginationResVM>)Model.Paginations)
+                                {
+                                    <li class="page-item @(paginationResVM.IsActived.Value ? "active":  "") @(paginationResVM.IsDisabled.Value ? "disabled":  "")">
+                                        <a class="page-link" href="/quan-ly-thiet-bi/phieu-de-nghi-mua-sam@(paginationResVM.Url)" tabindex="-1">@Html.Raw(paginationResVM.Text)</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/assets/javascript/hanhnd_1.js"></script>
+    <script>
+        function Delete(PhieuDeNghiMuaSamId) {
+            $('#delete-modal').modal('show');
+            $("#delete-phieu-de-nghi-mua-sam-btn").click(function () {
+                DeletePhieuDeNghiMuaSam(PhieuDeNghiMuaSamId);
+            });
+        }
+
+        function DeletePhieuDeNghiMuaSam(PhieuDeNghiMuaSamId) {
+            console.log(PhieuDeNghiMuaSamId)
+            $.ajax({
+                url: "/quan-ly-thiet-bi/xoa-thong-tin-phieu-de-nghi-mua-sam",
+                data: {
+                    PhieuDeNghiMuaSamId: PhieuDeNghiMuaSamId
+                },
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Search() {
+            let queryParams = $('#search-phieu-de-nghi-mua-sam-form').serialize();
+            location.replace("/quan-ly-thiet-bi/danh-sach-phieu-de-nghi-mua-sam?" + queryParams);
+        }
+
+        $(document).ready(function () {
+            if ('@(SuccessNotification)') {
+                toastr["success"]('@(SuccessNotification)')
+            }
+            else if ('@(WarningNotification)') {
+                toastr["warning"]('@(WarningNotification)')
+            }
+
+            $("#search-phieu-de-nghi-mua-sam-form select[name=DaXuLy]").val('@(DaXuLyQueryParam)').trigger('change')
+
+            $("#search-phieu-de-nghi-mua-sam-form").submit(function (e) {
+                e.preventDefault();
+            })
+        })
+    </script>
+}

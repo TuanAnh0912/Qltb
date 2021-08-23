@@ -1,0 +1,212 @@
+﻿@using qltb.Data.ResVMs
+@model ListWithPaginationResVM
+@{
+    ViewBag.Title = "Danh sách phiếu ghi mất thiết bị";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var SuccessNotification = TempData["SUCCESS"];
+    var WarningNotification = TempData["WARNING"];
+
+    string SoPhieuQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("SoPhieu", out SoPhieuQueryParam);
+
+    string TuNgayQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("TuNgay", out TuNgayQueryParam);
+
+    string DenNgayQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("DenNgay", out DenNgayQueryParam);
+}
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bạn có chắc chắn muốn xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="delete-phieu-ghi-mat-thiet-bi-btn">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto"> Danh sách phiếu ghi mất thiết bị</h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="/quan-ly-thiet-bi/them-thong-tin-phieu-ghi-mat-thiet-bi" type="button" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới</span></a>
+    </div><!-- /.btn-toolbar -->
+</div>
+<div class="page-section">
+    @*<header class="page-title-bar">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active">
+                    <a href="#">Danh sách phiếu ghi mất thiết bị</a>
+                </li>
+            </ol>
+        </nav>
+    </header>*@
+    <div class="row">
+        @*<div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <button onclick="Search()" class="btn btn-sm btn-outline-info">Tìm kiếm</button>
+                    <div class="float-right">
+                        <a class="btn btn-sm btn-primary" href="/quan-ly-thiet-bi/them-thong-tin-phieu-ghi-mat-thiet-bi">Thêm mới</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="search-phieu-ghi-mat-bi-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Tên phiếu ghi mất thiết bị</label>
+                                    <input class="form-control" type="text" name="SoPhieu" placeholder="Số phiếu..." value="@SoPhieuQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Từ ngày</label>
+                                    <input class="form-control" type="date" name="TuNgay" placeholder="dd-mm-yyyy" value="@TuNgayQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Đến ngày</label>
+                                    <input class="form-control" type="date" name="DenNgay" value="@DenNgayQueryParam" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>*@
+
+        <div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <form id="search-phieu-ghi-mat-bi-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Tên phiếu ghi mất thiết bị</label>
+                                    <input class="form-control" type="text" name="SoPhieu" placeholder="Số phiếu..." value="@SoPhieuQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Từ ngày</label>
+                                    <input class="form-control" type="date" name="TuNgay" placeholder="dd-mm-yyyy" value="@TuNgayQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Đến ngày</label>
+                                    <input class="form-control" type="date" name="DenNgay" value="@DenNgayQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12" style="display: flex;align-items: flex-end;">
+                                <div class="form-group">
+                                    <button onclick="Search()" class="btn btn-primary">Tìm kiếm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body" style="overflow-x: auto">
+                    <div class="table-responsive" style="min-width: 1000px">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Số phiếu</th>
+                                    <th>Ngày lập</th>
+                                    <th>Nội dung</th>
+                                    <th>Người tạo</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var phieuGhiMatThietBiResVM in (List<PhieuGhiMatThietBiResVM>)Model.Objects)
+                                    {
+                                        <tr>
+                                            <td>@phieuGhiMatThietBiResVM.STT</td>
+                                            <td>@phieuGhiMatThietBiResVM.SoPhieu</td>
+                                            <td>@(phieuGhiMatThietBiResVM.NgayLap.HasValue ? phieuGhiMatThietBiResVM.NgayLap.Value.ToString("dd/MM/yyyy") : "")</td>
+                                            <td>@phieuGhiMatThietBiResVM.NoiDung</td>
+                                            <td>@phieuGhiMatThietBiResVM.HoTen</td>
+                                            <td>
+                                                <a class="btn btn-sm btn-outline-info" href="/quan-ly-thiet-bi/thong-tin-phieu-ghi-mat-thiet-bi?phieuGhiMatThietBiId=@(phieuGhiMatThietBiResVM.PhieuGhiMatThietBiId)"><i class="fas fa-pencil"></i></a>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="Delete('@(phieuGhiMatThietBiResVM.PhieuGhiMatThietBiId)')"><i class="fas fa-trash-alt"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <ul class="pagination justify-content-center mt-4">
+                            @{
+                                foreach (var paginationResVM in (List<PaginationResVM>)Model.Paginations)
+                                {
+                                    <li class="page-item @(paginationResVM.IsActived.Value ? "active":  "") @(paginationResVM.IsDisabled.Value ? "disabled":  "")">
+                                        <a class="page-link" href="/quan-ly-thiet-bi/phieu-ghi-mat-thiet-bi@(paginationResVM.Url)" tabindex="-1">@Html.Raw(paginationResVM.Text)</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/assets/javascript/hanhnd_1.js"></script>
+    <script>
+        function Delete(PhieuGhiMatThietBiId) {
+            $('#delete-modal').modal('show');
+            $("#delete-phieu-ghi-mat-thiet-bi-btn").click(function () {
+                DeletePhieuGhiHongMatBi(PhieuGhiMatThietBiId);
+            });
+        }
+
+        function DeletePhieuGhiHongMatBi(PhieuGhiMatThietBiId) {
+            console.log(PhieuGhiMatThietBiId)
+            $.ajax({
+                url: "/quan-ly-thiet-bi/xoa-thong-tin-phieu-ghi-mat-thiet-bi",
+                data: {
+                    PhieuGhiMatThietBiId: PhieuGhiMatThietBiId
+                },
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Search() {
+            let queryParams = $('#search-phieu-ghi-mat-bi-form').serialize();
+            location.replace("/quan-ly-thiet-bi/danh-sach-phieu-ghi-mat-thiet-bi?" + queryParams);
+        }
+
+        $(document).ready(function () {
+            if ('@(SuccessNotification)') {
+                toastr["success"]('@(SuccessNotification)')
+            }
+            else if ('@(WarningNotification)') {
+                toastr["warning"]('@(WarningNotification)')
+            }
+
+            $("#search-phieu-ghi-mat-bi-form").submit(function (e) {
+                e.preventDefault();
+            })
+        })
+    </script>
+}

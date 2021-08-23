@@ -1,0 +1,563 @@
+﻿@model qltb.Data.ViewModels.PhieuMuonViewModel
+@{
+    ViewBag.Title = "EditPhieuMuonThietBi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<header class="page-title-bar">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/muon-tra/thiet-bi"><i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Danh sách phiếu mượn</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <a href="#">Chi tiết phiếu mượn thiết bị</a>
+            </li>
+        </ol>
+    </nav>
+    <div class="d-md-flex align-items-md-start">
+        <h1 class="page-title mr-sm-auto"> Chi tiết phiếu <code>@Model.MaPhieuMuon</code> </h1><!-- .btn-toolbar -->
+    </div>
+</header>
+<div class="modal fade" id="chonThietBiModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-70">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Danh sách thiết bị</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="list-thiet-bi">
+                    <div class="filter">
+                        <div class="row">
+                            <div class="col-md-3 col-12 mb-1">
+                                <select class="form-control" id="fKhoPhongId" data-toggle="select2" data-placeholder="Chọn kho phòng">
+                                    <option value="null">Tất cả các kho</option>
+                                    @foreach (var item in Model.KhoPhongs)
+                                    {
+                                        <option value="@item.KhoPhongId">@item.TenKhoPhong</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-2 col-12 mb-1">
+                                <select class="form-control" id="fLoaiThietBiId" data-toggle="select2" data-placeholder="Chọn loại thiết bị">
+                                    <option value="null">Tất cả loại thiết bị</option>
+                                    @foreach (var item in Model.LoaiThietBis)
+                                    {
+                                        <option value="@item.LoaiThietBiId">@item.TenLoaiThietBi</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-2 col-12 mb-1">
+                                <select class="form-control" id="fMonHocId" data-toggle="select2" data-placeholder="Chọn môn học">
+                                    <option value="null">Tất cả môn học</option>
+                                    @foreach (var item in Model.MonHocs)
+                                    {
+                                        <option value="@item.MonHocId">@item.TenMonHoc</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3 col-12 mb-1">
+                                <input class="form-control" id="searchString" placeholder="Tìm tên thiết bị" />
+                            </div>
+                            <div class="col-md-2 col-12 mb-1">
+                                <a href="#" class="btn btn-subtle-primary btn-block" onclick="RenderListThietBi()"><i class="fal fa-search mr-1"></i> Tìm kiếm</a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="list-group list-group-flush list-group-bordered" id="thietbi-to-select">
+                        <div class="text-center">
+                            <img src="~/assets/images/empty_xct9.svg" width="150" style="opacity:.5" />
+                            <p class="text-center text-muted mt-2">Chưa có thiết bị phù hợp</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <hr />
+            <div class="modal-footer">
+                <button type="button" class="btn btn-subtle-dark" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                <button type="button" class="btn btn-subtle-success" onclick="editSL()"><i class="fal fa-plus mr-2"></i>Chọn các thiết bị</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-section">
+    <div class="row">
+        <div class="col-md-4 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <fieldset>
+                        <legend>Thông tin chương trình học</legend>
+                    </fieldset>
+                    <div class="row">
+                        <div class="form-group col-md-6 col-12">
+                            <label>Chương trình học</label>
+                            <select class="form-control" data-toggle="select2" data-placeholder="Chọn chương trình học" id="ChuongTrinhHocId">
+                                @foreach (var item in Model.ChuongTrinhHocs)
+                                {
+                                    if (item.ChuongTrinhHocId == Model.ChuongTrinhHocId)
+                                    {
+                                        <option value="@item.ChuongTrinhHocId" selected>@item.TenChuongTrinhHoc</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.ChuongTrinhHocId">@item.TenChuongTrinhHoc</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6 col-12">
+                            <label>Môn học</label>
+                            <select class="form-control" data-toggle="select2" data-placeholder="Chọn môn học" id="MonHocId">
+                                @foreach (var item in Model.MonHocs)
+                                {
+                                    if (item.MonHocId == Model.MonHocId)
+                                    {
+                                        <option value="@item.MonHocId" selected>@item.TenMonHoc</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.MonHocId">@item.TenMonHoc</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Bài học</label>
+                        <select class="form-control" id="BaiHocId" data-toggle="select2" data-placeholder="Chọn bài học">
+                            @foreach (var item in Model.BaiHocCoSuDungThietBis)
+                            {
+                                if (item.BaiHocSuDungThietBiId == Model.BaiHocId)
+                                {
+                                    <option value="@item.BaiHocSuDungThietBiId" selected>@item.TenBaiHoc</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.BaiHocSuDungThietBiId">@item.TenBaiHoc</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 col-12">
+                            <label>Khối lơp</label>
+                            <select class="form-control" data-toggle="select2" data-placeholder="Chọn khối lớp" id="KhoiLopId">
+                                @foreach (var item in Model.KhoiLops)
+                                {
+                                    if (Model.KhoiLopId == item.KhoiLopId)
+                                    {
+                                        <option value="@item.KhoiLopId" selected>@item.TenKhoiLop</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.KhoiLopId">@item.TenKhoiLop</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6 col-12">
+                            <label>Lớp học</label>
+                            <select class="form-control" data-toggle="select2" data-placeholder="Chọn lớp" id="LopHocId">
+                                @foreach (var item in Model.Lops)
+                                {
+                                    if (item.LopId == Model.LopHocId)
+                                    {
+                                        <option value="@item.LopId" selected>@item.TenLop</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.LopId">@item.TenLop</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 col-12">
+                            <label>Giáo viên</label>
+                            <select class="form-control" data-toggle="select2" data-placeholder="Chọn giáo viên" id="GiaoVienId">
+                                @foreach (var item in Model.GiaoViens)
+                                {
+                                    if (item.GiaoVienId == Model.GiaoVienId)
+                                    {
+                                        <option value="@item.GiaoVienId" selected>@item.TenGiaoVien</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.GiaoVienId">@item.TenGiaoVien</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6 col-12">
+                            <label>Mục đích sử dụng</label>
+                            <select class="form-control" data-toggle="select2" data-placeholder="Chọn mục đích sử dụng" id="MucDichSuDungId">
+                                @foreach (var item in Model.MucDichSuDungs)
+                                {
+                                    if (item.MucDichSuDungId == Model.MucDichSuDungId)
+                                    {
+                                        <option value="@item.MucDichSuDungId" selected>@item.TenMucDichSuDung</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.MucDichSuDungId">@item.TenMucDichSuDung</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <hr />
+                    <fieldset>
+                        <legend>Thông tin tiết học</legend>
+                    </fieldset>
+                    <div>
+                        <p class="text-primary">Sáng</p>
+                        @foreach (var item in Model.TietHocs)
+                        {
+                            if (item.BuoiTrongNgay == 1)
+                            {
+                                if (Model.TietHocTrongPhieu.Contains(item.TietHocId.Value))
+                                {
+                                    <div class="custom-control custom-control-inline custom-checkbox">
+                                        <input type="checkbox" data-id="@item.TietHocId" data-ten="@item.TenTietHoc" data-buoi-hoc="@item.BuoiTrongNgay" class="custom-control-input" name="TietHoc" id="tiet-@item.TietHocId" checked> <label class="custom-control-label" for="tiet-@item.TietHocId">Tiết @item.TenTietHoc</label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="custom-control custom-control-inline custom-checkbox">
+                                        <input type="checkbox" data-id="@item.TietHocId" data-ten="@item.TenTietHoc" data-buoi-hoc="@item.BuoiTrongNgay" class="custom-control-input" name="TietHoc" id="tiet-@item.TietHocId"> <label class="custom-control-label" for="tiet-@item.TietHocId">Tiết @item.TenTietHoc</label>
+                                    </div>
+                                }
+
+                            }
+                        }
+                    </div>
+                    <div class="mt-2">
+                        <p class="text-primary">Chiều</p>
+                        @foreach (var item in Model.TietHocs)
+                        {
+                            if (item.BuoiTrongNgay == 2)
+                            {
+                                if (Model.TietHocTrongPhieu.Contains(item.TietHocId.Value))
+                                {
+                                    <div class="custom-control custom-control-inline custom-checkbox">
+                                        <input type="checkbox" data-id="@item.TietHocId" data-ten="@item.TenTietHoc" data-buoi-hoc="@item.BuoiTrongNgay" class="custom-control-input" name="TietHoc" id="tiet-@item.TietHocId" checked> <label class="custom-control-label" for="tiet-@item.TietHocId">Tiết @item.TenTietHoc</label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="custom-control custom-control-inline custom-checkbox">
+                                        <input type="checkbox" data-id="@item.TietHocId" data-ten="@item.TenTietHoc" data-buoi-hoc="@item.BuoiTrongNgay" class="custom-control-input" name="TietHoc" id="tiet-@item.TietHocId"> <label class="custom-control-label" for="tiet-@item.TietHocId">Tiết @item.TenTietHoc</label>
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+                    <hr />
+                    <fieldset>
+                        <legend>Ngày mượn / trả</legend>
+                    </fieldset>
+                    <div class="row">
+                        <div class="form-group col-md-6 col-12">
+                            <label>Ngày mượn </label>
+                            <input type="text" placeholder="Ngày mượn" class="form-control flatpicker" value="@String.Format("{0:yyyy-MM-dd HH:mm}", Model.NgayMuon)" id="NgayMuon">
+                        </div>
+                        <div class="form-group col-md-6 col-12">
+                            <label>Ngày trả</label>
+                            <input type="text" placeholder="Ngày trả" class="form-control flatpicker" value="@String.Format("{0:yyyy-MM-dd HH:mm}", Model.NgayTra)" id="NgayTra">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Ghi chú</label>
+                        <textarea rows="3" class="form-control" placeholder="Ghi chú" id="GhiChu"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 col-12">
+            <div class="card">
+                <div class="card-body">
+                    <fieldset>
+                        <legend>Thiết bị đã mượn</legend>
+                    </fieldset>
+                    <div class="list-group list-group-bordered mb-3 shadow-none" id="list-selected">
+                        @if (Model.ThietBis.Count > 0)
+                        {
+                            foreach (var item in Model.ThietBis)
+                            {
+                                <div class="list-group-item thietbi-selected" data-kho-phong-id="@item.KhoPhongId" data-id="@item.ThietBiId" data-slc="13" id="tb_@item.ThietBiId@item.KhoPhongId">
+                                    <div class="list-group-item-body">
+                                        <span><b id="ttb_1">@item.TenThietBi</b> (@item.TenMonHoc) </span>
+                                        <span class="badge badge-subtle badge-info ml-2">@item.TenLoaiThietBi</span><span class="badge badge-subtle badge-danger ml-2">@item.TenKhoPhong</span>
+                                    </div>
+                                    <div class="list-group-item-figure">
+                                        <span>SL Mượn: <b class="text-success" id="sl_@item.ThietBiId@item.KhoPhongId">@item.SoLuong</b></span>
+                                        <button class="btn btn-sm btn-icon btn-subtle-primary ml-4 mr-1" onclick="OpenUpdateSL('@item.TenThietBi', '@item.SoLuong', '@item.ThietBiId', '@item.KhoPhongId')"><i class="fal fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-icon btn-subtle-danger" onclick="removeSelected(11)"><i class="fal fa-trash-alt"></i></button>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-center">
+                                <img src="~/assets/images/empty_xct9.svg" width="150" style="opacity:.5" />
+                                <p class="text-center text-muted mt-2">Chưa có thiết bị nào được chọn</p>
+                            </div>
+                        }
+                    </div>
+                    <div class="text-right">
+                        <a href="#" onclick="openChonThietBiModal()"><i class="fal fa-plus mr-2"></i>Chọn thiết bị</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center">
+        <a href="/muon-tra/thiet-bi" class="btn btn-subtle-dark mr-2"><i class="fal fa-arrow-left mr-2"></i>Quay lại</a>
+        <button type="button" class="btn btn-subtle-primary" onclick="insertPhieu()"><i class="fal fa-check mr-2"></i>Cập nhật phiếu</button>
+    </div>
+</div>
+<div class="modal fade" id="changeSL" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Cập nhật số lượng mượn <span id="EName"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="EId" />
+                <input type="hidden" id="EkId" />
+                <div class="form-group">
+                    <label>Số lượng mượn</label>
+                    <input type="number" class="form-control" id="ESL" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-subtle-dark" data-dismiss="modal">Quay lại</button>
+                <button type="button" class="btn btn-subtle-primary" onclick="UpdateSL()">Cập nhật số lượng mượn</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="SetSL" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Chọn thiết bị vào phiếu <span id="EName"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="list-group list-group-bordered mb-3 shadow-none" id="list-selected1">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-subtle-dark" data-dismiss="modal"><i class="fal fa-times-square mr-1"></i>Hủy bỏ</button>
+                <button type="button" class="btn btn-subtle-primary" onclick="AddToPhieuMuon()"><i class="fal fa-check mr-2"></i>Thêm vào phiếu</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var MaPhieuMuon = '@Model.MaPhieuMuon'
+    $(function () {
+        $(".flatpicker").flatpickr({
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+        });
+    })
+    function OpenUpdateSL(tensp, sl, id, idkho) {
+        $("#EName").text(tensp);
+        $("#EId").val(id);
+        $("#EkId").val(idkho);
+        $("#ESL").val(sl);
+        $('#changeSL').modal('show')
+    }
+    function UpdateSL() {
+        var ThietBiId = $("#EId").val();
+        var KhoPhongId = $("#EkId").val();
+        var SoLuong = $("#ESL").val();
+        var reqData = {
+            ThietBiId: ThietBiId,
+            KhoPhongId: KhoPhongId,
+            SoLuong: SoLuong,
+            MaPhieuMuon: MaPhieuMuon
+        }
+        console.log(reqData)
+        $.ajax({
+            type: "POST",
+            url: '/MuonTra/UpdateSoLuongThietBi',
+            data: reqData,
+            dataType: 'html',
+            beforeSend: function () {
+                $("body").LoadingOverlay("show", {
+                    image: "/assets/images/load.png",
+                    progress: true
+                });
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                console.log(data)
+                if (data.Status == true) {
+                    $("#sl_" + ThietBiId + KhoPhongId).text(SoLuong)
+                }
+                toastr[data.Style](data.Message)
+            },
+            complete: function () {
+                $("body").LoadingOverlay("hide", true);
+                $('#changeSL').modal('hide');
+
+            }
+        });
+    }
+    function openChonThietBiModal() {
+        $("#chonThietBiModal").modal('show');
+        $('#chonThietBiModal').on('shown.bs.modal', function () {
+            RenderListThietBi();
+        })
+    }
+    function RenderListThietBi() {
+        var selected = [];
+        var html = '';
+        $(".thietbi-selected").each(function () {
+            var ThietBiId = $(this).attr("data-id");
+            var KhoPhongId = $(this).attr("data-kho-phong-id");
+            var obj = { ThietBiId: ThietBiId, KhoPhongId: KhoPhongId }
+            selected.push(obj);
+        });
+
+        var khophongid = $("#fKhoPhongId").val();
+        var loaithietbiid = $("#fLoaiThietBiId").val();
+        var monhocid = $("#fMonHocId").val();
+        var searchString = $("#searchString").val();
+        var dataReq = {
+            SelectedTB: selected,
+            KhoPhongId: khophongid,
+            MonHocId: monhocid,
+            LoaiThietBiId: loaithietbiid,
+            searchString: searchString
+        }
+        console.log(selected)
+        $.ajax({
+            type: "POST",
+            url: '/MuonTra/GetThietBi',
+            data: dataReq,
+            dataType: 'html',
+            beforeSend: function () {
+                $("#thietbi-to-select").LoadingOverlay("show", {
+                    image: "/assets/images/load.png",
+                    progress: true
+                });
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                $.each(data, function (key, value) {
+                    if (value.Selected == "selected") {
+                        html += '<label class="list-group-item d-flex justify-content-between align-items-center"><span><b>' + value.TenThietBi + '</b> (' + value.TenMonHoc + ')<span class="badge badge-subtle badge-primary ml-4">' + value.TenLoaiThietBi + '</span><span class="badge badge-subtle badge-danger ml-2">' + value.TenKhoPhong + '</span><span class="ml-4">Số lượng còn: <b>' + value.SoLuongConLai + '</b></span></span><span class="badge badge-secondary badge-pill">Đã chọn</span></label>';
+                    }
+                    else {
+                        html += '<label class="list-group-item custom-control custom-checkbox mb-0"><input id="tbs-' + value.ThietBiId + '" value="' + value.ThietBiId + '" data-ten-thiet-bi="' + value.TenThietBi + '" data-mon-hoc = "' + value.TenMonHoc + '" data-loai-thiet-bi="' + value.TenLoaiThietBi + '" data-ten-kho-phong = "' + value.TenKhoPhong + '" data-kho-phong-id = "' + value.KhoPhongId + '" data-so-luong-con-lai ="' + value.SoLuongConLai + '" name="listcheckbox" type="checkbox" class="custom-control-input select-thietbi"><span class="custom-control-label"><b>' + value.TenThietBi + '</b> (' + value.TenMonHoc + ')<span class="badge badge-subtle badge-primary ml-4">' + value.TenLoaiThietBi + '</span><span class="badge badge-subtle badge-danger ml-2">' + value.TenKhoPhong + '</span><span class="ml-4">Số lượng còn: <b>' + value.SoLuongConLai + '</b></span></span></label>';
+                    }
+                });
+            },
+            complete: function () {
+                $("#thietbi-to-select").LoadingOverlay("hide", true);
+                $("#thietbi-to-select").html(html);
+            }
+        });
+    }
+    function editSL() {
+        
+        $("#chonThietBiModal").modal('hide');
+        $("#SetSL").modal('show')
+        var html = '';
+        var selected = [];
+        var html = '';
+        $('#thietbi-to-select input[type=checkbox]').each(function () {
+            if ($(this).is(":checked")) {
+                var ThietBiId = $(this).attr('value');
+                var TenThietBi = $(this).attr('data-ten-thiet-bi');
+                var TenMonHoc = $(this).attr('data-mon-hoc');
+                var TenLoaiThietBi = $(this).attr('data-loai-thiet-bi');
+                var TenKhoPhong = $(this).attr('data-ten-kho-phong');
+                var SoLuongConLai = $(this).attr('data-so-luong-con-lai');
+                var KhoPhongId = $(this).attr('data-kho-phong-id');
+                var obj = { ThietBiId: ThietBiId, TenThietBi: TenThietBi, TenMonHoc: TenMonHoc, TenLoaiThietBi: TenLoaiThietBi, TenKhoPhong: TenKhoPhong, SoLuongConLai: SoLuongConLai, KhoPhongId: KhoPhongId, SoLuong: 1 }
+                selected.push(obj);
+            }
+        });
+        $.each(selected, function (key, value) {
+            html += '<div class="list-group-item thietbi-to-add" data-kho-phong-id = "' + value.KhoPhongId + '"  data-id="' + value.ThietBiId + '" data-slc="' + value.SoLuongConLai + '" id="tb' + value.ThietBiId + value.KhoPhongId + '"><div class="list-group-item-body"><span><b id="ttb_' + value.ThietBiId + '">' + value.TenThietBi + '</b> (' + value.TenMonHoc + ') </span><span class="badge badge-subtle badge-info ml-2">' + value.TenLoaiThietBi + '</span><span class="badge badge-subtle badge-danger ml-2">' + value.TenKhoPhong + '</span></div ><div class="list-group-item-figure"><span class="mr-4">Còn: <b class="text-success">' + value.SoLuongConLai + '</b></span><span>Mượn: </span><input type="number" min="1" class="form-control form-control-sm ml-2" id="sltbm_' + value.ThietBiId + '" value="' + value.SoLuong + '" style="width:50px" /></div></div >';
+        });
+        $("#list-selected1").html(html)
+    }
+    function AddToPhieuMuon() {
+        var check1;
+        var check2;
+        var ThietBis = [];
+        var mess1 = '';
+        var mess2 = ''
+        $(".thietbi-to-add").each(function () {
+            var ThietBiId = $(this).attr("data-id");
+            var KhoPhongId = $(this).attr("data-kho-phong-id");
+            var SoLuong = $("#sltbm_" + ThietBiId).val();
+            var SoLuongConLai = $(this).attr("data-slc");
+            var TenThietBi = $("#ttb_" + ThietBiId).text();
+            if (parseInt(SoLuong) > parseInt(SoLuongConLai)) {
+                check1 = 1;
+                mess1 += TenThietBi + ", "
+            }
+            if (parseInt(SoLuong) < 0) {
+                check2 = 1;
+                mess2 += TenThietBi + ", "
+            }
+            var obj = { ThietBiId: ThietBiId, TenThietBi: TenThietBi, KhoPhongId: KhoPhongId, SoLuong: SoLuong, SoLuongConLai: SoLuongConLai }
+            ThietBis.push(obj);
+        });
+        mess1 += " Không đủ trong kho"
+        mess2 += " số lượng mượn không được âm"
+        var MaPhieu = '@Model.MaPhieuMuon';
+        var reqData = {
+            ThietBis: ThietBis,
+            MaPhieuMuon: MaPhieu
+        }
+        if (check1 == 1) {
+            toastr["error"](mess1)
+        }
+        else if (check2 == 1) {
+            toastr["error"](mess2)
+        }
+        else {
+            console.log(ThietBis);
+            $.ajax({
+                type: "POST",
+                url: '/MuonTra/AddThietBiVaoPhieu',
+                data: reqData,
+                dataType: 'html',
+                beforeSend: function () {
+                },
+                success: function (response) {
+                    var data = JSON.parse(response);
+                    toastr[data.Style](data.Message);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1500);
+                },
+                complete: function () {
+                    $("#SetSL").modal('hide');
+                }
+            });
+        }
+        
+    }
+</script>

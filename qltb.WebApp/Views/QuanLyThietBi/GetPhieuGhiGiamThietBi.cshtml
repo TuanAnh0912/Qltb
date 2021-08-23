@@ -1,0 +1,779 @@
+﻿@using qltb.Data.ResVMs
+@model PhieuGhiGiamThietBiResVM
+@{
+    ViewBag.Title = "Thông tin phiếu ghi giảm thiết bị";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var SuccessNotification = TempData["SUCCESS"];
+    var WarningNotification = TempData["WARNING"];
+}
+
+<div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chọn thiết bị</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="overflow-x: auto">
+                <form id="search-chon-thiet-bi-form">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label class="control-label">Môn học</label>
+                                <select class="form-control" name="MonHocId" data-toggle="select2" data-placeholder="Chọn môn học" data-allow-clear="true">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label class="control-label">Tên thiết bị</label>
+                                <input class="form-control" type="text" name="TenThietBi" placeholder="Tên thiết bị..." value="" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label class="control-label">Loại</label>
+                                <select class="form-control" name="LoaiId" data-toggle="select2" data-placeholder="Chọn loại">
+                                    <option value="1">Còn dùng được</option>
+                                    <option value="2">Mất</option>
+                                    <option value="3">Hỏng</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col-12" style="min-width: 800px">
+                        <table class="table w-100" id="chon-thiet-bi-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã thiết bị</th>
+                                    <th>Tên thiết bị</th>
+                                    <th>Loại</th>
+                                    <th>Kho phòng</th>
+                                    <th>SL</th>
+                                    <th>Đơn vị tính</th>
+                                    <th>Lý do</th>
+                                    <th>Số phiếu ghi mất</th>
+                                    <th>Số phiếu ghi hỏng</th>
+                                    <th style="min-width: 50px"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel"> </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-thiet-bi-da-chon">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label class="control-label">Số lượng</label>
+                                <input class="form-control" type="number" readonly name="SoLuong" min="0" value="0" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label class="control-label">Số lượng giảm</label>
+                                <input class="form-control" type="number" name="SoLuongGiam" min="0" value="0" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label class="control-label">Số phiếu ghi mất</label>
+                                <input class="form-control" type="text" readonly name="SoPhieuGhiMat" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label class="control-label">Số phiếu ghi hỏng</label>
+                                <input class="form-control" type="text" readonly name="SoPhieuGhiHong" />
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="control-label">Lý do</label>
+                                <input class="form-control" type="text" name="LyDo" placeholder="Lý do..." value="" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="update-thiet-bi-da-chon-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-section">
+    <header class="page-title-bar">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active">
+                    <a href="/quan-ly-thiet-bi/danh-sach-phieu-ghi-giam-thiet-bi"><i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Thông tin phiếu ghi giảm thiết bị</a>
+                </li>
+            </ol>
+        </nav>
+    </header>
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <label>Thông tin phiếu ghi giảm thiết bị</label>
+                    <div class="float-right">
+                        <button class="btn btn-sm btn-success" onclick="UpdatePhieuGhiGiamThietBi()">Cập nhật</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="update-phieu-ghi-giam-thiet-bi-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Số phiếu</label>
+                                    <input class="form-control" type="text" name="SoPhieu" placeholder="Số phiếu..." value="@Model.SoPhieu" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Ngày lập</label>
+                                    <input class="form-control" type="date" name="NgayLap" value="@(Model.NgayLap.HasValue ? Model.NgayLap.Value.ToString("yyyy-MM-dd") : "")" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Nội dung</label>
+                                    <input class="form-control" type="text" name="NoiDung" placeholder="Nội dung..." value="@Model.NoiDung" />
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Tài liệu đính kèm</label>
+                                    <input type="file" name="FileDinhKem">
+                                </div>
+                                <div id="tai-lieu-dinh-kem-div">
+                                    <div class="row">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <h5>Danh sách thiết bị</h5>
+                    <div class="float-right">
+                        <button class="btn btn-sm btn-primary" onclick="OpenChonThietBi()">Chọn thiết bị</button>
+                    </div>
+                </div>
+                <div class="card-body" style="overflow-x: auto">
+                    <div style="min-width: 1000px">
+                        <table class="table" id="thiet-bi-da-chon-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã thiết bị</th>
+                                    <th>Tên thiết bị</th>
+                                    <th>Loại</th>
+                                    <th>Kho phòng</th>
+                                    <th>SL giảm</th>
+                                    <th>Đơn vị tính</th>
+                                    <th>Lý do</th>
+                                    <th>Số phiếu ghi mất</th>
+                                    <th>Số phiếu ghi hỏng</th>
+                                    <th style="min-width: 100px"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section style{
+    <link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" />
+    <style>
+        #tai-lieu-dinh-kem-div > div > div {
+            position: relative;
+            text-align: center;
+        }
+
+            #tai-lieu-dinh-kem-div > div > div:hover > div {
+                position: relative;
+                visibility: visible;
+                position: absolute;
+                top: 0;
+                right: 17px;
+                cursor: pointer;
+            }
+
+            #tai-lieu-dinh-kem-div > div > div > div {
+                visibility: hidden;
+                position: relative;
+                position: absolute;
+                top: 0;
+                right: 17px;
+            }
+
+
+                #tai-lieu-dinh-kem-div > div > div > div i {
+                    color: lightcoral;
+                    font-size: 18px
+                }
+
+                #tai-lieu-dinh-kem-div > div > div > div:hover i {
+                    color: red
+                }
+    </style>
+}
+
+
+@section scripts{
+    <script src="~/assets/javascript/hanhnd_1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        let thietBiDaChons = [];
+        let phieuGhiGiamThietBiId = '@Model.PhieuGhiGiamThietBiId'
+        let taiLieuDinhKems = [];
+        function UpdatePhieuGhiGiamThietBi() {
+            let data = { ChiTietThietBiGiams: thietBiDaChons, PhieuGhiGiamThietBiId: phieuGhiGiamThietBiId, TaiLieuDinhKems: taiLieuDinhKems }
+            $("#update-phieu-ghi-giam-thiet-bi-form").serializeArray().forEach(ele => {
+                data[ele.name] = ele.value
+            })
+            if (!data.SoPhieu) {
+                toastr["warning"]('Chưa nhập số phiếu');
+            }
+            else if (!data.NgayLap) {
+                toastr["warning"]('Chưa nhập ngày lập');
+            }
+            else if (!data.ChiTietThietBiGiams || data.ChiTietThietBiGiams.length == 0) {
+                toastr["warning"]('Chưa chọn thiết bị');
+            }
+            else {
+
+                $.ajax({
+                    url: "/quan-ly-thiet-bi/cap-nhat-thong-tin-phieu-ghi-giam-thiet-bi",
+                    type: "post",
+                    data: data,
+                    success: function (response) {
+                        location.reload();
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                    }
+                });
+            }
+
+        }
+
+        function OpenChonThietBi() {
+            let t;
+            $('#add-modal').modal('show');
+            $("#search-chon-thiet-bi-form input").prop("disabled", true);
+            $('#chon-thiet-bi-table').DataTable().clear().draw();;
+            GetMonHocs($("#search-chon-thiet-bi-form select[name=MonHocId]"));
+
+            $('#search-chon-thiet-bi-form select[name=MonHocId]').on('select2:select', function (e) {
+                if (e.params.data) {
+                    if (e.params.data.selected) {
+                        $("#search-chon-thiet-bi-form input").val('');
+                        $("#search-chon-thiet-bi-form input").prop("disabled", false);
+                        if (t) {
+                            clearTimeout(t);
+                        }
+                        t = setTimeout(function () {
+                            GetDanhSachChonThietBi();
+                        }, 400);
+                    }
+                }
+            });
+
+            $('#search-chon-thiet-bi-form select[name=LoaiId]').on('select2:select', function (e) {
+                if ($('#search-chon-thiet-bi-form select[name=MonHocId]').select2('data')[0].id) {
+                    if (t) {
+                        clearTimeout(t);
+                    }
+                    t = setTimeout(function () {
+                        GetDanhSachChonThietBi();
+                    }, 400);
+                }
+            });
+
+            $('#search-chon-thiet-bi-form select[name=MonHocId]').on('select2:clear', function (e) {
+                $("#search-chon-thiet-bi-form input").val('');
+                $("#search-chon-thiet-bi-form input").prop("disabled", true);
+            });
+
+            $("#search-chon-thiet-bi-form input").keyup(function () {
+                if (t) {
+                    clearTimeout(t);
+                }
+                t = setTimeout(function () {
+                    GetDanhSachChonThietBi();
+                }, 400);
+            })
+        }
+
+        function GetDanhSachChonThietBi() {
+            let dataSearch = {};
+
+            $('#search-chon-thiet-bi-form').serializeArray().forEach(ele => {
+                dataSearch[ele.name] = ele.value
+            })
+
+            $.ajax({
+                url: "/quan-ly-thiet-bi/danh-sach-thiet-bi-trong-kho-va-thiet-bi-hong-mat",
+                type: "get",
+                data: dataSearch,
+                success: function (response) {
+                    let data = [];
+                    let i = 0;
+                    response.forEach(ele => {
+                        let item = [];
+                        item.push(ele["MaThietBi"] ? ele["MaThietBi"] : '');
+                        item.push(ele["TenThietBi"] ? ele["TenThietBi"] : '');
+                        item.push(ele["TenLoaiThietBi"] ? ele["TenLoaiThietBi"] : '');
+                        item.push(ele["TenKhoPhong"] ? ele["TenKhoPhong"] : '');
+                        if ($('#search-chon-thiet-bi-form select[name=LoaiId]').select2('data')[0].id === "2") {
+                            item.push(ele["SoLuongMat"] ? ele["SoLuongMat"] : '0');
+                        }
+                        else if ($('#search-chon-thiet-bi-form select[name=LoaiId]').select2('data')[0].id === "3") {
+                            item.push(ele["SoLuongHong"] ? ele["SoLuongHong"] : '0');
+                        }
+                        else if ($('#search-chon-thiet-bi-form select[name=LoaiId]').select2('data')[0].id === "1") {
+                            item.push(ele["SoLuongConLai"] ? ele["SoLuongConLai"] : '0');
+                        }
+                        item.push(ele["TenDonViTinh"] ? ele["TenDonViTinh"] : '');
+                        item.push(ele["LyDo"] ? ele["LyDo"] : '');
+                        item.push(ele["SoPhieuGhiMatThietBi"] ? ele["SoPhieuGhiMatThietBi"] : '');
+                        item.push(ele["SoPhieuGhiHongThietBi"] ? ele["SoPhieuGhiHongThietBi"] : '');
+                        console.log(ele)
+                        if (ele.PhieuGhiMatThietBiId) {
+                            let currentChiTietThietBi = thietBiDaChons.find(x => (x.ThietBiId.toString() === ele.ThietBiId.toString())
+                                && (x.KhoPhongId.toString() === ele.KhoPhongId.toString())
+                                && (x.PhieuGhiMatThietBiId === ele.PhieuGhiMatThietBiId))
+                            if (currentChiTietThietBi) {
+                                item.push('<button class="btn btn-sm btn-success">Đã chọn</button>')
+                            }
+                            else {
+                                item.push('<button class="btn btn-sm btn-outline-primary" id="chonThietBi-' + i + '-btn">Chọn</button>')
+                            }
+                        }
+                        else if (ele.PhieuGhiHongThietBiId) {
+                            let currentChiTietThietBi = thietBiDaChons.find(x => (x.ThietBiId.toString() === ele.ThietBiId.toString())
+                                && (x.KhoPhongId.toString() === ele.KhoPhongId.toString())
+                                && (x.PhieuGhiHongThietBiId === ele.PhieuGhiHongThietBiId))
+                            if (currentChiTietThietBi) {
+                                item.push('<button class="btn btn-sm btn-success">Đã chọn</button>')
+                            }
+                            else {
+                                item.push('<button class="btn btn-sm btn-outline-primary" id="chonThietBi-' + i + '-btn">Chọn</button>')
+                            }
+                        }
+                        else {
+                            let currentChiTietThietBi = thietBiDaChons.find(x => (x.ThietBiId.toString() === ele.ThietBiId.toString())
+                                && (x.KhoPhongId.toString() === ele.KhoPhongId.toString())
+                                && (!x.PhieuGhiMatThietBiId) && (!x.PhieuGhiHongThietBiId));
+                            if (currentChiTietThietBi) {
+                                item.push('<button class="btn btn-sm btn-success">Đã chọn</button>')
+                            }
+                            else {
+                                item.push('<button class="btn btn-sm btn-outline-primary" id="chonThietBi-' + i + '-btn">Chọn</button>')
+                            }
+                        }
+                        i++;
+                        data.push(item)
+
+                    })
+                    let table = $('#chon-thiet-bi-table').DataTable();
+                    table.clear();
+                    table.rows.add(data)
+                    table.draw();
+
+                    i = 0;
+                    response.forEach(ele => {
+                        $("#chonThietBi-" + i + "-btn").unbind();
+                        $("#chonThietBi-" + i++ + "-btn").click(() => {
+                            ChonThietBi(ele)
+                        })
+                    })
+                },
+                error: function (xhr) {
+                    //Do Something to handle error
+                }
+            });
+        }
+
+        function ChonThietBi(chiTietThietBiDaChon) {
+            let currentChiTietThietBi;
+            if (chiTietThietBiDaChon.PhieuGhiMatThietBiId) {
+                currentChiTietThietBi = thietBiDaChons.find(x => (x.ThietBiId.toString() === chiTietThietBiDaChon.ThietBiId.toString())
+                    && (x.KhoPhongId.toString() === chiTietThietBiDaChon.KhoPhongId.toString())
+                    && (x.PhieuGhiMatThietBiId === chiTietThietBiDaChon.PhieuGhiMatThietBiId));
+            }
+            else if (chiTietThietBiDaChon.PhieuGhiHongThietBiId) {
+                currentChiTietThietBi = thietBiDaChons.find(x => (x.ThietBiId.toString() === chiTietThietBiDaChon.ThietBiId.toString())
+                    && (x.KhoPhongId.toString() === chiTietThietBiDaChon.KhoPhongId.toString())
+                    && (x.PhieuGhiHongThietBiId === chiTietThietBiDaChon.PhieuGhiHongThietBiId));
+            }
+            else {
+                currentChiTietThietBi = thietBiDaChons.find(x => (x.ThietBiId.toString() === chiTietThietBiDaChon.ThietBiId.toString())
+                    && (x.KhoPhongId.toString() === chiTietThietBiDaChon.KhoPhongId.toString())
+                    && (!x.PhieuGhiMatThietBiId) && (!x.PhieuGhiHongThietBiId));
+            }
+
+            if (!currentChiTietThietBi) {
+                $.ajax({
+                    url: "/quan-ly-thiet-bi/thong-tin-thiet-bi-hong-mat-trong-kho",
+                    type: "get",
+                    data: {
+                        thietBiId: chiTietThietBiDaChon.ThietBiId,
+                        khoPhongId: chiTietThietBiDaChon.KhoPhongId,
+                        phieuGhiMatThietBiId: chiTietThietBiDaChon.PhieuGhiMatThietBiId ? chiTietThietBiDaChon.PhieuGhiMatThietBiId : '',
+                        phieuGhiHongThietBiId: chiTietThietBiDaChon.PhieuGhiHongThietBiId ? chiTietThietBiDaChon.PhieuGhiHongThietBiId : ''
+                    },
+                    success: function (response) {
+                        let ele = response;
+                        let data = [];
+                        let item = [];
+                        let id = (new Date()).valueOf();
+                        let soLuongGiam = 0;
+                        item.push(ele["MaThietBi"] ? ele["MaThietBi"] : '');
+                        item.push(ele["TenThietBi"] ? ele["TenThietBi"] : '');
+                        item.push(ele["TenLoaiThietBi"] ? ele["TenLoaiThietBi"] : '');
+                        item.push(ele["TenKhoPhong"] ? ele["TenKhoPhong"] : '');
+                        if (response.PhieuGhiMatThietBiId) {
+                            soLuongGiam = ele["SoLuongMat"] ? ele["SoLuongMat"] : 0;
+                        }
+                        else if (response.phieuGhiHongThietBiId) {
+                            soLuongGiam = ele["SoLuongHong"] ? ele["SoLuongHong"] : 0;
+                        }
+                        else {
+                            soLuongGiam = 0;
+                        }
+
+                        item.push(soLuongGiam);
+                        item.push(ele["TenDonViTinh"] ? ele["TenDonViTinh"] : '');
+                        item.push(ele["LyDo"] ? ele["LyDo"] : '');
+                        item.push(ele["SoPhieuGhiMatThietBi"] ? ele["SoPhieuGhiMatThietBi"] : '');
+                        item.push(ele["SoPhieuGhiHongThietBi"] ? ele["SoPhieuGhiHongThietBi"] : '');
+                        item.push(`<button class="btn btn-sm btn-info" onClick="EditThietBiDaChon('` + id + `')">Sửa</button>
+                                                                            <button class="btn btn-sm btn-outline-danger" onClick="DeleteThietBiDaChon('` + id + `')">Xóa</button>`);
+                        data.push(item)
+
+                        let table = $('#thiet-bi-da-chon-table').DataTable();
+                        table.rows.add(data)
+                        table.draw();
+                        thietBiDaChons.push({ ...response, id: id.toString(), SoLuongGiam: soLuongGiam })
+
+                        $('#add-modal').modal('toggle');
+                        toastr["success"]('Chọn thành công')
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                    }
+                });
+            }
+            else {
+                toastr["warning"]('Đã chọn thiết bị này')
+            }
+
+
+        }
+
+        function DeleteThietBiDaChon(thietBiDaChonId) {
+            var index = thietBiDaChons.findIndex(ele => {
+                return ele.id === thietBiDaChonId.trim();
+            })
+            if (index !== -1) thietBiDaChons.splice(index, 1);
+            ReDrawThietBiDaChonTable();
+            toastr["success"]('Xóa thành công');
+        }
+
+        function EditThietBiDaChon(thietBiDaChonId) {
+            let thietBiDaChon = thietBiDaChons.find(x => x.id === thietBiDaChonId);
+            if (thietBiDaChon) {
+                $("#editModalLabel").html("Tên thiết bị: " + thietBiDaChon.TenThietBi)
+                if (thietBiDaChon.PhieuGhiMatThietBiId) {
+                    $("#edit-thiet-bi-da-chon input[name=SoLuongGiam]").prop('readonly', true)
+                    $("#edit-thiet-bi-da-chon input[name=LyDo]").prop('readonly', true)
+                    $("#edit-thiet-bi-da-chon input[name=SoLuong]").val(thietBiDaChon.SoLuongHongMat);
+                    $("#edit-thiet-bi-da-chon input[name=SoPhieuGhiMat]").val(thietBiDaChon.SoPhieuGhiMatThietBi);
+                }
+                else if (thietBiDaChon.PhieuGhiHongThietBiId) {
+                    $("#edit-thiet-bi-da-chon input[name=SoLuongGiam]").prop('readonly', true)
+                    $("#edit-thiet-bi-da-chon input[name=LyDo]").prop('readonly', true)
+                    $("#edit-thiet-bi-da-chon input[name=SoLuong]").val(thietBiDaChon.SoLuongHongMat);
+                    $("#edit-thiet-bi-da-chon input[name=SoPhieuGhiHong]").val(thietBiDaChon.SoPhieuGhiHongThietBi);
+                }
+                else {
+                    $("#edit-thiet-bi-da-chon input[name=SoLuongGiam]").prop('readonly', false)
+                    $("#edit-thiet-bi-da-chon input[name=LyDo]").prop('readonly', false)
+                    $("#edit-thiet-bi-da-chon input[name=SoLuong]").val(thietBiDaChon.SoLuongConLai);
+                    $("#edit-thiet-bi-da-chon input[name^=SoPhieu]").val('');
+                }
+                $("#edit-thiet-bi-da-chon input[name=SoLuongGiam]").val(thietBiDaChon.SoLuongGiam);
+                $("#edit-thiet-bi-da-chon input[name=LyDo]").val(thietBiDaChon.LyDo);
+                $("#update-thiet-bi-da-chon-btn").unbind();
+                $("#update-thiet-bi-da-chon-btn").click(function () {
+                    UpdateThietBiDaChon(thietBiDaChon.id);
+                });
+
+                $('#edit-modal').modal('toggle');
+            }
+        }
+
+        function UpdateThietBiDaChon(thietBiDaChonId) {
+            var index = thietBiDaChons.findIndex(x => x.id === thietBiDaChonId);
+            if (thietBiDaChons[index].PhieuGhiMatThietBiId || thietBiDaChons[index].PhieuGhiHongThietBiId) {
+                toastr["success"]('Cập nhật thành công');
+                $('#edit-modal').modal('toggle');
+            }
+            else {
+                let soLuongGiam = $("#edit-thiet-bi-da-chon input[name=SoLuongGiam]").val();
+                if (soLuongGiam <= thietBiDaChons[index]["SoLuongConLai"]) {
+                    $("#edit-thiet-bi-da-chon").serializeArray().forEach(ele => {
+                        thietBiDaChons[index][ele.name] = ele.value;
+                    })
+                    ReDrawThietBiDaChonTable();
+                    toastr["success"]('Cập nhật thành công');
+                    $('#edit-modal').modal('toggle');
+                }
+                else {
+                    toastr["warning"]('Số lượng giảm không lớn hơn số lượng ban đầu');
+                }
+            }
+        }
+
+        function ReDrawThietBiDaChonTable() {
+            let table = $('#thiet-bi-da-chon-table').DataTable();
+            let data = [];
+            thietBiDaChons.forEach(ele => {
+                let item = [];
+                item.push(ele["MaThietBi"] ? ele["MaThietBi"] : '');
+                item.push(ele["TenThietBi"] ? ele["TenThietBi"] : '');
+                item.push(ele["TenLoaiThietBi"] ? ele["TenLoaiThietBi"] : '');
+                item.push(ele["TenKhoPhong"] ? ele["TenKhoPhong"] : '');
+                item.push(ele["SoLuongGiam"] ? ele["SoLuongGiam"] : '0');
+                item.push(ele["TenDonViTinh"] ? ele["TenDonViTinh"] : '');
+                item.push(ele["LyDo"] ? ele["LyDo"] : '');
+                item.push(ele["SoPhieuGhiMatThietBi"] ? ele["SoPhieuGhiMatThietBi"] : '');
+                item.push(ele["SoPhieuGhiHongThietBi"] ? ele["SoPhieuGhiHongThietBi"] : '');
+                item.push(`<button class="btn btn-sm btn-info" onClick="EditThietBiDaChon('` + ele["id"] + `')">Sửa</button>
+                                                                                    <button class="btn btn-sm btn-outline-danger" onClick="DeleteThietBiDaChon('` + ele["id"] + `')">Xóa</button>`)
+                data.push(item)
+            });
+            table.clear();
+            table.rows.add(data)
+            table.draw();
+        }
+
+        function GetNguonCaps(item) {
+            return $.ajax({
+                url: "/tu-dien/danh-sach-nguon-cap",
+                type: "get",
+                success: function (response) {
+                    item.html('').select2({ data: [{ id: '', text: '' }] });
+                    item.select2({
+                        data: response.map(ele => {
+                            return { ...ele, id: ele.NguonCapId, text: ele.TenNguonCap ? ele.TenNguonCap : '' }
+                        }),
+                        language: {
+                            noResults: function () {
+                                return "Không có dữ liệu";
+                            }
+                        },
+                    })
+                },
+                error: function (xhr) {
+                    //Do Something to handle error
+                }
+            });
+
+        }
+
+        function GetMonHocs(item) {
+            return $.ajax({
+                url: "/tu-dien/danh-sach-mon-hoc",
+                type: "get",
+                success: function (response) {
+                    response.unshift({ MonHocId: 0, TenMonHoc: 'Dùng chung' })
+                    item.html('').select2({ data: [{ id: '', text: '' }] });
+                    item.select2({
+                        data: response.map(ele => {
+                            return { ...ele, id: ele.MonHocId, text: ele.TenMonHoc ? ele.TenMonHoc : '' }
+                        }),
+                        language: {
+                            noResults: function () {
+                                return "Không có dữ liệu";
+                            }
+                        },
+                    })
+                },
+                error: function (xhr) {
+                    //Do Something to handle error
+                }
+            });
+
+        }
+
+        function ReDrawTaiLieuDinhKem() {
+            let content = "";
+            taiLieuDinhKems.forEach(ele => {
+                content += `<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4 col-6">
+                                                    <a target="_blank" href="/`+ ele.Url + `">
+                                                        <img src="`+ ele.Icon + `" />
+                                                        <div>
+                                                            `+ ele.TenFile + `
+                                                        </div>
+                                                    </a>
+                                                    <div class="delete-tai-lieu-dinh-kiem-div">
+                                                        <i class="fas fa-minus-circle" onClick="RemoveTaiLieuDinhKiem('`+ ele.FileId + `')"></i>
+                                                    </div>
+                                                </div>`;
+            })
+            $("#tai-lieu-dinh-kem-div > div").html(content);
+        }
+
+        function RemoveTaiLieuDinhKiem(fileId) {
+            var index = taiLieuDinhKems.findIndex(ele => {
+                return ele.FileId === fileId.trim();
+            })
+            if (index !== -1) taiLieuDinhKems.splice(index, 1);
+            ReDrawTaiLieuDinhKem();
+        }
+
+        $(document).ready(function () {
+            if ('@(SuccessNotification)') {
+                toastr["success"]('@(SuccessNotification)')
+            }
+            else if ('@(WarningNotification)') {
+                toastr["warning"]('@(WarningNotification)')
+            }
+
+            $('#thiet-bi-da-chon-table').DataTable({
+                "data": [],
+                "columns": [
+                    { "dataProp": "MaThietBi" },
+                    { "dataProp": "TenThietBi" },
+                    { "dataProp": "TenLoaiThietBi" },
+                    { "dataProp": "TenKhoPhong" },
+                    { "dataProp": "SoLuongHongMat" },
+                    { "dataProp": "TenDonViTinh" },
+                    { "dataProp": "LyDo" },
+                    { "dataProp": "SoPhieuGhiMatThietBi" },
+                    { "dataProp": "SoPhieuGhiHongThietBi" },
+                    { "dataProp": "Action" },
+                ],
+                bLengthChange: false,
+                bInfo: false,
+                language: {
+                    emptyTable: "Không có dữ liệu",
+                    paginate: {
+                        previous: '‹',
+                        next: '›'
+                    },
+                    search: 'Tìm kiếm'
+                },
+                pageLength: 10,
+            });
+
+            $.ajax({
+                url: "/quan-ly-thiet-bi/chi-tiet-phieu-ghi-giam-thiet-bi",
+                type: "get",
+                data: {
+                    phieuGhiGiamThietBiId: phieuGhiGiamThietBiId
+                },
+                success: function (response) {
+                    let i = 0;
+                    thietBiDaChons = response.ChiTietThietBis.map(ele => {
+                        i++;
+                        return { ...ele, id: i.toString() }
+                    });
+                    ReDrawThietBiDaChonTable();
+
+                    taiLieuDinhKems = response.FileTrongPhieuGhiGiams;
+                    ReDrawTaiLieuDinhKem();
+
+                },
+                error: function (xhr) {
+                    //Do Something to handle error
+                }
+            });
+
+            $("#update-phieu-ghi-giam-thiet-bi-form input[name=FileDinhKem]").on('input', function (e) {
+                var fd = new FormData();
+                var files = $('#update-phieu-ghi-giam-thiet-bi-form input[name=FileDinhKem]')[0].files;
+                if (files.length > 0) {
+                    fd.append('file', files[0]);
+                    $.ajax({
+                        url: '/upload/upload-file-phieu-ghi-giam-thiet-bi',
+                        type: 'post',
+                        data: fd,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            taiLieuDinhKems.push(response);
+                            ReDrawTaiLieuDinhKem();
+                        },
+                    });
+                }
+            })
+
+            $('#chon-thiet-bi-table').DataTable({
+                "data": [],
+                "columns": [
+                    { "dataProp": "MaThietBi" },
+                    { "dataProp": "TenThietBi" },
+                    { "dataProp": "Loai" },
+                    { "dataProp": "TenKhoPhong" },
+                    { "dataProp": "SoLuong" },
+                    { "dataProp": "DonViTinh" },
+                    { "dataProp": "LyDo" },
+                    { "dataProp": "SoPhieuGhiMatThietBi" },
+                    { "dataProp": "SoPhieuGhiHongThietBi" },
+                    { "dataProp": "Action" },
+                ],
+                bLengthChange: false,
+                bInfo: false,
+                language: {
+                    emptyTable: "Không có dữ liệu",
+                    paginate: {
+                        previous: '‹',
+                        next: '›'
+                    },
+                },
+                pageLength: 10,
+                searching: false
+            });
+
+        })
+
+    </script>
+}

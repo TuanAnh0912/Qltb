@@ -1,0 +1,37 @@
+﻿@model IEnumerable<qltb.Data.ViewModels.LoaiKhoPhongViewModel>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<header class="page-title-bar">
+    <div class="d-flex justify-content-between">
+        <h1 class="page-title"> Chọn loại phòng </h1>
+    </div>
+</header>
+<div class="page-section">
+    <div class="col-md-6 col-12">
+        <div class="card card-fluid">
+            <!-- .list-group -->
+            <div class="list-group list-group-flush list-group-divider">
+                @foreach (var item in Model)
+                {
+                    <div class="list-group-item">
+                        <div class="list-group-item-figure">
+                            <a href="/quan-ly-phong/danh-sach?LoaiKhoPhongId=@item.LoaiKhoPhongId" class="tile tile-circle bg-blue"><i class="fad fa-window-frame"></i></a>
+                        </div>
+                        <div class="list-group-item-body">
+                            <h4 class="list-group-item-title">
+                                <a href="/quan-ly-phong/danh-sach?LoaiKhoPhongId=@item.LoaiKhoPhongId"><b>@item.TenLoaiKhoPhong</b></a>
+                            </h4>
+                            <p class="list-group-item-text">Số lượng phòng: <b class="text-danger">@item.SoLuongPhong</b></p>
+                        </div>
+                        <div class="list-group-item-figure">
+                            <a href="/quan-ly-phong/danh-sach?LoaiKhoPhongId=@item.LoaiKhoPhongId" class="btn btn-xs btn-subtle-info">Chi tiết</a>
+                        </div>
+                    </div>
+                }
+            </div><!-- /.list-group -->
+        </div>
+    </div>
+</div>
+

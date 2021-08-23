@@ -1,0 +1,609 @@
+﻿@model qltb.WebApp.Models.StorageRoomViewModel.KhoPhongDetail
+@{
+    ViewBag.Title = "Equipment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<header class="page-title-bar">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/StorageRoom/Index"><i class="breadcrumb-icon fa fa-angle-left mr-2"></i>Danh sách phòng</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <a href="#">Chi tiết Phòng</a>
+            </li>
+        </ol>
+    </nav>
+    <div class="d-md-flex align-items-md-start">
+        <h1 class="page-title mr-sm-auto"> Chi tiết phòng <code></code> </h1><!-- .btn-toolbar -->
+        <div class="btn-toolbar">
+            <a href="#" class="btn btn-sm btn-subtle-primary ml-1" onclick="openChonThietBiInPhongModal('Hong')"><i class="fal fa-share-all mr-1"></i> Báo hỏng thiết bị</a>
+            <a href="#" class="btn btn-sm btn-subtle-danger ml-1" onclick="openChonThietBiInPhongModal('Mat')"><i class="far fa-times-circle mr-1"></i> Báo mất thiết bị</a>
+        </div>
+    </div>
+</header>
+<!-- .page-section -->
+<div class="page-section">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card card-fluid">
+                <!-- .card-header -->
+                <div class="card-header d-flex">
+                <p>Danh sách thiết bị trong phòng</p>
+                    <!--<div class="form-group">
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#storage_insert_modal">Xuất excel</button>
+                    </div>--><!-- /.form-group -->
+                    <button type="button" class="btn btn-primary ml-auto" onclick="openChonThietBiModal()">Thêm thiết bị vào phòng</button>
+                </div><!-- /.card-header -->
+                <!-- .card-body -->
+                <div class="card-body storage-table table-responsive">
+                    <table id="storage-table" class="table table-bordered table-hover">
+                        <!-- thead -->
+                        <thead class="bg-light">
+                            <tr>
+                                <th style="width:10%" class=""> Mã thiết bị </th>
+                                <th style="width:25%" class=""> Tên thiết bị</th>
+                                <th style="width:15%" class="text-center"> Số lượng </th>
+                                <th style="width:15%" class="text-center"> Số thiết bị hỏng </th>
+                                <th style="width:15%" class="text-center"> Số thiết bị mất </th>
+                                <th style="width:15%" class="text-center"> </th>
+                            </tr>
+                        </thead><!-- /thead -->
+                        <!-- tbody -->
+                        <tbody id="listThietBi">
+                            <!-- create empty row to passing html validator -->
+                            @foreach (var equip in Model.ThietBis)
+                            {
+                                <tr>
+                                    <td>
+                                        <input hidden name="KhoThietBiId" value="@equip.KhoThietBiId" />
+                                        <input hidden name="ThietBiId" value="@equip.ThietBiId" />
+                                        <code>
+                                            <b>@equip.MaThietBi</b>
+                                        </code>
+                                    </td>
+                                    <td class="">
+                                        <span class="text-blue">@equip.TenThietBi</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="number" class="input-number" value="@equip.SoLuong" onchange="changeSoluong(this)" />
+                                    </td>
+                                    <td class="text-center">@equip.SoLuongHong</td>
+                                    <td class="text-center">@equip.SoLuongMat</td>
+                                    <td class="text-center"><a href="#" class="btn btn-sm btn-subtle-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Xóa bỏ" onclick="RemoveThietBi(this)"><i class="fal fa-trash-alt"></i></a></td>
+                                </tr>
+                            }
+                        </tbody><!-- /tbody -->
+                    </table><!-- /.table -->
+                </div><!-- /.card-body -->
+            </div>
+        </div>
+        <!-- .card -->
+        <div class="col-lg-4">
+            <div class="card card-fluid">
+                <div class="card-body">
+                    <fieldset>
+                        <legend>
+                            Nhật ký nhập - xuất thiết bị
+                        </legend>
+                    </fieldset>
+                    <div class="text-center">
+                        <img src="~/assets/images/empty_xct9.svg" width="150" style="opacity:.5" />
+                        <p class="text-center text-muted mt-2">Chưa có thống kê</p>
+                    </div>
+                    <ul class="timeline" style="max-height:500px; overflow-y:scroll">
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <fieldset>
+                        <legend>Phiếu báo mất / hỏng</legend>
+                    </fieldset>
+                    <div class="list-group list-group-flush list-group-divider" id="listBaoHongMat">
+                        <!-- .list-group-item -->
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.card -->
+    </div>
+</div><!-- /.page-section -->
+
+<div class="modal fade" id="chonThietBiModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-70">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Danh sách thiết bị</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="list-thiet-bi">
+                    <div class="filter">
+                        <div class="row">
+                            <div class="col-md-2 col-12 mb-1">
+                                <select class="form-control" id="fMonHocId" data-toggle="select2" data-placeholder="Chọn môn học">
+                                    <option value="0">Tất cả môn học</option>
+                                    <option value="-1">Dùng chung</option>
+                                    @foreach (var item in ViewData["MonHocs"] as List<qltb.Data.MonHoc>)
+                                    {
+                                        <option value="@item.MonHocId">@item.TenMonHoc</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3 col-12 mb-1">
+                                <input class="form-control" id="searchString" placeholder="Tìm tên thiết bị" />
+                            </div>
+                            <div class="col-md-2 col-12 mb-1">
+                                <a href="#" class="btn btn-subtle-primary btn-block" onclick="LoadListThietBi()"><i class="fal fa-search mr-1"></i> Tìm kiếm</a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="list-group list-group-flush list-group-bordered" id="thietbi-to-select">
+                        <div class="text-center">
+                            <img src="~/assets/images/empty_xct9.svg" width="150" style="opacity:.5" />
+                            <p class="text-center text-muted mt-2">Chưa có thiết bị phù hợp</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="modal-footer">
+                <button type="button" class="btn btn-subtle-dark" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                <button type="button" class="btn btn-subtle-success" onclick="addToListThietBi()"><i class="fal fa-check mr-2"></i>Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="baoHongThietBiModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-70">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Báo hỏng thiết bị</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <hr />
+            <div class="modal-footer">
+                <button type="button" class="btn btn-subtle-dark" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                <button type="button" class="btn btn-subtle-success" onclick="SumbitBaoHongThietBi()"><i class="fal fa-check mr-2"></i>Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="baoMatThietBiModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-70">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Báo Mất thiết bị</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <hr />
+            <div class="modal-footer">
+                <button type="button" class="btn btn-subtle-dark" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                <button type="button" class="btn btn-subtle-success" onclick="SumbitBaoMatThietBi()"><i class="fal fa-check mr-2"></i>Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="chonThietBiInPhongModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-70">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Danh sách thiết bị</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+              
+            </div>
+            <hr />
+            <div class="modal-footer">
+                <button type="button" class="btn btn-subtle-dark" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                <button type="button" id="btnXacNhan" class="btn btn-subtle-success" ><i class="fal fa-check mr-2"></i>Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function openChonThietBiInPhongModal(type) {
+        $("#chonThietBiInPhongModal").modal('show');
+        $('#chonThietBiInPhongModal').on('shown.bs.modal', function () {
+            LoadListThietBiInPhong(type)
+        })
+    }
+    function LoadListThietBiInPhong(type) {
+        var selected = [];
+        if (type == 'Hong') {
+            $('#chonThietBiInPhongModal #btnXacNhan').attr("onclick", "addToListThietBiHong()");
+            $("#baoHongThietBiModal #listThietBi input[name='ThietBiId']").each(function () {
+                var ThietBiId = $(this).val();
+                selected.push(ThietBiId);
+            });
+        } else {
+            $('#chonThietBiInPhongModal #btnXacNhan').attr("onclick", "addToListThietBiMat()");
+            $("#baoMatThietBiModal #listThietBi input[name='ThietBiId']").each(function () {
+                var ThietBiId = $(this).val();
+                selected.push(ThietBiId);
+            });
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/StorageRoom/SelectThietBiInPhongView',
+            data: {
+                thietBiIdSelected: selected,
+                khoPhongId: '@Model.KhoPhongId',
+            },
+            dataType: 'html',
+            beforeSend: function () {
+                $("#chonThietBiInPhongModal .modal-body").LoadingOverlay("show", {
+                    image: "/assets/images/load.png",
+                    progress: true
+                });
+            },
+            success: function (response) {
+
+
+                $("#chonThietBiInPhongModal .modal-body").html(response);
+            },
+            complete: function () {
+                $("#chonThietBiInPhongModal .modal-body").LoadingOverlay("hide", true);
+            }
+        });
+    }
+    function addToListThietBiHong() {
+        $("#chonThietBiInPhongModal").modal('hide');
+
+        var selected = [];
+        $("#chonThietBiInPhongModal #itemThietBiSelect input[type='checkbox']").each(function () {
+            if ($(this).is(":checked")) {
+                selected.push($(this).val());
+            }
+        });
+        var selectedTB = [];
+        $("#baoHongThietBiModal #listThietBi input[name='ThietBiId']").each(function () {
+            var ThietBiId = $(this).val();
+            selectedTB.push(ThietBiId);
+        });
+        if (selected.length > 0) {
+            $.ajax({
+                type: "GET",
+                url: '/StorageRoom/BaoHongThietBiView',
+                data: {
+                    KhoPhongId: '@Model.KhoPhongId',
+                },
+                dataType: 'html',
+                beforeSend: function () {
+
+                },
+                success: function (response) {
+                    $("#baoHongThietBiModal .modal-body").html(response);
+                },
+                complete: function () {
+                    $("#baoHongThietBiModal").modal('show');
+                    $.ajax({
+                        type: "POST",
+                        url: '/StorageRoom/AddThietBiToBaoHongView',
+                        data: {
+                            khoThietBiIdSelected: selected,
+                            thietBiSelectId: selectedTB
+                        },
+                        dataType: 'html',
+                        beforeSend: function () {
+
+                        },
+                        success: function (response) {
+                            $("#baoHongThietBiModal .modal-body #listThietBiBaoHong").append(response);
+                        },
+                        complete: function () {
+
+                        }
+                    });
+                }
+            });
+        } else {
+
+        }
+    }
+    function SumbitBaoHongThietBi() {
+        var form_data = new FormData($('#formBaohongThietBi')[0]);
+        $.ajax({
+            type: "POST",
+            url: '/StorageRoom/BaoHongThietBiView',
+            data: form_data,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            beforeSend: function () {
+                $("#formBaohongThietBi").LoadingOverlay("show", {
+                    image: "/assets/images/load.png",
+                    progress: true
+                });
+            },
+            success: function (response) {
+                if (response.error == 0) {
+                    toastr.success(response.msg);
+                    location.reload();
+                    $("#baoHongThietBiModal").modal('hide');
+                } else {
+                    toastr.error(response.msg);
+                }
+
+            },
+            complete: function () {
+                $("#formBaohongThietBi").LoadingOverlay("hide", true);
+            }
+        });
+    }
+    function openChonThietBiModal() {
+        $("#chonThietBiModal").modal('show');
+        $('#chonThietBiModal').on('shown.bs.modal', function () {
+            LoadListThietBi()
+        })
+    }
+    function RemoveThietBiHong(input) {
+        $(input).parents("tr").remove();
+    }
+    function LoadListThietBi() {
+        var selected = [];
+        $("#listThietBi input[name='ThietBiId']").each(function () {
+            var ThietBiId = $(this).val();
+            selected.push(ThietBiId);
+        });
+        var monhocid = $("#fMonHocId").val();
+
+        var searchString = $("#searchString").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/StorageRoom/SelectThietBiView',
+            data: {
+                thietBiIdSelected: selected,
+                monHocId: monhocid,
+                str: searchString
+            },
+            dataType: 'html',
+            beforeSend: function () {
+                $("#thietbi-to-select").LoadingOverlay("show", {
+                    image: "/assets/images/load.png",
+                    progress: true
+                });
+            },
+            success: function (response) {
+                $("#chonThietBiModal #thietbi-to-select").html(response);
+            },
+            complete: function () {
+                $("#thietbi-to-select").LoadingOverlay("hide", true);
+            }
+        });
+    }
+    function addToListThietBi() {
+        $("#chonThietBiModal").modal('hide');
+        $("#listThietBi").LoadingOverlay("show", {
+            image: "/assets/images/load.png",
+            progress: true
+        });
+        var selected = [];
+        $("#chonThietBiModal #itemThietBiSelect input[type='checkbox']").each(function () {
+            if ($(this).is(":checked")) {
+                selected.push($(this).val());
+            }
+        });
+        if (selected.length > 0) {
+            $.ajax({
+                type: "POST",
+                url: '/StorageRoom/AddThietBiToPhong',
+                data: {
+                    thietBiIdSelected: selected,
+                    khoPhongId: '@Model.KhoPhongId'
+                },
+                dataType: 'html',
+                beforeSend: function () {
+                    $("#thietbi-to-select").LoadingOverlay("show", {
+                        image: "/assets/images/load.png",
+                        progress: true
+                    });
+                },
+                success: function (response) {
+                    $("#listThietBi").append(response);
+                },
+                complete: function () {
+                    $("#listThietBi").LoadingOverlay("hide", true);
+                }
+            });
+        } else {
+            $("#listThietBi").LoadingOverlay("hide", true);
+        }
+    }
+    function RemoveThietBi(input) {
+        var khoThietBiId = $(input).parents("tr").find('input[name="KhoThietBiId"]').val();
+
+        $.ajax({
+            type: "POST",
+            url: '/StorageRoom/RemoveThietBi',
+            data: {
+                khoThietBiId: khoThietBiId,
+            },
+            dataType: 'html',
+            beforeSend: function () {
+            },
+            success: function (response) {
+                $(input).parents("tr").remove();
+            },
+            complete: function () {
+            }
+        });
+    }
+    function changeSoluong(input) {
+        var soluong = $(input).val();
+        var khoThietBiId = $(input).parents("tr").find('input[name="KhoThietBiId"]').val();
+        $.ajax({
+            type: "POST",
+            url: '/StorageRoom/ChangeSoluongThietBi',
+            data: {
+                khoThietBiId: khoThietBiId,
+                soLuong: soluong
+            },
+            dataType: 'html',
+            beforeSend: function () {
+
+            },
+            success: function (response) {
+
+            },
+            complete: function () {
+
+            }
+        });
+    }
+    function addToListThietBiMat() {
+        $("#chonThietBiInPhongModal").modal('hide');
+
+        var selected = [];
+        $("#chonThietBiInPhongModal #itemThietBiSelect input[type='checkbox']").each(function () {
+            if ($(this).is(":checked")) {
+                selected.push($(this).val());
+            }
+        });
+        var selectedTB = [];
+        $("#baoMatThietBiModal #listThietBi input[name='ThietBiId']").each(function () {
+            var ThietBiId = $(this).val();
+            selectedTB.push(ThietBiId);
+        });
+        if (selected.length > 0) {
+            $.ajax({
+                type: "GET",
+                url: '/StorageRoom/BaoMatThietBiView',
+                data: {
+                    KhoPhongId: '@Model.KhoPhongId',
+                },
+                dataType: 'html',
+                beforeSend: function () {
+
+                },
+                success: function (response) {
+                    $("#baoMatThietBiModal .modal-body").html(response);
+                },
+                complete: function () {
+                    $("#baoMatThietBiModal").modal('show');
+                    $.ajax({
+                        type: "POST",
+                        url: '/StorageRoom/AddThietBiToBaoMatView',
+                        data: {
+                            khoThietBiIdSelected: selected,
+                            thietBiSelectId: selectedTB
+                        },
+                        dataType: 'html',
+                        beforeSend: function () {
+
+                        },
+                        success: function (response) {
+                            $("#baoMatThietBiModal .modal-body #listThietBiBaoMat").append(response);
+                        },
+                        complete: function () {
+
+                        }
+                    });
+                }
+            });
+        } else {
+
+        }
+    }
+    function RemoveThietBiMat(input) {
+        $(input).parents("tr").remove();
+    }
+    function SumbitBaoMatThietBi() {
+        var form_data = new FormData($('#formBaoMatThietBi')[0]);
+        $.ajax({
+            type: "POST",
+            url: '/StorageRoom/BaoMatThietBiView',
+            data: form_data,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            beforeSend: function () {
+                $("#formBaoMatThietBi").LoadingOverlay("show", {
+                    image: "/assets/images/load.png",
+                    progress: true
+                });
+            },
+            success: function (response) {
+                if (response.error == 0) {
+                    toastr.success(response.msg);
+                    location.reload();
+                    $("#baoMatThietBiModal").modal('hide');
+                } else {
+                    toastr.error(response.msg);
+                }
+
+            },
+            complete: function () {
+                $("#formBaoMatThietBi").LoadingOverlay("hide", true);
+            }
+        });
+    }
+    function LoadListBaoHongMat() {
+        $("#listBaoHongMat").load("/StorageRoom/ListBaoHongBaoMatView?id=@Model.KhoPhongId", function () {
+        });
+    }
+    LoadListBaoHongMat();
+
+    function LoadDetailBaoHongThietBi(id) {
+        
+        
+        $.ajax({
+                type: "GET",
+                url: '/StorageRoom/BaoHongThietBiView',
+                data: {
+                    KhoPhongId: '@Model.KhoPhongId',
+                    id :id
+                },
+                dataType: 'html',
+                beforeSend: function () {
+
+                },
+                success: function (response) {
+                    $("#baoHongThietBiModal .modal-body").html(response);
+                },
+                complete: function () {
+                    $("#baoHongThietBiModal").modal('show');
+                }
+            });
+    }
+     function LoadDetailBaoMatThietBi(id) {
+        $.ajax({
+                type: "GET",
+                url: '/StorageRoom/BaoMatThietBiView',
+                data: {
+                    KhoPhongId: '@Model.KhoPhongId',
+                    id :id
+                },
+                dataType: 'html',
+                beforeSend: function () {
+
+                },
+                success: function (response) {
+                    $("#baoMatThietBiModal .modal-body").html(response);
+                },
+                complete: function () {
+                    $("#baoMatThietBiModal").modal('show');
+                }
+            });
+    }
+</script>

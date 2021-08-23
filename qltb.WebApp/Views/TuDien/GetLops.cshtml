@@ -1,0 +1,376 @@
+﻿@using qltb.Data.ResVMs
+@model ListWithPaginationResVM
+@{
+    ViewBag.Title = "Lớp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var SuccessNotification = TempData["SUCCESS"];
+    var WarningNotification = TempData["WARNING"];
+
+    // get ten tinh param
+    string TenLopQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("TenLop", out TenLopQueryParam);
+
+    string KhoiLopIdQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("KhoiLopId", out KhoiLopIdQueryParam);
+}
+<div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm mới lớp</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-lop-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Mã lớp</label>
+                                <input type="text" class="form-control" name="MaLop" />
+                            </div>
+                            <div class="form-group">
+                                <label>Tên lớp</label>
+                                <input type="text" class="form-control" name="TenLop" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Khối</label>
+                                <select class="form-control" name="KhoiLopId" data-toggle="select2" data-placeholder="Chọn khối" data-allow-clear="true">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="add-lop-btn">Thêm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-lop-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Mã lớp</label>
+                                <input type="text" class="form-control" name="MaLop" />
+                            </div>
+                            <div class="form-group">
+                                <label>Tên lớp</label>
+                                <input type="text" class="form-control" name="TenLop" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Khối</label>
+                                <select class="form-control" name="KhoiLopId" data-toggle="select2" data-placeholder="Chọn khối" data-allow-clear="true">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="update-lop-btn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bạn có chắc chắn muốn xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="delete-lop-btn">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto">Danh sách lớp</h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="#" type="button" onclick="Add()" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới</span></a>
+    </div><!-- /.btn-toolbar -->
+</div>
+<div class="page-section">
+    <div class="row">
+        @*<div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <button onclick="Search()" class="btn btn-sm btn-outline-info">Tìm kiếm</button>
+                    <div class="float-right">
+                        <button class="btn btn-sm btn-primary" onclick="Add()">Thêm mới</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="search-lop-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Tên lớp</label>
+                                    <input class="form-control" type="text" name="TenLop" placeholder="Tên lớp..." value="@TenLopQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+
+                                <div class="form-group">
+                                    <label class="control-label">Khối</label>
+                                    <select class="form-control" name="KhoiLopId" data-toggle="select2" data-placeholder="Chọn khối" data-allow-clear="true">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>*@
+
+        <div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <form id="search-lop-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <input class="form-control" type="text" name="TenLop" placeholder="Tên lớp..." value="@TenLopQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <select class="form-control" name="KhoiLopId" data-toggle="select2" data-placeholder="Chọn khối" data-allow-clear="true">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <button onclick="Search()" class="btn btn-primary">Tìm kiếm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body" style="overflow-x: auto">
+                    <div class="table-responsive" style="min-width: 1000px">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã lớp</th>
+                                    <th>Tên lớp</th>
+                                    <th>Tên khối</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var lopResVM in (List<LopResVM>)Model.Objects)
+                                    {
+                                        <tr>
+                                            <td>@lopResVM.STT</td>
+                                            <td><code>@lopResVM.MaLop</code></td>
+                                            <td>@lopResVM.TenLop</td>
+                                            <td>@lopResVM.TenKhoiLop</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-info" onclick="Edit('@(lopResVM.LopId)')"><i class="fas fa-pencil"></i></button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="Delete('@(lopResVM.LopId)')"><i class="fas fa-trash-alt"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <ul class="pagination justify-content-center mt-4">
+                            @{
+                                foreach (var paginationResVM in (List<PaginationResVM>)Model.Paginations)
+                                {
+                                    <li class="page-item @(paginationResVM.IsActived.Value ? "active":  "") @(paginationResVM.IsDisabled.Value ? "disabled":  "")">
+                                        <a class="page-link" href="/tu-dien/lop@(paginationResVM.Url)" tabindex="-1">@Html.Raw(paginationResVM.Text)</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/assets/javascript/hanhnd_1.js"></script>
+    <script>
+        function Add() {
+            $('#add-modal').modal('show');
+            $('#add-lop-form input[name=MaLop]').val('');
+            $('#add-lop-form input[name=TenLop]').val('');
+            $("#add-lop-btn").unbind();
+            $("#add-lop-btn").click(function () {
+                AddLop();
+            });
+            GetKhoiLops($("#add-lop-form select[name=KhoiLopId]"));
+        }
+
+        function Edit(LopId) {
+            $.ajax({
+                url: "/tu-dien/thong-tin-lop",
+                data: {
+                    LopId: LopId
+                },
+                type: "get",
+                success: function (response) {
+                    if (response) {
+                        setTimeout(function () {
+                            $('#edit-modal').modal('show');
+                            GetKhoiLops($("#edit-lop-form select[name=KhoiLopId]")).then(res => {
+                                $('#edit-lop-form select[name=KhoiLopId]').val(response.KhoiLopId).trigger("change");
+                            });
+                            $('#editModalLabel').html(response.TenLop)
+                            $('#edit-lop-form input[name=MaLop]').val(response.MaLop);
+                            $('#edit-lop-form input[name=TenLop]').val(response.TenLop);
+                            $("#update-lop-btn").unbind();
+                            $("#update-lop-btn").click(function () {
+                                UpdateLop(response.LopId);
+                            });
+                        }, 500);
+                    }
+                    else {
+                        setTimeout(function () { toastr["warning"]('Không tìm thấy dữ liệu') }, 500)
+                    }
+
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Delete(LopId) {
+            $('#delete-modal').modal('show');
+            $("#delete-lop-btn").unbind();
+            $("#delete-lop-btn").click(function () {
+                DeleteLop(LopId);
+            });
+        }
+
+        function DeleteLop(LopId) {
+            console.log(LopId)
+            $.ajax({
+                url: "/tu-dien/xoa-thong-tin-lop",
+                data: {
+                    LopId: LopId
+                },
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function UpdateLop(LopId) {
+            let data = {
+                LopId: LopId
+            }
+            $('#edit-lop-form').serializeArray().forEach(ele => {
+                data[ele.name] = ele.value
+            })
+            $.ajax({
+                url: "/tu-dien/cap-nhat-thong-tin-lop",
+                data: data,
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function AddLop() {
+            let data = {}
+            $('#add-lop-form').serializeArray().forEach(ele => {
+                data[ele.name] = ele.value
+            })
+
+            console.log(data)
+
+            $.ajax({
+                url: "/tu-dien/them-thong-tin-lop",
+                data: data,
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Search() {
+            let queryParams = $('#search-lop-form').serialize();
+            console.log(queryParams);
+            location.replace("/tu-dien/lop?" + queryParams);
+        }
+
+        // get ds khoi lop
+        function GetKhoiLops(item) {
+            return $.ajax({
+                url: "/tu-dien/danh-sach-khoi-lop",
+                type: "get",
+                success: function (response) {
+                    item.html('').select2({ data: [{ id: '', text: '' }] });
+                    item.select2({
+                        data: response.map(ele => {
+                            return { ...ele, id: ele.KhoiLopId, text: ele.TenKhoiLop }
+                        })
+                    })
+                },
+                error: function (xhr) {
+                    //Do Something to handle error
+                }
+            });
+
+        }
+
+        $(document).ready(function () {
+            if ('@(SuccessNotification)') {
+                toastr["success"]('@(SuccessNotification)')
+            }
+            else if ('@(WarningNotification)') {
+                toastr["warning"]('@(WarningNotification)')
+            }
+
+            GetKhoiLops($("#search-lop-form select[name=KhoiLopId]")).then(res => {
+                let khoiLopIdQueryParam = '@(KhoiLopIdQueryParam)';
+                if (khoiLopIdQueryParam) {
+                    console.log(khoiLopIdQueryParam)
+                    $('#search-lop-form select[name=KhoiLopId]').val(parseInt(khoiLopIdQueryParam)).trigger("change");
+                }
+            })
+
+            $("#search-lop-form").submit(function (e) {
+                e.preventDefault();
+            })
+        })
+    </script>
+}

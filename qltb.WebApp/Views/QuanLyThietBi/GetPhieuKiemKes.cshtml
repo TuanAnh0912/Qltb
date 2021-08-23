@@ -1,0 +1,284 @@
+﻿@using qltb.Data.ResVMs
+@model ListWithPaginationResVM
+@{
+    ViewBag.Title = "Danh sách phiếu kiểm kê";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var SuccessNotification = TempData["SUCCESS"];
+    var WarningNotification = TempData["WARNING"];
+
+    string SoPhieuQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("SoPhieu", out SoPhieuQueryParam);
+
+    string KhoPhongIdQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("KhoPhongId", out KhoPhongIdQueryParam);
+
+    string NgayLapTuNgayQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("NgayLapTuNgay", out NgayLapTuNgayQueryParam);
+
+    string NgayLapDenNgayQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("NgayLapDenNgay", out NgayLapDenNgayQueryParam);
+
+    string NgayKiemKeTuNgayQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("NgayKiemKeTuNgay", out NgayKiemKeTuNgayQueryParam);
+
+    string NgayKiemKeDenNgayQueryParam = "";
+    Model.CurrentQueryParamsDict.TryGetValue("NgayKiemKeDenNgay", out NgayKiemKeDenNgayQueryParam);
+}
+<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bạn có chắc chắn muốn xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="delete-phieu-kiem-ke-btn">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto"> Danh sách phiếu kiểm kê</h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="/quan-ly-thiet-bi/them-thong-tin-phieu-kiem-ke" type="button" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới</span></a>
+    </div><!-- /.btn-toolbar -->
+</div>
+<div class="page-section">
+    <div class="row">
+        @*<div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <button onclick="Search()" class="btn btn-sm btn-outline-info">Tìm kiếm</button>
+                    <div class="float-right">
+                        <a class="btn btn-sm btn-primary" href="/quan-ly-thiet-bi/them-thong-tin-phieu-kiem-ke">Thêm mới</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="search-phieu-kiem-ke-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Tên phiếu kiểm kê</label>
+                                    <input class="form-control" type="text" name="SoPhieu" placeholder="Số phiếu..." value="@SoPhieuQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label class="control-label">Kho Phòng</label>
+                                    <select class="form-control" name="KhoPhongId" data-toggle="select2" data-placeholder="Chọn kho phòng" data-allow-clear="true">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Từ ngày</label>
+                                    <input class="form-control" type="date" name="NgayLapTuNgay" placeholder="dd-mm-yyyy" value="@NgayLapTuNgayQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Đến ngày</label>
+                                    <input class="form-control" type="date" name="NgayLapDenNgay" value="@NgayKiemKeDenNgayQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Từ ngày</label>
+                                    <input class="form-control" type="date" name="NgayKiemKeTuNgay" placeholder="dd-mm-yyyy" value="@NgayKiemKeTuNgayQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Đến ngày</label>
+                                    <input class="form-control" type="date" name="NgayKiemKeDenNgay" value="@NgayKiemKeDenNgayQueryParam" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>*@
+
+        <div class="col-12">
+            <div class="card card-fluid">
+                <div class="card-header">
+                    <form id="search-phieu-kiem-ke-form">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Tên phiếu kiểm kê</label>
+                                    <input class="form-control" type="text" name="SoPhieu" placeholder="Số phiếu..." value="@SoPhieuQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label class="control-label">Kho Phòng</label>
+                                    <select class="form-control" name="KhoPhongId" data-toggle="select2" data-placeholder="Chọn kho phòng" data-allow-clear="true">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Từ ngày</label>
+                                    <input class="form-control" type="date" name="NgayLapTuNgay" placeholder="dd-mm-yyyy" value="@NgayLapTuNgayQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Đến ngày</label>
+                                    <input class="form-control" type="date" name="NgayLapDenNgay" value="@NgayKiemKeDenNgayQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Từ ngày</label>
+                                    <input class="form-control" type="date" name="NgayKiemKeTuNgay" placeholder="dd-mm-yyyy" value="@NgayKiemKeTuNgayQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label>Đến ngày</label>
+                                    <input class="form-control" type="date" name="NgayKiemKeDenNgay" value="@NgayKiemKeDenNgayQueryParam" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-4 col-12" style="display: flex;align-items: flex-end;">
+                                <div class="form-group">
+                                    <button onclick="Search()" class="btn btn-primary">Tìm kiếm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body" style="overflow-x: auto">
+                    <div class="table-responsive" style="min-width: 1000px">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Số phiếu</th>
+                                    <th>Ngày lập</th>
+                                    <th>Ngày kiểm kê</th>
+                                    <th>Ghi chú</th>
+                                    <th>Người tạo</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var phieuKiemKeResVM in (List<PhieuKiemKeResVM>)Model.Objects)
+                                    {
+                                        <tr>
+                                            <td>@phieuKiemKeResVM.STT</td>
+                                            <td><code>@phieuKiemKeResVM.SoPhieu</code></td>
+                                            <td>@(phieuKiemKeResVM.NgayLap.HasValue ? phieuKiemKeResVM.NgayLap.Value.ToString("dd/MM/yyyy") : "")</td>
+                                            <td>@(phieuKiemKeResVM.NgayKiemKe.HasValue ? phieuKiemKeResVM.NgayKiemKe.Value.ToString("dd/MM/yyyy") : "")</td>
+                                            <td>@phieuKiemKeResVM.GhiChu</td>
+                                            <td>@phieuKiemKeResVM.HoTen</td>
+                                            <td>
+                                                <a class="btn btn-sm btn-outline-info" href="/quan-ly-thiet-bi/thong-tin-phieu-kiem-ke?phieuKiemKeId=@(phieuKiemKeResVM.PhieuKiemKeId)"><i class="fas fa-pencil"></i></a>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="Delete('@(phieuKiemKeResVM.PhieuKiemKeId)')"><i class="fas fa-trash-alt"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <ul class="pagination justify-content-center mt-4">
+                            @{
+                                foreach (var paginationResVM in (List<PaginationResVM>)Model.Paginations)
+                                {
+                                    <li class="page-item @(paginationResVM.IsActived.Value ? "active":  "") @(paginationResVM.IsDisabled.Value ? "disabled":  "")">
+                                        <a class="page-link" href="/quan-ly-thiet-bi/phieu-kiem-ke@(paginationResVM.Url)" tabindex="-1">@Html.Raw(paginationResVM.Text)</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/assets/javascript/hanhnd_1.js"></script>
+    <script>
+        function Delete(PhieuKiemKeId) {
+            $('#delete-modal').modal('show');
+            $("#delete-phieu-kiem-ke-btn").click(function () {
+                DeletePhieuGhiHongMatBi(PhieuKiemKeId);
+            });
+        }
+
+        function DeletePhieuGhiHongMatBi(PhieuKiemKeId) {
+            console.log(PhieuKiemKeId)
+            $.ajax({
+                url: "/quan-ly-thiet-bi/xoa-thong-tin-phieu-kiem-ke",
+                data: {
+                    PhieuKiemKeId: PhieuKiemKeId
+                },
+                type: "post",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                }
+            });
+        }
+
+        function Search() {
+            let queryParams = $('#search-phieu-kiem-ke-form').serialize();
+            location.replace("/quan-ly-thiet-bi/danh-sach-phieu-kiem-ke?" + queryParams);
+        }
+
+        function GetKhoPhongs(item) {
+            return $.ajax({
+                url: "/tu-dien/danh-sach-kho-phong",
+                type: "get",
+                success: function (response) {
+                    item.html('').select2({ data: [{ id: '', text: '' }] });
+                    item.select2({
+                        data: response.map(ele => {
+                            return { ...ele, id: ele.KhoPhongId, text: ele.TenKhoPhong ? ele.TenKhoPhong : '' }
+                        }),
+                        language: {
+                            noResults: function () {
+                                return "Không có dữ liệu";
+                            }
+                        },
+                    })
+                },
+                error: function (xhr) {
+                    //Do Something to handle error
+                }
+            });
+
+        }
+
+        $(document).ready(function () {
+            if ('@(SuccessNotification)') {
+                toastr["success"]('@(SuccessNotification)')
+            }
+            else if ('@(WarningNotification)') {
+                toastr["warning"]('@(WarningNotification)')
+            }
+
+            GetKhoPhongs($("#search-phieu-kiem-ke-form select[name=KhoPhongId]")).then(res => {
+                let khoPhongIdQueryParam = '@(KhoPhongIdQueryParam)';
+                if (khoPhongIdQueryParam) {
+                    console.log(khoPhongIdQueryParam)
+                    $('#search-phieu-kiem-ke-form select[name=KhoPhongId]').val(parseInt(khoPhongIdQueryParam)).trigger("change");
+                }
+            })
+
+            $("#search-phieu-kiem-ke-form").submit(function (e) {
+                e.preventDefault();
+            })
+        })
+    </script>
+}

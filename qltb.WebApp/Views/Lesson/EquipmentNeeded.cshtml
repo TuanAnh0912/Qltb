@@ -1,0 +1,532 @@
+﻿
+@using qltb.Data
+@using qltb.Data.ViewModels
+@model IEnumerable<qltb.Data.ResVMs.BaiHocCoSuDungThietBiResVM>
+@{
+    ViewBag.Title = "Bài học sử dụng thiết bị";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="d-md-flex align-items-md-start mb-3">
+    <h1 class="page-title mr-sm-auto"> Bài học sử dụng thiết bị</h1><!-- .btn-toolbar -->
+    <div class="btn-toolbar">
+        <a href="#" type="button" data-toggle="modal" data-target="#lesson_insert_modal" class="btn btn-subtle-primary"><i class="fal fa-plus mr-1"></i> <span class="ml-1">Thêm mới</span></a>
+    </div>
+</div>
+<div class="page-section">
+    <!-- .card -->
+    <div class="card card-fluid">
+        @*<div class="card-header d-flex">
+            <div class="form-group">
+                <input id="table-search" type="text" class="form-control" placeholder="Tìm kiếm">
+            </div>
+            <button type="button" class="btn btn-primary ml-auto" data-toggle="modal" data-target="#lesson_insert_modal">Thêm mới</button>
+        </div>*@<!-- /.card-header -->
+        <!-- .card-body -->
+        <div class="card-body lesson-table table-responsive">
+            <table id="lesson-table" class="table table-bordered table-hover">
+                <!-- thead -->
+                <thead class="bg-light">
+                    <tr>
+                        <th style="width:1%!important" class=""> # </th>
+                        <th style="width:15%!important" class="">Tên bài học</th>
+                        <th style="width:12%!important" class=""> Tên môn học </th>
+                        <th style="width:10%!important" class="text-center"> Tên lớp </th>
+                        <th style="width:14%!important" class="text-center"> CT học </th>
+                        <th style="width:10%!important" class="text-center"> Tiết (PPTC) </th>
+                        <th style="width:8%!important" class="text-center"> Số tiết </th>
+                        <th style="width:5%!important" class="text-center"> HK </th>
+                        <th style="width:15%!important" class="text-center"> &nbsp; </th>
+                    </tr>
+                </thead><!-- /thead -->
+                <!-- tbody -->
+                <tbody>
+                    @foreach (var equip in Model)
+                    {
+                        <tr>
+                            <td class="">@equip.STT</td>
+                            <td class="">@equip.TenBaiHoc</td>
+                            <td class="">@equip.TenMonHoc</td>
+                            <td class="text-center">@equip.TenLop</td>
+                            <td class="text-center">@equip.TenChuongTrinhHoc</td>
+                            <td class="text-center">@equip.TietTheoPPTC</td>
+                            <td class="text-center">@equip.SoTiet</td>
+                            <td class="text-center"><b>@equip.TenHocKy</b></td>
+                            <td class="align-middle text-center">
+                                <a href="#" class="btn btn-sm btn-icon lesson_detail btn-subtle-success" data-id="@equip.BaiHocSuDungThietBiId" data-toggle="modal" data-target="#lesson_detail_modal"><i class="fal fa-info"></i> <span class="sr-only">Detail</span></a>
+                                <a href="#" class="btn btn-sm btn-icon lesson_update btn-subtle-primary" data-id="@equip.BaiHocSuDungThietBiId" data-toggle="modal" data-target="#lesson_update_modal"><i class="fal fa-pencil-alt"></i> <span class="sr-only">Edit</span></a>
+                                <a href="#" class="btn btn-sm btn-icon lesson_delete btn-subtle-danger" data-id="@equip.BaiHocSuDungThietBiId" data-name="@equip.TenBaiHoc" data-toggle="modal" data-target="#lesson_delete_modal"><i class="far fa-trash-alt"></i> <span class="sr-only">Remove</span></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody><!-- /tbody -->
+            </table><!-- /.table -->
+        </div><!-- /.card-body -->
+    </div><!-- /.card -->
+</div><!-- /.page-section -->
+
+<form id="lesson_insert_form" action="/Lesson/Insert" method="post">
+    <div id="lesson_insert_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+
+            <div class="modal-content">
+
+                <div class="modal-header border-bottom mb-3">
+                    <h5 class="modal-title "> Thêm mới bài học sử dụng thiết bị </h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Tên bài học <span class="text-danger">*</span></label>
+                                <input id="tenbaihoc_add" class="form-control" type="text" name="TenBaiHoc" value="" placeholder="Tên bài học.." required />
+                            </div>
+                            <div class="form-group">
+                                <label>Học kỳ <span class="text-danger">*</span></label>
+                                <select id="hocky_add" name="HocKyId" class="hocky_select form-control selectize-select selectize-growth " required>
+                                    <option value="-1">---Chọn học kỳ--- </option>
+                                    @foreach (var x in ViewBag.HocKy as List<HocKy>)
+                                    {
+                                        <option value="@x.HocKyId">@x.TenHocKy </option>
+
+                                    }
+                                </select>
+                                <div class="invalid-feedback">
+                                    <i class="fa fa-exclamation-circle fa-fw"></i> Vui lòng không để trống thông tin
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Lớp học <span class="text-danger">*</span></label>
+                                <select id="lop_add" name="LopId" class="lop_select form-control selectize-select selectize-growth">
+                                    <option value="-1">---Chọn lớp học--- </option>
+                                    @foreach (var x in ViewBag.Lop as List<Lop>)
+                                    {
+                                        <option value="@x.LopId">@x.TenLop </option>
+
+                                    }
+                                </select>
+                                <div class="invalid-feedback">
+                                    <i class="fa fa-exclamation-circle fa-fw"></i> Vui lòng không để trống thông tin
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="tf1">Số tiết <span class="text-danger">*</span></label>
+                                <div class="custom-number">
+                                    <input id="sotiet_add" type="number" class="form-control" name="SoTiet" min="0" step="1" value="0" placeholder="Số tiết.." required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Loại bài học <span class="text-danger">*</span></label>
+                                <select id="loaibaihoc_add" name="LoaiBaiHocId" class="loaibaihoc_select form-control selectize-select selectize-growth">
+                                    <option value="-1">---Chọn loại bài học--- </option>
+                                    @foreach (var x in ViewBag.LoaiBaiHoc as List<LoaiBaiHoc>)
+                                    {
+                                        <option value="@x.LoaiBaiHocId">@x.TenLoaiBaiHoc </option>
+
+                                    }
+                                </select>
+                                <div class="invalid-feedback">
+                                    <i class="fa fa-exclamation-circle fa-fw"></i> Vui lòng không để trống thông tin
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Chương trình học <span class="text-danger">*</span></label>
+                                <select id="chuongtrinhhoc_select" name="ChuongTrinhHocId" class="chuongtrinhhoc_select form-control selectize-select selectize-growth">
+                                    <option value="-1">---Chọn chương trình học--- </option>
+                                    @foreach (var x in ViewBag.ChuongTrinhHoc as List<ChuongTrinhHoc>)
+                                    {
+                                        <option value="@x.ChuongTrinhHocId">@x.TenChuongTrinhHoc </option>
+
+                                    }
+                                </select>
+                                <div class="invalid-feedback">
+                                    <i class="fa fa-exclamation-circle fa-fw"></i> Vui lòng không để trống thông tin
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Môn học <span class="text-danger">*</span></label>
+                                <select name="MonHocId" id="select_monhoc" class="monhoc_select form-control selectize-select selectize-growth">
+                                    <option value="-1">---Chọn môn học--- </option>
+                                    @foreach (var x in ViewBag.MonHoc as List<MonHoc>)
+                                    {
+                                        <option value="@x.MonHocId">@x.TenMonHoc </option>
+                                    }
+                                </select>
+                                <div class="invalid-feedback">
+                                    <i class="fa fa-exclamation-circle fa-fw"></i> Vui lòng không để trống thông tin
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="tf2">Tiết theo phân phối chương trình <span class="text-danger">*</span></label>
+                                <div class="custom-number">
+                                    <input id="tietpptc_add" type="number" class="form-control" name="TietTheoPPTC" min="0" step="1" value="0" placeholder="Số tiết theo phân phối chương trình.." required>
+                                </div>
+                            </div>
+                            @*<div class="form-group">
+                                    <label>Thời gian sử dụng <span class="text-danger">*</span></label>
+                                    <input id="ngaytao_add" name="ThoiGian" type="text" placeholder="Thời gian.." class="form-control">
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                    <button type="submit" class="btn btn-subtle-success" id="lesson_insert_btn"><i class="fal fa-check mr-2"></i>Thêm mới</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<form id="lesson_update_form" action="/Lesson/Update" method="post">
+    <div id="lesson_update_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header border-bottom mb-3">
+                    <h5 class="modal-title "> Cập nhật bài học sử dụng thiết bị</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Tên bài học <span class="text-danger">*</span></label>
+                                <input id="tenbaihoc_update" class="form-control" type="text" name="TenBaiHoc" placeholder="Tên bài học.." />
+                                <input id="BaiHocSuDungThietBiId" class="form-control" type="text" name="BaiHocSuDungThietBiId" hidden />
+                            </div>
+                            <div class="form-group">
+                                <label>Học kỳ <span class="text-danger">*</span></label>
+                                <select id="hocky_update" name="HocKyId" class="hocky_select form-control selectize-select selectize-growth">
+                                    <option>---Chọn học kỳ--- </option>
+                                    @foreach (var x in ViewBag.HocKy as List<HocKy>)
+                                    {
+                                        <option value="@x.HocKyId">@x.TenHocKy </option>
+
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Lớp học <span class="text-danger">*</span></label>
+                                <select id="lop_update" name="LopId" class="lop_select form-control selectize-select selectize-growth">
+                                    <option>---Chọn lớp học--- </option>
+                                    @foreach (var x in ViewBag.Lop as List<Lop>)
+                                    {
+                                        <option value="@x.LopId">@x.TenLop </option>
+
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tf3">Số tiết <span class="text-danger">*</span></label>
+                                <div class="custom-number">
+                                    <input id="sotiet_update" type="number" class="form-control" name="SoTiet" min="0" step="1" value="0" placeholder="Số tiết.." required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Loại bài học <span class="text-danger">*</span></label>
+                                <select id="loaibaihoc_update" name="LoaiBaiHocId" class="loaibaihoc_select form-control selectize-select selectize-growth">
+                                    <option>---Chọn loại bài học--- </option>
+                                    @foreach (var x in ViewBag.LoaiBaiHoc as List<LoaiBaiHoc>)
+                                    {
+                                        <option value="@x.LoaiBaiHocId">@x.TenLoaiBaiHoc </option>
+
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Chương trình học <span class="text-danger">*</span></label>
+                                <select id="chuongtrinhhoc_update" name="ChuongTrinhHocId" class="chuongtrinhhoc_select form-control selectize-select selectize-growth">
+                                    <option>---Chọn chương trình học--- </option>
+                                    @foreach (var x in ViewBag.ChuongTrinhHoc as List<ChuongTrinhHoc>)
+                                    {
+                                        <option value="@x.ChuongTrinhHocId">@x.TenChuongTrinhHoc </option>
+
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Môn học <span class="text-danger">*</span></label>
+                                <select id="monhoc_update" name="MonHocId" class="monhoc_select form-control selectize-select selectize-growth">
+                                    <option>---Chọn môn học--- </option>
+                                    @foreach (var x in ViewBag.MonHoc as List<MonHoc>)
+                                    {
+                                        <option value="@x.MonHocId">@x.TenMonHoc </option>
+
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tf4">Tiết theo phân phối chương trình <span class="text-danger">*</span></label>
+                                <div class="custom-number">
+                                    <input id="tietpptc_update" type="number" class="form-control" name="TietTheoPPTC" min="0" step="1" value="0" placeholder="Số tiết theo phân phối chương trình.." required>
+                                </div>
+                            </div>
+                            @*<div class="form-group">
+                                    <label>Thời gian sử dụng <span class="text-danger">*</span></label>
+                                    <input id="ngaytao_update" name="ThoiGian" type="text" placeholder="Thời gian.." class="form-control" required>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                    <button type="submit" class="btn btn-subtle-success" id="lesson_update_btn"><i class="fal fa-check mr-2"></i>Cập nhật</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<form id="lesson_delete_form" action="/Lesson/Delete" method="post">
+    <div id="lesson_delete_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"> Hủy bỏ bài học sử dụng thiết bị</h5>
+                </div>
+
+                <div class="modal-body">
+                    <input id="lesson_id_delete" hidden />
+                    <p>Xóa bỏ bài học <b id="lesson_to_delete"></b> khỏi hệ thống</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                    <button type="submit" class="btn btn-subtle-success" id="lesson_delete_btn"><i class="fal fa-check mr-2"></i>Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<div id="lesson_detail_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> Danh sách thiết bị sử dụng trong bài học môn <span id="subject_name"></span></h5>
+            </div>
+
+            <div class="modal-body">
+                <input id="lesson_equipment_detail_id" type="text" hidden />
+                <div class="card card-fluid">
+                    <!-- .table-responsive -->
+                    <div class="table-responsive">
+                        <!-- .table -->
+                        <table class="table table-hover table-bordered table-hover">
+                            <!-- thead -->
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th style="min-width:200px"> Tên thiết bị </th>
+                                    <th> Loại thiết bị </th>
+                                    <th> Đơn vị </th>
+                                    <th> Số lượng </th>
+                                </tr>
+                            </thead><!-- /thead -->
+                            <!-- tbody -->
+                            <tbody id="lesson_equipment_detail">
+                            </tbody><!-- /tbody -->
+                        </table><!-- /.table -->
+                    </div><!-- /.table-responsive -->
+                </div><!-- /.card -->
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-subtle-secondary" data-dismiss="modal"><i class="fal fa-arrow-left mr-2"></i>Quay lại</button>
+                <button type="submit" class="btn btn-subtle-info" id="lesson_detail_btn" onclick="window.open('/Lesson/LessonEquipment?lesson_id='+ $('#lesson_equipment_detail_id').val())">Cập nhật thiết bị <i class="fal fa-arrow-right ml-2"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#lesson-table").DataTable({
+            autoWidth: false
+        });
+        $(".dataTables_length select").css("width", "55");
+        $(".chuongtrinhhoc_select").selectize({
+            create: 0,
+            placeholder: "Chọn chương trình",
+            dropdownParent: "body"
+        })
+        $(".lop_select").selectize({
+            create: 0,
+            placeholder: "Chọn lớp học",
+            dropdownParent: "body"
+        })
+        $(".hocky_select").selectize({
+            create: 0,
+            placeholder: "Chọn học kỳ",
+            dropdownParent: "body"
+        })
+        $(".loaibaihoc_select").selectize({
+            create: 0,
+            placeholder: "Chọn loại bài học",
+            dropdownParent: "body"
+        })
+        $(".monhoc_select").selectize({
+            create: 0,
+            placeholder: "Chọn môn học",
+            dropdownParent: "body"
+        })
+    })
+    $("#lesson_insert_form").submit(function () {
+        var form = $(this);
+        var hk = $("#hocky_add option:selected").val();
+        var lp = $("#lop_add option:selected").val();
+        var lbh = $("#loaibaihoc_add option:selected").val();
+        var cth = $("#chuongtrinhhoc_select option:selected").val();
+        var mh = $("#select_monhoc option:selected").val();
+        if (hk == -1) {
+            $("#hocky_add").addClass("is-invalid");
+            return false;
+        }
+        if (lp == -1) {
+            $("#lop_add").addClass("is-invalid");
+            return false;
+        }
+        if (lbh == -1) {
+            $("#loaibaihoc_add").addClass("is-invalid");
+            return false;
+        }
+        if (cth == -1) {
+            $("#chuongtrinhhoc_select").addClass("is-invalid");
+            return false;
+        }
+        if (mh == -1) {
+            $("#select_monhoc").addClass("is-invalid");
+            return false;
+        }
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: form.serialize(),
+            dataType: 'html',
+            beforeSend: function () {
+                $("#lesson_insert_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công! ');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công.');
+                }
+            },
+            complete: function () {
+                $("#lesson_insert_btn").removeAttr("disabled");
+                $("#lesson_insert_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+    $(".lesson_update").click(function () {
+        var lesson_id = $(this).data('id');
+        $.post("/Lesson/GetBaiHocSuDungByID", { id: lesson_id }, function (data) {
+            $("#tenbaihoc_update").val(data.TenBaiHoc);
+            $("#monhoc_update").selectize()[0].selectize.setValue(data.MonHocId);
+            $("#chuongtrinhhoc_update").selectize()[0].selectize.setValue(data.ChuongTrinhHocId);
+            $("#hocky_update").selectize()[0].selectize.setValue(data.HocKyId);
+            $("#lop_update").selectize()[0].selectize.setValue(data.LopId);
+            $("#loaibaihoc_update").selectize()[0].selectize.setValue(data.LoaiBaiHocId);
+            $("#tietpptc_update").val(data.TietTheoPPTC);
+            $("#sotiet_update").val(data.SoTiet);
+            $("#ngaytao_update").val(data.ThoiGian);
+            $("#BaiHocSuDungThietBiId").val(data.BaiHocSuDungThietBiId);
+        });
+    })
+    $(".lesson_detail").click(function () {
+        var lesson_id = $(this).data('id');
+        $('#lesson_equipment_detail_id').val(lesson_id);
+        $("#lesson_equipment_detail").empty();
+        $.post("/Lesson/GetThietBiBaiHoc", { lesson_id: lesson_id }, function (data) {
+            $("#subject_name").text(data.TenMonHoc);
+            console.log(data.lstThietBi);
+            var html = "";
+            $.each(data.lstThietBi, function (idx, el) {
+                html += '<tr>' +
+                    '<td>' + (idx + 1) + '</td>' +
+                    '<td>' + el.TenThietBi + '</td>' +
+                    '<td>' + el.TenLoaiThietBi + '</td>' +
+                    '<td>' + el.TenDonViTinh + '</td>' +
+                    '<td>' + el.SoLuong + '</td>' + '</tr>';
+                $("#lesson_equipment_detail").html(html);
+            })
+            if (data.lstThietBi.length == 0) {
+                html = '<tr><td colspan="5"><div class="text-center m-2">Bài học chưa sử dụng thiết bị</div></td></tr>';
+                $("#lesson_equipment_detail").html(html);
+            }
+        });
+    })
+    $("#lesson_update_form").submit(function (event) {
+        var form = $(this);
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: form.serialize(),
+            dataType: 'html',
+            beforeSend: function () {
+                $("#lesson_update_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công!');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công.');
+                }
+            },
+            complete: function () {
+                $("#lesson_update_btn").removeAttr("disabled");
+                $("#lesson_update_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+
+    $(".lesson_delete").click(function () {
+        var lesson_id = $(this).data('id');
+        var lesson_name = $(this).data('name');
+        $("#lesson_id_delete").val(lesson_id);
+        $("#lesson_to_delete").text(lesson_name);
+    })
+    $("#lesson_delete_form").submit(function (event) {
+        var form = $(this);
+        var lesson_id = $("#lesson_id_delete").val();
+        if (lesson_id == null) {
+            return false;
+        }
+        $.ajax({
+            type: "Post",
+            url: form.attr('action'),
+            data: { id: lesson_id },
+            dataType: 'html',
+            beforeSend: function () {
+                $("#lesson_update_btn").attr("disabled", "disabled");
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status == true) {
+                    toastr.success(data.messages, 'Thành công! ');
+                }
+                if (data.status == false) {
+                    toastr.error(data.messages, 'Không thành công. ');
+                }
+            },
+            complete: function () {
+                $("#lesson_delete_btn").removeAttr("disabled");
+                $("#lesson_delete_modal").modal("hide");
+                setTimeout(function () { window.location.reload() }, 2000);
+            }
+        });
+        event.preventDefault();
+    });
+
+</script>
+
+
